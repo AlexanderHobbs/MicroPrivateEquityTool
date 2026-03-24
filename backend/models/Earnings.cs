@@ -2,7 +2,6 @@ namespace EarningsCalculator;
 
 public class Earning
 {
-    public int year {get; set;}
     public decimal SDE {get; set;}
     public decimal OwnerSalary {get; set;}
 

@@ -9,36 +9,16 @@ public class AddEntry : EarningCalculator
     }
     public void add()
     {
-        bool cont = true;
-
-        while(cont){
-            Console.WriteLine("Please Enter Year: ");
-            int year = int.Parse(Console.ReadLine());
-
-            if (!_calculator.InputDictionary.ContainsKey(year))
-            {
-                _calculator.InputDictionary.Add(year, new List<object>());
-            }
-
-            marginEntry(year);
-            earningsEntry(year);
-            AddBackEntry(year);
-            AccountingDetailEntry(year);
-
-            Console.WriteLine("Would you like to add another year of data? (y/n)");
-            if (Console.ReadLine().Equals("n"))
-            {
-                cont = false;
-            }
-        }
-
-        displayAllEntries();
-
+        marginEntry();
+        earningsEntry();
+        AddBackEntry();
+        AccountingDetailEntry();
+        displayEntry();
         
     }
 
 
-    public void AddBackEntry(int year)
+    public void AddBackEntry()
     {
         List<AddBack> addBacks = new List<AddBack>();
 
@@ -93,24 +73,20 @@ public class AddEntry : EarningCalculator
                 }
             else
             {
-                addBack.year = year;
                 cont = false;
             }
 
         }
 
-        _calculator.InputDictionary[year].Add(addBacks);
         _calculator.EntryList.Add(addBacks);
 
     }
 
 
-    public void earningsEntry(int year)
+    public void earningsEntry()
     {   
 
         Earning compensation = new Earning();
-
-        compensation.year = year;
 
         Console.WriteLine("Reported SDE: ");
         compensation.SDE = decimal.Parse(Console.ReadLine());
@@ -118,13 +94,12 @@ public class AddEntry : EarningCalculator
         Console.WriteLine("Reported Salary: ");
         compensation.OwnerSalary = decimal.Parse(Console.ReadLine());
 
-        _calculator.InputDictionary[year].Add(compensation);
         _calculator.EntryList.Add(compensation);
 
     }
     
 
-    public void marginEntry(int year)
+    public void marginEntry()
     {
        
         List<Margin> profitFile = new List<Margin>();
@@ -134,7 +109,11 @@ public class AddEntry : EarningCalculator
         while(cont){
 
             Margin profit = new Margin();
+
+            Console.WriteLine("Please enter year: ");
+            profit.year = int.Parse(Console.ReadLine());
             
+
             Console.WriteLine("Please enter revenue amount: ");
             profit.revenue = decimal.Parse(Console.ReadLine());
 
@@ -143,32 +122,24 @@ public class AddEntry : EarningCalculator
 
             profitFile.Add(profit);
 
-
             Console.WriteLine("Add another entry (y/n)? ");
             
             if (Console.ReadLine().Equals("n"))
             {
-                profit.year = year;
                 cont = false;
             }
         }
-
-        
         
         _calculator.EntryList.Add(profitFile);
-        _calculator.InputDictionary[year].Add(profitFile);
-        
     }
 
-    public void AccountingDetailEntry(int year)
+    public void AccountingDetailEntry()
     {
         AccountingDetail detail = new();
 
-        detail.year = year;
-
         Console.WriteLine("Are EBITDA values avalibale? (y/n) ");
-        string val = Console.ReadLine();
 
+        string val = Console.ReadLine();
         switch (val)
         {
             case "y":
@@ -191,12 +162,12 @@ public class AddEntry : EarningCalculator
             case "n":
                 detail.avaliableData = AccountingDetail.Avaliable.not_avaliable;
             break;
+            
         }
-        
-        _calculator.EntryList.Add(detail);
-        _calculator.InputDictionary[year].Add(detail);
+         _calculator.EntryList.Add(detail);
 
-                
+
+
     }
 
     // public void marginEntry2()
@@ -262,32 +233,6 @@ public class AddEntry : EarningCalculator
                 Console.WriteLine("\n--------------------------------------------------\n");
 
             }
-    }
-
-    public void displayAllEntries()
-    {
-        foreach(KeyValuePair<int, List<object>> entry in _calculator.InputDictionary)
-        {
-            foreach(object list in entry.Value)
-            {
-                if(list is List<AddBack> a)
-                {
-                    AddBack ab = new();
-                    ab.displayEntry(a);
-                }
-                else if (list is Earning ea)
-                {
-                    ea.displayEntry();
-
-                }else if (list is List<Margin> mr)
-                {   
-                    Margin mg = new();
-                    mg.displayEntry(mr);
-
-                }
-
-            }
-        }
     }
 
 }

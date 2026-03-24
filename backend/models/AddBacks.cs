@@ -3,7 +3,7 @@ namespace EarningsCalculator;
 public class AddBack 
 {
     
-    public int year {get; set;}
+    
     public string? description {get; set;}
     public decimal amount {get; set;}
 
@@ -26,7 +26,7 @@ public class AddBack
             Console.WriteLine($"Add Back Description: {singleAb.description} \n" + 
                             $"Add Back Amount: {singleAb.amount:C} \n" +
                             $"Add Back Category: {singleAb.category}\n" +
-                            $"Add Back Confidence Level: {singleAb.confidenceLevel}%\n");
+                            $"Add Back Confidence Level: {singleAb.confidenceLevel:P}\n");
         }
     }
 
