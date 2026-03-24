@@ -2,7 +2,7 @@ namespace EarningsCalculator;
 
 public class EarningCalculator
 {
-
+    //little snippit to test tracking is in order
     public Dictionary<int, List<object>> InputDictionary = new();
     public Dictionary<int, List<object>> outputDictionary = new();
     public List<object> EntryList {get; set;}
