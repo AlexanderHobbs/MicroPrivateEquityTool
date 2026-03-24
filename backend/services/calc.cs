@@ -13,10 +13,9 @@ public class Calc : EarningCalculator
     }
     public void calculate()
     {
-        // calculateMarginTrend();
-        // calculateRevenueTrend();
         calculateFinancialSummary();
-        // calculateSDE();
+
+        displayOutput();
     }
 
     public void calculateFinancialSummary()
@@ -82,10 +81,10 @@ public class Calc : EarningCalculator
 
                 if (!_calculator.outputDictionary.ContainsKey(year))
                 {
-                    _calculator.outputDictionary.Add(year, new List<object>());
+                    _calculator.outputDictionary.Add(year, new CalculationOutput());
                 }
 
-                _calculator.outputDictionary[year].Add(output);
+                _calculator.outputDictionary[year] = output;
             }
         }catch (Exception e)
         {
@@ -214,9 +213,12 @@ public class Calc : EarningCalculator
 
     }
 
-    public void displayCalculations()
+    public void displayOutput()
     {
-        
+         foreach(KeyValuePair<int, CalculationOutput> entry in _calculator.outputDictionary)
+        {
+            entry.Value.displayOutput();
+        }
     }
     
 }

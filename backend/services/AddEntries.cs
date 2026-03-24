@@ -63,26 +63,31 @@ public class AddEntry : EarningCalculator
                 while(!valid){
 
                     Console.WriteLine("Add back category: ");
-                    string? cat = Console.ReadLine();
+                    string? category = Console.ReadLine();
 
-                    if (cat.Equals("discretionary"))
+                    switch (category)
                     {
-                        addBack.category = AddBack.Category.discretionary;
-                        valid = true;
-                    }else if (cat.Equals("non-recurring"))
-                    {
-                        addBack.category = AddBack.Category.non_recurring;
-                        valid = true;
+                        case "discretionary":
+                            addBack.category = AddBack.Category.discretionary;
+                            valid = true;
+                        break;
+
+                        case "non-recurring":
+                            addBack.category = AddBack.Category.non_recurring;
+                            valid = true;
+                        break;
+
+
+                        case "questionable":
+                            addBack.category = AddBack.Category.questionable;
+                            valid = true;
+                        break;
+
+                        default:
+                            Console.WriteLine("Invalid Category");
+                        break;
                     }
-                    else if(cat.Equals("questionable"))
-                    {
-                        addBack.category = AddBack.Category.questionable;
-                        valid = true;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid Category");
-                    }
+                    
                 }
 
                 Console.WriteLine("Add back confidence level: ");
@@ -100,7 +105,6 @@ public class AddEntry : EarningCalculator
         }
 
         _calculator.InputDictionary[year].Add(addBacks);
-        _calculator.EntryList.Add(addBacks);
 
     }
 
@@ -119,7 +123,6 @@ public class AddEntry : EarningCalculator
         compensation.OwnerSalary = decimal.Parse(Console.ReadLine());
 
         _calculator.InputDictionary[year].Add(compensation);
-        _calculator.EntryList.Add(compensation);
 
     }
     
@@ -129,36 +132,22 @@ public class AddEntry : EarningCalculator
        
         List<Margin> profitFile = new List<Margin>();
 
-        bool cont = true;
-
-        while(cont){
-
-            Margin profit = new Margin();
-            
-            Console.WriteLine("Please enter revenue amount: ");
-            profit.revenue = decimal.Parse(Console.ReadLine());
-
-            Console.WriteLine("Please enter expense amount: ");        
-            profit.expense = decimal.Parse(Console.ReadLine());
-
-            profitFile.Add(profit);
-
-
-            Console.WriteLine("Add another entry (y/n)? ");
-            
-            if (Console.ReadLine().Equals("n"))
-            {
-                profit.year = year;
-                cont = false;
-            }
-        }
-
+        Margin profit = new Margin();
         
+        Console.WriteLine("Please enter revenue amount: ");
+        profit.revenue = decimal.Parse(Console.ReadLine());
+
+        Console.WriteLine("Please enter expense amount: ");        
+        profit.expense = decimal.Parse(Console.ReadLine());
+
+        profitFile.Add(profit);         
         
-        _calculator.EntryList.Add(profitFile);
+        profit.year = year;
+            
         _calculator.InputDictionary[year].Add(profitFile);
         
     }
+    
 
     public void AccountingDetailEntry(int year)
     {
@@ -193,76 +182,11 @@ public class AddEntry : EarningCalculator
             break;
         }
         
-        _calculator.EntryList.Add(detail);
         _calculator.InputDictionary[year].Add(detail);
 
                 
     }
 
-    // public void marginEntry2()
-    // {
-       
-    //     Margin profit;
-
-    //     bool cont = true;
-
-    //     while(cont){
-
-    //         profit = new Margin();
-
-    //         Console.WriteLine("Please enter year: ");
-    //         int year = int.Parse(Console.ReadLine());
-
-    //         if (!Margin.Dictionary.ContainsKey(year))
-    //         {
-    //             Margin.Dictionary.Add(year, new Margin());
-    //         }            
-
-    //         Console.WriteLine("Please enter revenue amount: ");
-    //         profit.revenue = float.Parse(Console.ReadLine());
-
-    //         Console.WriteLine("Please enter expense amount: ");        
-    //         profit.expense = float.Parse(Console.ReadLine());
-
-    //         Margin.Dictionary[year] = profit;
-
-    //         Console.WriteLine("Add another entry (y/n)? ");
-            
-    //         if (Console.ReadLine().Equals("n"))
-    //         {
-    //             cont = false;
-    //         }
-    //     }
-        
-    //     _calculator.EntryList.Add(Margin.Dictionary);
-
-    // }
-
-
-    public void displayEntry()
-    {
-            foreach(var item in _calculator.EntryList)
-            {
-                if(item is List<AddBack> a)
-                {   
-                    AddBack ab = new();
-                    ab.displayEntry(a);
-
-                }else if (item is Earning ea)
-                {
-                    ea.displayEntry();
-
-                }else if (item is List<Margin> mr)
-                {   
-                    Margin mg = new();
-                    mg.displayEntry(mr);
-
-                }
-
-                Console.WriteLine("\n--------------------------------------------------\n");
-
-            }
-    }
 
     public void displayAllEntries()
     {

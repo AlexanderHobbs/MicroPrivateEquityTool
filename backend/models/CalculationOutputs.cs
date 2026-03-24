@@ -17,4 +17,24 @@ public class CalculationOutput
     public decimal Yearly_Adjusted_Profit {get; set;}
     public decimal Yearly_Adjusted_Margin {get; set;}
 
+    public void displayOutput()
+    {
+        Console.WriteLine(
+            $"Year: {year}\n" +
+            $"Profit Per Year: {Profit_Per_Year:C}\n" +
+            $"Margin Per Year: {Margin_Per_Year:P1}\n" +
+            $"Revenue Growth: {Revenue_Growth:P1}\n" +
+            $"EBITDA: {EBITDA:C}\n" +
+            $"Effective AddBacks: {Effective_AddBacks:C}\n" +
+            $"Total AddBacks: {Total_AddBacks:C}\n" +
+            $"Weighted AddBacks: {Weighted_AddBacks:C}\n" +
+            $"Conservative AddBacks: {Conservative_AddBacks:C}\n" +
+            $"Base SDE: {Base_SDE:C}\n" +
+            $"Risk Adjusted SDE: {Risk_Adjusted_SDE:C}\n" +
+            $"Conservative SDE: {Conservative_SDE:C}\n" +
+            $"Yearly Adjusted Profit: {Yearly_Adjusted_Profit:C}\n" +
+            $"Yearly Adjusted Margin: {Yearly_Adjusted_Margin:P1}"
+        );
+    }
+
 }

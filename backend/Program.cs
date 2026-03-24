@@ -9,7 +9,7 @@ public class financialSummary
     public static void Main()
     {
        EarningCalculator compiler = new();
-       compiler.runProgram();
+       compiler.RunProgram();
 
     }
     

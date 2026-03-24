@@ -3,23 +3,25 @@ namespace EarningsCalculator;
 public class EarningCalculator
 {
 
-    public Dictionary<int, List<object>> InputDictionary = new();
-    public Dictionary<int, List<object>> outputDictionary = new();
-    public List<object> EntryList {get; set;}
-    public List<object> OutputList {get; set;}
+    public Dictionary<int, List<object>> InputDictionary;
+    public Dictionary<int, CalculationOutput> outputDictionary;
     public EarningCalculator()
     {
-        EntryList = new List<object>();
-        OutputList = new List<object>();
+        InputDictionary = new();
+
+        outputDictionary = new();
     }
 
-    public void runProgram()
+    public void RunProgram()
     {
         AddEntry entry = new(this);
         entry.add();
 
-        Calc calc = new(this);
-        calc.calculate();
+        Console.WriteLine("Would you like to calculate Financial Summary? (Yes/No)");
+        if(Console.ReadLine().Equals("Yes")){
+            Calc calc = new(this);
+            calc.calculate();
+        }
         
     }
     
