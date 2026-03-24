@@ -27,6 +27,7 @@ public class Calc : EarningCalculator
 
             foreach(KeyValuePair<int, List<object>> entry in _calculator.InputDictionary)
             {
+                CalculationOutput output = new();
                 int year = entry.Key;
                 foreach(var list in entry.Value)
                 {
@@ -34,55 +35,57 @@ public class Calc : EarningCalculator
                     {   
                         int index = 0;
                         foreach (Margin mg in value){
-                        {
-                            profit = mg.revenue - mg.expense;
-                            output.Profit_Per_Year = profit;
-                        }
-
-                        {
-                            margin = profit / mg.revenue;
-                            output.Margin_Per_Year = margin;
-                        }
-
-                        {
-                            if(index-1 >= 0){
-                                Margin prevYear = value[index-1];
-                                Revenue_growth = (mg.revenue - prevYear.revenue) / prevYear.revenue;
-                            }
-                            else
-                            {
-                                Revenue_growth = -1;
-                            }
-
-                            index++;
-                            output.Revenue_Growth = Revenue_growth;
-                        }
-
-                        {
-                            EBIDTA = calculateEBITDA(profit, year);
-                            output.EBITDA = EBIDTA;
-                            
-
-                        }
-
-                        {
-                            calculateAddBacks(year);
-                        }
-
-                        {
-                            calculateSDE(year); 
-                        }
-
-                        {
-                            
-                        }
+                        
+                        //calculating the profit
+                        profit = mg.revenue - mg.expense;
+                        output.Profit_Per_Year = profit;
                     
 
-                        Console.WriteLine($"{profit:C}, {margin:P1}, {(Revenue_growth == -1 ? "unavaliable" : Revenue_growth)}, {EBIDTA:C}");
+                        //calculating margin
+                        margin = profit / mg.revenue;
+                        output.Margin_Per_Year = margin;
                     
+
+                        //checking if a previous year exist, if so calculate revenue growth percentage
+                        if(index-1 >= 0){
+                            Margin prevYear = value[index-1];
+                            Revenue_growth = (mg.revenue - prevYear.revenue) / prevYear.revenue;
+                        }
+                        else
+                        {
+                            Revenue_growth = -1;
+                        }
+
+                        index++;
+                        output.Revenue_Growth = Revenue_growth;
+                    
+
+                        //calculate EBITDTE per year
+                        EBIDTA = calculateEBITDA(profit, year);
+                        output.EBITDA = EBIDTA;
+                        
+                        //calculate total, weighted, effective, conservative add back
+                        calculateAddBacks(year);
+                        
+                        //using add backs to calculate base, risk, conservative SDE
+                        calculateSDE(year); 
+                                
+                        //calculating adjusted profit
+                        output.Yearly_Adjusted_Profit = profit + output.Weighted_AddBacks;
+
+                        //calculating adjusted margin
+                        output.Yearly_Adjusted_Margin = output.Yearly_Adjusted_Profit / mg.revenue;
+
                         }
                     }
                 }
+
+                if (!_calculator.outputDictionary.ContainsKey(year))
+                {
+                    _calculator.outputDictionary.Add(year, new List<object>());
+                }
+
+                _calculator.outputDictionary[year].Add(output);
             }
         }catch (Exception e)
         {
@@ -90,10 +93,6 @@ public class Calc : EarningCalculator
         }
     }
 
-    // public double calculateRevenueGrowth(Margin mg)
-    // {
-        
-    // }
     public void calculateMarginTrend()
     {
     
