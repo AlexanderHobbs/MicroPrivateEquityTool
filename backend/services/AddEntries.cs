@@ -1,3 +1,5 @@
+using System.Formats.Asn1;
+
 namespace EarningsCalculator;
 
 public class AddEntry : EarningCalculator
@@ -158,28 +160,23 @@ public class AddEntry : EarningCalculator
         Console.WriteLine("Are EBITDA values avalibale? (y/n) ");
         string val = Console.ReadLine();
 
-        switch (val)
-        {
-            case "y":
-                detail.avaliableData = AccountingDetail.Avaliable.avaliable;
+        if(val.Equals("y")){
+            detail.IsAvaliable = true;
 
-                Console.WriteLine("Please enter Interest Rate for year: ");
-                detail.InterestRate = decimal.Parse(Console.ReadLine());
+            Console.WriteLine("Please enter Interest Rate for year: ");
+            detail.InterestRate = decimal.Parse(Console.ReadLine());
 
-                Console.WriteLine("Please enter Taxes for year: ");
-                detail.Taxes = decimal.Parse(Console.ReadLine());
+            Console.WriteLine("Please enter Taxes for year: ");
+            detail.Taxes = decimal.Parse(Console.ReadLine());
 
-                Console.WriteLine("Please enter Depreciation for year: ");
-                detail.Depreciation = decimal.Parse(Console.ReadLine());
+            Console.WriteLine("Please enter Depreciation for year: ");
+            detail.Depreciation = decimal.Parse(Console.ReadLine());
 
-                Console.WriteLine("Please enter Amortization for year: ");
-                detail.Amortization = decimal.Parse(Console.ReadLine());
+            Console.WriteLine("Please enter Amortization for year: ");
+            detail.Amortization = decimal.Parse(Console.ReadLine());
 
-            break;
-
-            case "n":
-                detail.avaliableData = AccountingDetail.Avaliable.not_avaliable;
-            break;
+        }else{
+            detail.IsAvaliable = false;
         }
         
         _calculator.InputDictionary[year].Add(detail);
@@ -192,6 +189,7 @@ public class AddEntry : EarningCalculator
     {
         foreach(KeyValuePair<int, List<object>> entry in _calculator.InputDictionary)
         {
+            
             foreach(object list in entry.Value)
             {
                 if(list is List<AddBack> a)
@@ -208,6 +206,10 @@ public class AddEntry : EarningCalculator
                     Margin mg = new();
                     mg.displayEntry(mr);
 
+                }else if (list is AccountingDetail dt)
+                {
+                    AccountingDetail EBITDA = new AccountingDetail();
+                    EBITDA.displayEntry();
                 }
 
             }

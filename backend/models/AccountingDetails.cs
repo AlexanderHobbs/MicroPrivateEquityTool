@@ -8,10 +8,24 @@ public class AccountingDetail
     public decimal Depreciation {get; set;}
     public decimal Amortization {get; set;}
 
-    public enum Avaliable
-    {
-        not_avaliable,
-        avaliable
+    public bool IsAvaliable {get; set;}
+
+    public void displayEntry()
+    {   
+        if(IsAvaliable)
+        {
+        Console.WriteLine("EBITDA Details\n");
+        Console.WriteLine(
+            $"Interest Rate: {InterestRate}\n" +
+            $"Taxes: {Taxes}\n" +
+            $"Depreciation: {Depreciation}\n" +
+            $"Amortization: {Amortization}\n"
+        );
+        }
+        else
+        {
+            Console.WriteLine("EBITDA Data Not Avalibale\n");
+        }
+
     }
-    public Avaliable avaliableData {get; set;}
 }

@@ -105,22 +105,16 @@ public class Calc : EarningCalculator
     public decimal calculateEBITDA(decimal profit, int year)
     {
         decimal EBITDA_VALUE = 0;
-        decimal SDE = 0, OwnerSalary = 0, non_operating_adjustments = 0;
 
         foreach (object entry in _calculator.InputDictionary[year]){
             
             if(entry is AccountingDetail list)
             {
-                switch (list.avaliableData)
-                {
-                    case AccountingDetail.Avaliable.avaliable:
-                        Console.WriteLine("avaliable");
-                        EBITDA_VALUE =  profit + list.InterestRate + list.Taxes + list.Depreciation + list.Amortization;
-                        break;
-
-                    case AccountingDetail.Avaliable.not_avaliable:
-                        EBITDA_VALUE = calculateEbitdaSDE(year);
-                        break;
+                if(list.IsAvaliable){
+                    Console.WriteLine("avaliable");
+                    EBITDA_VALUE =  profit + list.InterestRate + list.Taxes + list.Depreciation + list.Amortization;
+                }else{
+                    EBITDA_VALUE = calculateEbitdaSDE(year);
                 }
             }
         }
