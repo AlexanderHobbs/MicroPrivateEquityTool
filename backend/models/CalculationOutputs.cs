@@ -26,7 +26,7 @@ public class CalculationOutput
             
         if(Revenue_Growth == 0)
         {
-            Console.WriteLine($"Revenue Growth: NA\n");
+            Console.WriteLine($"Revenue Growth: NA (Previous Year Data Not Avaliable)\n");
         }
         else
         {
@@ -35,10 +35,10 @@ public class CalculationOutput
 
         Console.WriteLine(
             $"EBITDA: {EBITDA:C}\n" +
-            $"Effective AddBacks: {Effective_AddBacks:C}\n" +
-            $"Total AddBacks: {Total_AddBacks:C}\n" +
-            $"Weighted AddBacks: {Weighted_AddBacks:C}\n" +
-            $"Conservative AddBacks: {Conservative_AddBacks:C}\n" +
+            $"Add Back Effectiveness: {Effective_AddBacks:P1}\n" +
+            $"Total Add Backs: {Total_AddBacks:C}\n" +
+            $"Weighted Add Backs: {Weighted_AddBacks:C}\n" +
+            $"Conservative Add Backs: {Conservative_AddBacks:C}\n" +
             $"Base SDE: {Base_SDE:C}\n" +
             $"Risk Adjusted SDE: {Risk_Adjusted_SDE:C}\n" +
             $"Conservative SDE: {Conservative_SDE:C}\n" +

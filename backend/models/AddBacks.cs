@@ -1,11 +1,9 @@
 namespace EarningsCalculator;
 
-public class AddBack 
+public class AddBack
 {
 
     public int year {get; set;}
-    public bool addBacks_present {get; set;}
-
     public List<AddBackArray> AddBackTotalList {get; set;}
 
     public class AddBackArray
@@ -29,7 +27,7 @@ public class AddBack
 
     public void displayEntry()
     {
-        if(addBacks_present){
+        if(AddBackTotalList != null){
             foreach(var singleAb in AddBackTotalList)
             {
                 Console.WriteLine($"Add Back Description: {singleAb.description} \n" + 

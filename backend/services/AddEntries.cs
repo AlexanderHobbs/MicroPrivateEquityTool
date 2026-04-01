@@ -42,8 +42,11 @@ public class AddEntry : EarningCalculator
 
     public void AddBackEntry(int year)
     {
+        try{
 
-        AddBack addBack = new AddBack();
+        AddBack addBack = new AddBack{
+            AddBackTotalList = new List<AddBack.AddBackArray>()
+        };
 
         bool cont = true;
 
@@ -54,7 +57,6 @@ public class AddEntry : EarningCalculator
             if (Console.ReadLine().Equals("y"))
             {
                 
-                addBack.addBacks_present = true;
                 AddBack.AddBackArray newAddBackList = new AddBack.AddBackArray();
 
                 Console.WriteLine("Add Back Description: ");
@@ -114,6 +116,11 @@ public class AddEntry : EarningCalculator
         }
 
         _calculator.InputDictionary[year].Add(addBack);
+
+        }catch(Exception error)
+        {
+            Console.WriteLine(error);
+        }
 
     }
 
