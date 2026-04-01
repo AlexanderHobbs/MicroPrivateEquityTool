@@ -22,8 +22,18 @@ public class CalculationOutput
         Console.WriteLine(
             $"Year: {year}\n" +
             $"Profit Per Year: {Profit_Per_Year:C}\n" +
-            $"Margin Per Year: {Margin_Per_Year:P1}\n" +
-            $"Revenue Growth: {Revenue_Growth:P1}\n" +
+            $"Margin Per Year: {Margin_Per_Year:P1}\n");
+            
+        if(Revenue_Growth == 0)
+        {
+            Console.WriteLine($"Revenue Growth: NA\n");
+        }
+        else
+        {
+            Console.WriteLine($"Revenue Growth: {Revenue_Growth: P1}");
+        }
+
+        Console.WriteLine(
             $"EBITDA: {EBITDA:C}\n" +
             $"Effective AddBacks: {Effective_AddBacks:C}\n" +
             $"Total AddBacks: {Total_AddBacks:C}\n" +

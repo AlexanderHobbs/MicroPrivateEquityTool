@@ -42,46 +42,52 @@ public class AddEntry : EarningCalculator
 
     public void AddBackEntry(int year)
     {
-        List<AddBack> addBacks = new List<AddBack>();
+
+        AddBack addBack = new AddBack();
 
         bool cont = true;
 
         while(cont){
             
-            AddBack addBack = new AddBack();
-
             Console.WriteLine("Owner claimed add backs exists (y/n)? ");
 
             if (Console.ReadLine().Equals("y"))
             {
+                
+                addBack.addBacks_present = true;
+                AddBack.AddBackArray newAddBackList = new AddBack.AddBackArray();
+
                 Console.WriteLine("Add Back Description: ");
-                addBack.description = Console.ReadLine();
+                newAddBackList.description = Console.ReadLine();
 
                 Console.WriteLine("Add back amount: ");
-                addBack.amount = decimal.Parse(Console.ReadLine());
+                newAddBackList.amount = decimal.Parse(Console.ReadLine());
 
                 bool valid = false;
 
                 while(!valid){
 
                     Console.WriteLine("Add back category: ");
-                    string? category = Console.ReadLine();
+                    string? category = Console.ReadLine().ToUpper();
 
                     switch (category)
                     {
-                        case "discretionary":
-                            addBack.category = AddBack.Category.discretionary;
+                        case "DISCRETIONARY":
+                            newAddBackList.category = AddBack.AddBackArray.Category.discretionary;
+                            newAddBackList.categoryWeight = 0.75M;
                             valid = true;
                         break;
 
-                        case "non-recurring":
-                            addBack.category = AddBack.Category.non_recurring;
+                        case "NON-RECURRING":
+                            newAddBackList.category = AddBack.AddBackArray.Category.non_recurring;
+                            newAddBackList.categoryWeight = 1.0M;
                             valid = true;
                         break;
 
 
-                        case "questionable":
-                            addBack.category = AddBack.Category.questionable;
+                        case "QUESTIONABLE":
+                            newAddBackList.category = AddBack.AddBackArray.Category.questionable;
+                            newAddBackList.categoryWeight = 0.25M;
                             valid = true;
                         break;
 
@@ -93,11 +99,12 @@ public class AddEntry : EarningCalculator
                 }
 
                 Console.WriteLine("Add back confidence level: ");
-                addBack.confidenceLevel = int.Parse(Console.ReadLine());
-
-                addBacks.Add(addBack);   
+                newAddBackList.confidenceLevel = int.Parse(Console.ReadLine());
+                
+                addBack.AddBackTotalList.Add(newAddBackList);
 
                 }
+
             else
             {
                 addBack.year = year;
@@ -106,7 +113,7 @@ public class AddEntry : EarningCalculator
 
         }
 
-        _calculator.InputDictionary[year].Add(addBacks);
+        _calculator.InputDictionary[year].Add(addBack);
 
     }
 
@@ -132,8 +139,6 @@ public class AddEntry : EarningCalculator
     public void marginEntry(int year)
     {
        
-        List<Margin> profitFile = new List<Margin>();
-
         Margin profit = new Margin();
         
         Console.WriteLine("Please enter revenue amount: ");
@@ -142,11 +147,9 @@ public class AddEntry : EarningCalculator
         Console.WriteLine("Please enter expense amount: ");        
         profit.expense = decimal.Parse(Console.ReadLine());
 
-        profitFile.Add(profit);         
-        
         profit.year = year;
             
-        _calculator.InputDictionary[year].Add(profitFile);
+        _calculator.InputDictionary[year].Add(profit);
         
     }
     
@@ -192,24 +195,21 @@ public class AddEntry : EarningCalculator
             
             foreach(object list in entry.Value)
             {
-                if(list is List<AddBack> a)
+                if(list is AddBack ab)
                 {
-                    AddBack ab = new();
-                    ab.displayEntry(a);
+                    ab.displayEntry();
                 }
                 else if (list is Earning ea)
                 {
                     ea.displayEntry();
 
-                }else if (list is List<Margin> mr)
+                }else if (list is Margin mr)
                 {   
-                    Margin mg = new();
-                    mg.displayEntry(mr);
+                    mr.displayEntry();
 
                 }else if (list is AccountingDetail dt)
                 {
-                    AccountingDetail EBITDA = new AccountingDetail();
-                    EBITDA.displayEntry();
+                    dt.displayEntry();
                 }
 
             }

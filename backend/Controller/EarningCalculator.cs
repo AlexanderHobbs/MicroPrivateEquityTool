@@ -18,7 +18,8 @@ public class EarningCalculator
         entry.add();
 
         Console.WriteLine("Would you like to calculate Financial Summary? (Yes/No)");
-        if(Console.ReadLine().Equals("Yes")){
+        string input = Console.ReadLine().ToUpper();
+        if(input.Equals("YES")){
             Calc calc = new(this);
             calc.calculate();
         }

@@ -8,14 +8,13 @@ public class Margin
     public decimal revenue {get; set;}
     public decimal expense {get; set;}
 
-    public void displayEntry(List<Margin> mg)
+    public void displayEntry()
     {
-        foreach(var singleMargin in mg)
-        {
-            Console.WriteLine($"Year: {singleMargin.year}\n" 
-                            + $"Revenue: {singleMargin.revenue:C}\n" 
-                            + $"Expense: {singleMargin.expense:C}");
-        }
+            Console.WriteLine(
+                $"Year: {year}\n" + 
+                $"Revenue: {revenue:C}\n" + 
+                $"Expense: {expense:C}"
+                );
     }
 
 

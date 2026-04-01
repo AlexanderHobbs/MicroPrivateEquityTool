@@ -24,7 +24,7 @@ public class AccountingDetail
         }
         else
         {
-            Console.WriteLine("EBITDA Data Not Avalibale\n");
+            Console.WriteLine($"EBITDA data not avalibale for year: {year}\n");
         }
 
     }

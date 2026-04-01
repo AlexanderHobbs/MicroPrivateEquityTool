@@ -22,19 +22,18 @@ public class Calc : EarningCalculator
     {
         try{ 
 
-            decimal profit, SDE, margin, Revenue_growth, EBIDTA;
+            decimal profit, SDE, margin, Revenue_growth, EBIDTA, prevYear_revenue = 0;
 
             foreach(KeyValuePair<int, List<object>> entry in _calculator.InputDictionary)
             {
                 CalculationOutput output = new();
                 int year = entry.Key;
-                foreach(var list in entry.Value)
+                output.year = year;
+
+                foreach(var EntryClass in entry.Value)
                 {
-                    if(list is List<Margin> value)
+                    if(EntryClass is Margin mg)
                     {   
-                        int index = 0;
-                        foreach (Margin mg in value){
-                        
                         //calculating the profit
                         profit = mg.revenue - mg.expense;
                         output.Profit_Per_Year = profit;
@@ -46,19 +45,21 @@ public class Calc : EarningCalculator
                     
 
                         //checking if a previous year exist, if so calculate revenue growth percentage
-                        if(index-1 >= 0){
-                            Margin prevYear = value[index-1];
-                            Revenue_growth = (mg.revenue - prevYear.revenue) / prevYear.revenue;
+                        if(prevYear_revenue != 0)
+                        {
+                            Revenue_growth = (mg.revenue - prevYear_revenue) / prevYear_revenue;
+                            prevYear_revenue = mg.revenue;
                         }
                         else
                         {
-                            Revenue_growth = -1;
+                            Revenue_growth = 0;
+                            prevYear_revenue = mg.revenue;
                         }
 
-                        index++;
+
                         output.Revenue_Growth = Revenue_growth;
                     
-
+                    
                         //calculate EBITDTE per year
                         EBIDTA = calculateEBITDA(profit, year);
                         output.EBITDA = EBIDTA;
@@ -66,6 +67,7 @@ public class Calc : EarningCalculator
                         //calculate total, weighted, effective, conservative add back
                         calculateAddBacks(year);
                         
+                        Console.WriteLine($"{output.Total_AddBacks}, {output.Weighted_AddBacks}, {output.Conservative_AddBacks}, {output.Effective_AddBacks}");
                         //using add backs to calculate base, risk, conservative SDE
                         calculateSDE(year); 
                                 
@@ -75,7 +77,6 @@ public class Calc : EarningCalculator
                         //calculating adjusted margin
                         output.Yearly_Adjusted_Margin = output.Yearly_Adjusted_Profit / mg.revenue;
 
-                        }
                     }
                 }
 
@@ -85,6 +86,7 @@ public class Calc : EarningCalculator
                 }
 
                 _calculator.outputDictionary[year] = output;
+
             }
         }catch (Exception e)
         {
@@ -131,61 +133,48 @@ public class Calc : EarningCalculator
             if(entry is Earning earning)
             {
                 SDE = earning.SDE;
-                Console.WriteLine(SDE);
                 OwnerSalary = earning.OwnerSalary;
-            }else if (entry is List<AddBack> addBack)
+
+            }else if (entry is AddBack addBack)
             {
-                foreach(AddBack ab in addBack)
-                {
-                    non_operating_adjustments += ab.amount;
-                }
+               non_operating_adjustments += addBack.AddBackTotalList?
+               .Where(ab => ab.category == AddBack.AddBackArray.Category.non_recurring ||
+               ab.category == AddBack.AddBackArray.Category.discretionary)
+               .Sum(ab => ab.amount) ?? 0m;
             }
         }
-
-
 
         return SDE - OwnerSalary + non_operating_adjustments;
     }
 
     public void calculateAddBacks(int year)
     {
-        decimal Effective_AddBack = 0, Total_AddBacks = 0, Weighted_AddBacks = 0, conservative_AddBacks = 0;
-        foreach (object entry in _calculator.InputDictionary[year]){
+        decimal Total_AddBacks = 0, Weighted_AddBacks = 0, conservative_AddBacks = 0;
+        foreach (var entry in _calculator.InputDictionary[year]){
             
-            if (entry is List<AddBack> addBack)
-            {
-                foreach(AddBack ab in addBack)
+            if (entry is AddBack addBack)
                 {
-                    switch (ab.category)
+                    if(addBack.addBacks_present){
+                    foreach(AddBack.AddBackArray ar in addBack.AddBackTotalList)
                     {
-                        case AddBack.Category.non_recurring:
-                            Effective_AddBack = ab.amount * (ab.confidenceLevel / 100) * (decimal) 1.0;
-                            if(ab.confidenceLevel > 90)
-                            {
-                                conservative_AddBacks += ab.amount;
-                            }
-                        break;
+                        Weighted_AddBacks += ar.amount * (ar.confidenceLevel / 100m) * ar.categoryWeight;
+                        Total_AddBacks += ar.amount;
 
-                        case AddBack.Category.discretionary:
-                            Effective_AddBack = ab.amount * (ab.confidenceLevel / 100) * (decimal) .75;
-                        break;
+                        if(ar.category == AddBack.AddBackArray.Category.non_recurring && ar.confidenceLevel >= 80)
+                        {
+                            conservative_AddBacks += ar.amount;
+                        }
 
-                        case AddBack.Category.questionable:
-                            Effective_AddBack = ab.amount * (ab.confidenceLevel / 100) * (decimal) .25;
-                        break;
                     }
 
-                    Total_AddBacks += ab.amount;
-                    Weighted_AddBacks += Effective_AddBack;
-
-                    output.Effective_AddBacks = Effective_AddBack;
+                    output.Conservative_AddBacks = conservative_AddBacks;
                     output.Total_AddBacks = Total_AddBacks;
                     output.Weighted_AddBacks = Weighted_AddBacks;
-                    output.Conservative_AddBacks = conservative_AddBacks;
-
+                    output.Effective_AddBacks = Weighted_AddBacks / Total_AddBacks;
                 }
             }
         }
+
     }
 
     public void calculateSDE(int year)
