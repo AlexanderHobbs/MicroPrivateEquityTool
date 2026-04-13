@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/alexhobbs/Desktop/Startup/Vue-Csharp/MicroPrivateEquityTool/backend/backend.csproj",
+      "projectUniqueName": "/Users/alexhobbs/Desktop/Startup/MicroPrivateEquityTool/backend/backend.csproj",
       "projectName": "backend",
-      "projectPath": "/Users/alexhobbs/Desktop/Startup/Vue-Csharp/MicroPrivateEquityTool/backend/backend.csproj",
+      "projectPath": "/Users/alexhobbs/Desktop/Startup/MicroPrivateEquityTool/backend/backend.csproj",
       "packagesPath": "/Users/alexhobbs/.nuget/packages/",
-      "outputPath": "/Users/alexhobbs/Desktop/Startup/Vue-Csharp/MicroPrivateEquityTool/backend/obj/",
+      "outputPath": "/Users/alexhobbs/Desktop/Startup/MicroPrivateEquityTool/backend/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/alexhobbs/.nuget/NuGet/NuGet.Config"

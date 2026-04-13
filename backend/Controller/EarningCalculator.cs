@@ -19,9 +19,14 @@ public class EarningCalculator
 
         Console.WriteLine("Would you like to calculate Financial Summary? (Yes/No)");
         string input = Console.ReadLine().ToUpper();
-        if(input.Equals("YES")){
+        int amount = 0;
+        if(input.Equals("YES") && amount <= 3){
             Calc calc = new(this);
             calc.calculate();
+            amount++;
+        }else if (amount == 3)
+        {
+            Console.WriteLine("Maximum amount of years added");
         }
         
     }

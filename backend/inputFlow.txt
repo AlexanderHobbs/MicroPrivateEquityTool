@@ -1,0 +1,101 @@
+1- Core Deal / Year Input
+
+These should be strict numeric inputs with validation.
+
+Year
+Type: number input (integer)
+Constraints: min 1900, max current year + 1
+Revenue
+Type: currency input (formatted text w/ numeric parsing)
+Validation: ≥ 0
+Expenses
+Type: currency input
+Validation: ≥ 0
+Reported SDE
+Type: currency input
+Validation: ≥ 0
+Owner Salary
+Type: currency input
+Validation: ≥ 0
+
+
+2- Add-Backs Section (Dynamic / Repeatable Group)
+
+This is where your current system breaks. You need a repeatable structured component, not free-form prompts.
+
+Has Add-Backs?
+Type: radio button (Yes / No)
+
+If Yes, show a repeater list:
+
+Each Add-Back Entry:
+
+Description
+Type: text input (string)
+Validation: required
+Amount
+Type: currency input
+Validation: numeric only (this prevents your exception)
+Category
+Type: select dropdown
+Options:
+discretionary
+non-recurring
+non-operational
+accounting adjustment
+(enum on backend)
+Confidence Level
+Type: slider (0–100)
+Alternative: number input with step=1
+Display: percentage
+Add Another Add-Back
+Type: button (adds new entry)
+
+
+3- EBITDA Section (Conditional)
+Is EBITDA Available?
+Type: radio (Yes / No)
+
+If Yes, show:
+
+Interest
+Type: currency input
+Taxes
+Type: currency input
+Depreciation
+Type: currency input
+Amortization
+Type: currency input
+
+Note: your prompt says “Interest Rate: 9” — that’s ambiguous. This should be:
+
+Either Interest Expense (currency)
+Or Interest Rate (%)
+
+Do not mix. Financial models expect expense, not rate.
+
+
+4- Multi-Year Control
+Add Another Year?
+Type: button (not radio)
+Behavior: pushes new “Year Form” object into an array
+
+You should model this as:
+
+years: [
+  {
+    year: 2025,
+    revenue: 0,
+    expenses: 0,
+    sde: 0,
+    salary: 0,
+    addBacks: [],
+    ebitda: {
+      available: false,
+      interest: 0,
+      taxes: 0,
+      depreciation: 0,
+      amortization: 0
+    }
+  }
+]
