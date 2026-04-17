@@ -31,11 +31,11 @@ const isOpen = ref(false)
 
 .parent-container{
     display: flex;
+    background-color: lightblue;
 }
 
 .navbar-links{
     font: 1em sans-serif;
-    border: 1px solid black ;
     flex: 3;
 }
 
