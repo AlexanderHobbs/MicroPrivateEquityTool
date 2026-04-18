@@ -1,26 +1,35 @@
 <script setup>
 
-import {ref} from 'vue'
+import {ref} from 'vue' 
+
 
 const isOpen = ref(false)
+var navbar_logo = ref("←");
+
+const toggleNav = () => {
+    isOpen.value = !isOpen.value
+    navbar_logo.value = isOpen.value ? "→" : "←";
+}
+
 </script>
 
 <template>
 
 <div class="parent-container">
+    
+    <div :class="['navbar', { closed: !isOpen }]">
+        <div class = "navbar-links" v-show = "isOpen">
+            <ul>
+                <li><router-link to = "/earnings">Earning Calculator</router-link></li>
+                <li><router-link to = "/loss">Loss Report</router-link></li>
+                <li><router-link to = "/summary">Financial Summary</router-link></li>
+            </ul>
+        
+        </div>
 
-    <div class = "navbar-links" v-show = "isOpen">
-        <ul>
-            <li><h4>Earning Calc</h4></li>
-            <li><h4>Loss Report</h4></li>
-            <li><h4>Financial Sumarry</h4></li>
-            <li><h4>History</h4></li>
-        </ul>
-       
-    </div>
-
-    <div class = "toggle-navBar-btn">
-        <button @click = "isOpen = !isOpen"> Toggle NavBar </button>
+        <div class = "toggle-navBar-btn">
+            <button @click = "toggleNav">{{ navbar_logo }}</button>
+        </div>
     </div>
 
 </div>
@@ -29,26 +38,90 @@ const isOpen = ref(false)
 
 <style scoped>
 
-.parent-container{
+
+.parent-container {
     display: flex;
-    background-color: lightblue;
+    background-color: #f4f6f8;
+    align-items: stretch;
+    
 }
 
-.navbar-links{
-    font: 1em sans-serif;
-    flex: 3;
+.navbar {
+    display: flex;
+    flex-direction: row;
+    width: 220px;
+    color: black;
+    transition: width 0.25s ease;
+    overflow: hidden;
+    height: 100vh;
+    background: #ffffff;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
 }
 
-.toggle-navBar-btn {
+.navbar.closed {
+    width: 60px;
+}
+
+
+/* Nav section */
+.navbar-links {
     flex: 1;
-    display: flex;
-    align-self: center;
-    justify-items: center;
-    transform: rotate(90deg);
+    padding: 20px 10px;
 }
 
-button{
-    width: fit-content;
+.navbar-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
+
+.navbar-links li {
+    margin-bottom: 12px;
+}
+
+router-link {
+    text-decoration: none;
+    color: #1f2937;
+    font-size: 14px;
+    display: block;
+    padding: 8px 10px;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+router-link:hover {
+    background: #1f2937;
+    color: white;
+}
+
+router-link-active {
+    background: #374151;
+    color: white;
+}
+
+/* Toggle button container */
+.toggle-navBar-btn {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.toggle-navBar-btn button {
+    background: #1f2937;
+    border: none;
+    color: white;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    height: auto;
+}
+
+.toggle-navBar-btn button:hover {
+    background: #374151;
+}
+
 
 </style>
