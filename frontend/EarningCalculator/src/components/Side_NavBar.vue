@@ -3,48 +3,38 @@
 import {ref} from 'vue' 
 
 
-const isOpen = ref(false)
+const isOpen = ref(true)
 var navbar_logo = ref("←");
 
 const toggleNav = () => {
     isOpen.value = !isOpen.value
-    navbar_logo.value = isOpen.value ? "→" : "←";
+    navbar_logo.value = isOpen.value ? "←" :  "→" ;
 }
 
 </script>
 
 <template>
 
-<div class="parent-container">
     
-    <div :class="['navbar', { closed: !isOpen }]">
-        <div class = "navbar-links" v-show = "isOpen">
-            <ul>
-                <li><router-link to = "/earnings">Earning Calculator</router-link></li>
-                <li><router-link to = "/loss">Loss Report</router-link></li>
-                <li><router-link to = "/summary">Financial Summary</router-link></li>
-            </ul>
-        
-        </div>
-
-        <div class = "toggle-navBar-btn">
-            <button @click = "toggleNav">{{ navbar_logo }}</button>
-        </div>
+<div :class="['navbar', { closed: !isOpen }]">
+    <div class = "navbar-links" v-show = "isOpen">
+        <ul>
+            <li><router-link to = "/earnings">Earning Calculator</router-link></li>
+            <li><router-link to = "/loss">Loss Report</router-link></li>
+            <li><router-link to = "/summary">Financial Summary</router-link></li>
+        </ul>
+    
     </div>
 
+    <div class = "toggle-navBar-btn">
+        <button @click = "toggleNav">{{ navbar_logo }}</button>
+    </div>
 </div>
+
 
 </template>
 
 <style scoped>
-
-
-.parent-container {
-    display: flex;
-    background-color: #f4f6f8;
-    align-items: stretch;
-    
-}
 
 .navbar {
     display: flex;
@@ -59,6 +49,7 @@ const toggleNav = () => {
     border-radius: 12px;
     border: 1px solid #e5e7eb;
     box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+
 }
 
 .navbar.closed {

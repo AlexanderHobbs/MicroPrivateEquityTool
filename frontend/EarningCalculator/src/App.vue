@@ -1,7 +1,14 @@
 <script setup>
+import {ref} from 'vue'
 import earningCalculator from '@/views/EarningCalculator.vue';
 import Top_NavBar from './components/Top_NavBar.vue';
 import Side_NavBar from './components/Side_NavBar.vue';
+
+import FinancialSummary from './views/FinancialSummary.vue';
+import LossReport from './views/LossReport.vue';
+
+const pageNum = ref(0)
+
 </script>
 
 <template>
@@ -9,12 +16,26 @@ import Side_NavBar from './components/Side_NavBar.vue';
 <div class = "parent-container">
 
     <div class = "top-nav">
-    <Top_NavBar />
+        <Top_NavBar class = "side-nav"/>
     </div>
+
     <div class = "hero-section-ea">
-        <Side_NavBar />
+
+        <div class = "side-nav-bar">
+            <Side_NavBar />
+        </div>
+        
         <div class="vertical-line"></div>
-        <earningCalculator />
+
+        <div class = "input-section" v-if = "pageNum === 0">
+            <earningCalculator />
+        </div>
+        <div class = "input-section" v-else-if = "pageNum === 1">
+            <FinancialSummary />
+        </div>
+        <div class = "input-section" v-else-if = "pageNum === 2">
+            <LossReport />
+        </div>
     </div>
 
 </div>
@@ -39,12 +60,12 @@ import Side_NavBar from './components/Side_NavBar.vue';
     gap: 20px;
 }
 
+
 .hero-section-ea {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: row;
-
 }
 
 .vertical-line {
@@ -53,5 +74,13 @@ import Side_NavBar from './components/Side_NavBar.vue';
   margin: 0 20px;
 }
 
+.input-section {
+    width: 100%;
+}
+
+.side-nav-bar .navbar { 
+    top: 0px;
+    position: sticky;
+}
 
 </style>

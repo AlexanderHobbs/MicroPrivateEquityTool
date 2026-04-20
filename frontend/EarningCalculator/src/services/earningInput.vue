@@ -38,7 +38,7 @@ async function add_AddBack() {
             description: '',
             price: '',
             category: '',
-            confidenceLevel:''
+            confidenceLevel: 50
         })
     
     }catch (err){
@@ -91,6 +91,7 @@ const fields = [
 <template>
 
 <div class = "parent-container">
+    <h1>Earning Calculation</h1>
 
     <div class = "selected-year-input">
         <label for="SelectedYearInput">Select Fiscal Year: </label>
@@ -146,12 +147,13 @@ const fields = [
             <label for="AddBack-Category">Add Back Category: </label>
             <input type="text" v-model = "AddBackForm.category">
             <label for = "AddBack-ConfidenceLevel">Add Back Confidence Level:</label>
-            <input type="text" v-model = "AddBackForm.confidenceLevel">
+            <input type="range" v-model = "AddBackForm.confidenceLevel" min = "0" max = "100" step = "1">
+            <span class = "confidence-value">{{ AddBackForm.confidenceLevel }}%</span>
 
             <button class = "addBack-btn" @click="add_AddBack()">Create Add Back</button>
         </div>
 
-        <div class = "AddBackList" v-if = "AddBackList.length > 0">
+        <div class = "AddBackList">
             <table class = "Table">
                 <thead>
                     <tr>
@@ -235,17 +237,24 @@ const fields = [
 
 /* Inputs */
 input, select, textarea {
-    padding: 8px 10px;
+    padding: 10px 12px;
     border-radius: 8px;
-    border: 1px solid #d1d5db;
+    border: 1px solid transparent;
     outline: none;
     font-size: 13px;
-    background: #fff;
+    background: #f9fafb;
+    transition: all 0.2s ease;
+    font-family: 'Arial', sans-serif;
+}
+
+input:hover, select:hover, textarea:hover {
+    background: #f3f4f6;
 }
 
 input:focus, select:focus, textarea:focus {
-    border-color: #60a5fa;
-    box-shadow: 0 0 0 3px rgba(96,165,250,0.2);
+    background: #ffffff;
+    border-color: #111827;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
 }
 
 /* AddBack section container */
@@ -257,6 +266,7 @@ input:focus, select:focus, textarea:focus {
     border-radius: 14px;
     border: 1px solid #e5e7eb;
     box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+    box-sizing: border-box;
 }
 
 /* Left form */
@@ -329,6 +339,10 @@ input:focus, select:focus, textarea:focus {
     transform: translateY(0);
 }
 
+.confidence-value {
+    font-size: 12px;
+    color: #6b7280;
+}
 
 
 </style>
