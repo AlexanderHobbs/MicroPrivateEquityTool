@@ -126,7 +126,7 @@ function submitYear() {
                 
                 <CurrencyInput label = "Owner Salary:" v-model = "currencyForm.ownerSalary" />
 
-                <button @click="updateCurrencyValues">Submit Values</button>
+                <!-- <button @click="updateCurrencyValues">Submit Values</button> -->
                 
             </div>
 
@@ -182,6 +182,9 @@ function submitYear() {
 
         </div>
 
+        <div class = "earning-output">
+        <h1>Review</h1>
+
         <div class = "ea-output-container">
 
             <div class = "output-container"><CurrencyOutput :data = "currencyForm" :label = "selectedYear"/></div>
@@ -214,6 +217,7 @@ function submitYear() {
                     <EBITDAOutput :data = "EBITDAForm"/>
                 </div>
         </div>
+        </div>
     </div>
 </body>
 
@@ -227,7 +231,6 @@ function submitYear() {
 }
 
 .ea-output-container {
-    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 22px;
@@ -236,6 +239,18 @@ function submitYear() {
     border-radius: 14px;
     border: 1px solid #e5e7eb;
     box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 20px;
+    margin-bottom: 55px;
+}
+
+.earning-output {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 22px;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .ea-input-container {

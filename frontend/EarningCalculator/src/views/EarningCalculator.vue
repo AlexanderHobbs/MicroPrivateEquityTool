@@ -24,31 +24,34 @@ function saveYearData(year, payload) {
                     <h2>{{ year }}</h2>
                     </div>
 
-                    <div class="metrics">
-                        <div class="metric">
-                            <span class="label">Revenue</span>
-                            <span class="value">{{ entry.operating.revenue }}</span>
-                        </div>
+                    <div>
+                        <h3>Operating</h3>
+                        <div class="metrics">
+                            <div class="metric">
+                                <span class="label">Revenue</span>
+                                <span class="value">{{ entry.operating.revenue }}</span>
+                            </div>
 
-                        <div class="metric">
-                            <span class="label">Expense</span>
-                            <span class="value">{{ entry.operating.expense }}</span>
-                        </div>
+                            <div class="metric">
+                                <span class="label">Expense</span>
+                                <span class="value">{{ entry.operating.expense }}</span>
+                            </div>
 
-                        <div class="metric">
-                            <span class="label">SDE</span>
-                            <span class="value">{{ entry.operating.ReportedSDE }}</span>
-                        </div>
+                            <div class="metric">
+                                <span class="label">SDE</span>
+                                <span class="value">{{ entry.operating.ReportedSDE }}</span>
+                            </div>
 
-                        <div class="metric">
-                            <span class="label">Owner Salary</span>
-                            <span class="value">{{ entry.operating.ownerSalary }}</span>
+                            <div class="metric">
+                                <span class="label">Owner Salary</span>
+                                <span class="value">{{ entry.operating.ownerSalary }}</span>
+                            </div>
                         </div>
                     </div>
 
 
                     <div>
-                    <h3>Add Backs</h3>
+                    <h3>Adjustments</h3>
                     
                     <div class="section">
                         <div v-for="(addBack, index) in entry.adjustments.addBacks" :key="index" class="sub-table">
@@ -73,7 +76,7 @@ function saveYearData(year, payload) {
                     </div>
 
                     <div>
-                    <h3>EBITDA</h3>
+                    <h3>Financials</h3>
                     <div class="metrics">
                         <div class = "metric"><span class = "label">Interest:</span><span class = "value">{{ entry.financials.InterestRate }}</span></div>
                         <div class = "metric"><span class = "label">Taxes:</span><span class = "value">{{ entry.financials.Taxes }}</span></div>
@@ -105,7 +108,6 @@ function saveYearData(year, payload) {
     border: 1px solid #e5e7eb;
     box-shadow: 0 2px 6px rgba(0,0,0,0.04);
 }
-
 
 .input{
     width: 100%;
