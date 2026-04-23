@@ -1,6 +1,11 @@
 <script setup>
 
 import {ref, useId} from 'vue'
+import CurrencyInput from '@/components/CurrencyInput.vue'
+import CurrencyOutput from '@/components/CurrencyOutput.vue'
+import EBITDAInput from '@/components/EBITDAInput.vue'
+import EBITDAOutput from '@/components/EBITDAOutput.vue'
+import { errorMessages } from 'vue/compiler-sfc'
 
 const selectedYear = ref()
 const selectedYear_Options = ref([
@@ -9,21 +14,41 @@ const selectedYear_Options = ref([
     {text: '2023', value: 2023},
 ])
 
-const revenueAmount = ref('')
-const expenseAmount = ref('')
-const SDE = ref('')
-const ownerSalary = ref('')
+const currencyForm = ref({
+    revenue: null,
+    expense: null,
+    ownerSalary: null,
+    ReportedSDE: null
+})
+
+const updatedValues = ref(null);
+
+function updateCurrencyValues() {
+    try{
+        updatedValues.value = () => structuredClone(currencyForm.value)
+    }catch(err){
+        errorMessages.value = (err)
+    }
+    
+    Object.keys(currencyForm.value).forEach(key => {
+        currencyForm.value[key] = null;
+    })
+
+
+}
+
+
 const addBackExist = ref(false)
 
 const AddBackList = ref([])
 
 const AddBackForm= ref(
     {
-        Id: useId(),
+        id: useId(),
         description: "",
-        price: "",
+        price: null,
         category: "",
-        confidenceLevel: ""
+        confidenceLevel: null
     }
 )
 
@@ -34,7 +59,7 @@ async function add_AddBack() {
         })
 
         Object.assign(AddBackForm.value, {
-            Id: 0,
+            id: null,
             description: '',
             price: '',
             category: '',
@@ -48,157 +73,149 @@ async function add_AddBack() {
 
 const EBITDAValuesExist = ref(false);
 
-const InterestRate = ref('');
-const Taxes = ref('');
-const Depreciation = ref('');
-const Amortization = ref('');
+const EBITDAForm = ref({
+    InterestRate: null,
+    Taxes: null,
+    Depreciation: null,
+    Amortization: null
+})
 
 const emit = defineEmits(['save'])
 
 function submitYear() {
     const yearData = {
-        revenue: revenueAmount.value,
-        expense: expenseAmount.value,
-        SDE: SDE.value,
-        ownerSalary: ownerSalary.value,
-        addBacks: AddBackList.value,
-        EBITDA: EBITDAValuesExist.value ? {
-            interestRate: InterestRate.value,
-            taxes: Taxes.value,
-            depreciation: Depreciation.value,
-            amortization: Amortization.value
-        } : null,
+        operating: {
+            ...currencyForm.value
+        },
+
+        adjustments: {
+            addBacks: AddBackList.value
+        },
+
+        financials: {
+            ...EBITDAForm.value
+        }
     }
 
     emit('save', selectedYear.value, yearData);
 }
 
-
-const financialData = ref({
-    revenue: '',
-    expense: '',
-    notes: '',
-})
-
-const fields = [
-    {key: 'revenue', label: 'Revenue', type: 'number', placeholder: '0.00'},
-    {key: 'expense', label: 'Expense', type: 'number', placeholder: '0.00'},
-    {key: 'notes', label: 'Notes', type: 'textarea'}
-]
-
 </script>
 
 <template>
+<body>
+    <div class = "parent-container">
+        <div class = "ea-input-container">
+            <h1>Earning Calculation</h1>
+            <div class = "selected-year-input">
+                <label for="SelectedYearInput">Select Fiscal Year: </label>
+                <select name="SelectedYearInput" id="InputYear" v-model = "selectedYear">
+                    <option disabled value="">Select a Year</option>
+                    <option v-for = "year in selectedYear_Options" :key = "year.value" :value = "year.value">
+                        {{ year.text }}
+                    </option>
+                </select>
+            </div>
 
-<div class = "parent-container">
-    <h1>Earning Calculation</h1>
+            <div class = "currency-input-form">
+                <CurrencyInput  label = "Revenue Amount: " v-model = "currencyForm.revenue"/>
 
-    <div class = "selected-year-input">
-        <label for="SelectedYearInput">Select Fiscal Year: </label>
-        <select name="SelectedYearInput" id="InputYear" v-model = "selectedYear">
-            <option disabled value="">Select a Year</option>
-            <option v-for = "year in selectedYear_Options" :key = "year.value" :value = "year.value">
-                {{ year.text }}
-            </option>
-        </select>
-        <p>Selected Year: {{ selectedYear }}</p>
-    </div>
+                <CurrencyInput  label = "Expense Amount:" v-model = "currencyForm.expense" />
 
-    <div class = "currency-input">
-        <label for="revenue">Revenue Amount: </label>
-        <input type="text" v-model = "revenueAmount" placeholder="00.00">
-        <p>{{ revenueAmount }}</p>
+                <CurrencyInput label = "Reported SDE:" v-model = "currencyForm.ReportedSDE" />
+                
+                <CurrencyInput label = "Owner Salary:" v-model = "currencyForm.ownerSalary" />
 
-    </div>
-    <div class="currency-input">
-        <label for="expense">Expense Amount: </label>
-        <input type="text" v-model = "expenseAmount" placeholder = "00.00">
-        <p>{{ expenseAmount }}</p>
-    </div>
+                <button @click="updateCurrencyValues">Submit Values</button>
+                
+            </div>
 
-    <div class="currency-input">
-        <label for="SDE">SDE: </label>
-        <input type="text" v-model = "SDE" placeholder = "00.00">
-        <p>{{ SDE }}</p>
-    </div>
+            <div class = "radio-btn-class">
+                <label for="hasAddBacks?">Owner Add Backs Exist for year {{ selectedYear }}?: </label>
+                <input type="radio" :value ="true" v-model = "addBackExist">
+                <label for="yes">Yes </label>
+                <input type="radio" :value = "false" v-model = "addBackExist">
+                <label for="no">No </label>
+            </div>
 
-    <div class="currency-input">
-        <label for="expense">Owner Salary: </label>
-        <input type="text" v-model = "ownerSalary" placeholder = "00.00">
-        <p>{{ ownerSalary }}</p>
-    </div>
+            <div class = "OwnerAddBacks" v-if = "addBackExist">
 
-     <div class = "radio-btn-class">
-        <label for="hasAddBacks?">Owner Add Backs Exist for year {{ selectedYear }}?: </label>
-        <input type="radio" :value ="true" v-model = "addBackExist">
-        <label for="yes">Yes </label>
-        <input type="radio" :value = "false" v-model = "addBackExist">
-        <label for="no">No </label>
-    </div>
+                <div class = "addBackEntry">
+                    <h4>Add claimed add backs (as many as needed): </h4>
+                    <label for="AddBack-Description">Add Back Description: </label>
+                    <textarea v-model = "AddBackForm.description" placeholder="description..."></textarea>
+                    <label for="AddBack-Value">Add Back Value: </label>
+                    <input type="number" v-model.number = "AddBackForm.price">
+                    <label for="AddBack-Category">Add Back Category: </label>
+                    <input type="text" v-model = "AddBackForm.category">
+                    <label for = "AddBack-ConfidenceLevel">Add Back Confidence Level:</label>
+                    <input type="range" v-model.number = "AddBackForm.confidenceLevel" min = "0" max = "100" step = "1">
+                    <span class = "confidence-value">{{ AddBackForm.confidenceLevel }}%</span>
 
-    <div class = "OwnerAddBacks" v-if = "addBackExist">
+                    <button class = "addBack-btn" @click="add_AddBack()">Create Add Back</button>
+                </div>
 
-        <div class = "addBackEntry">
-            <h4>Add claimed add backs (as many as needed): </h4>
-            <label for="AddBack-Description">Add Back Description: </label>
-            <textarea v-model = "AddBackForm.description" placeholder="description..."></textarea>
-            <label for="AddBack-Value">Add Back Value: </label>
-            <input type="text" v-model = "AddBackForm.price">
-            <label for="AddBack-Category">Add Back Category: </label>
-            <input type="text" v-model = "AddBackForm.category">
-            <label for = "AddBack-ConfidenceLevel">Add Back Confidence Level:</label>
-            <input type="range" v-model = "AddBackForm.confidenceLevel" min = "0" max = "100" step = "1">
-            <span class = "confidence-value">{{ AddBackForm.confidenceLevel }}%</span>
+            </div>
 
-            <button class = "addBack-btn" @click="add_AddBack()">Create Add Back</button>
+            <div class="radio-btn-class">
+                <label for="hasEBITDA?">Do EBITDA Records Exist for year {{ selectedYear }}?</label>
+                <input type="radio" :value = "true" v-model = "EBITDAValuesExist">
+                <label for="yes-rd-btn">Yes</label>
+                <input type="radio" :value = "false" v-model = "EBITDAValuesExist">
+                <label for="no-rd-btn">No</label>
+            </div>
+
+            <div class="EBITDA" v-if = "EBITDAValuesExist">
+                    <h4>Add EBITDA Values: </h4>
+
+                    <EBITDAInput label = "Interest Rate" v-model = "EBITDAForm.InterestRate"/>
+
+                    <EBITDAInput label = "Taxes" v-model = "EBITDAForm.Taxes"/>
+
+                    <EBITDAInput label = "Depreciation" v-model = "EBITDAForm.Depreciation"/>
+
+                    <EBITDAInput label = "Amortization" v-model = "EBITDAForm.Amortization"/>
+
+            </div>
+
+            <button class = "save-btn" @click = "submitYear">Save Data</button>
+
         </div>
 
-        <div class = "AddBackList">
-            <table class = "Table">
-                <thead>
-                    <tr>
-                        <th>Description</th>
-                        <th>Price</th>
-                        <th>Category</th>
-                        <th>Confidence Level</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <tr v-for = "addBack in AddBackList">
-                    <td>{{ addBack.description }}</td>
-                    <td>{{ addBack.price }}</td>
-                    <td>{{ addBack.category }}</td>
-                    <td>{{ addBack.confidenceLevel }}</td>
-                </tr>
-                </tbody>
-            </table>
+        <div class = "ea-output-container">
+
+            <div class = "output-container"><CurrencyOutput :data = "currencyForm" :label = "selectedYear"/></div>
+
+            <div class="output-container">
+                <div class = "AddBackList">
+                        <h4>Add Backs</h4>
+                        <table class = "Table">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                    <th>Category</th>
+                                    <th>Confidence Level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for = "addBack in AddBackList" :key = "addBack.id">
+                                <td>{{ addBack.description }}</td>
+                                <td>{{ addBack.price }}</td>
+                                <td>{{ addBack.category }}</td>
+                                <td>{{ addBack.confidenceLevel }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class = "output-container">
+                    <EBITDAOutput :data = "EBITDAForm"/>
+                </div>
         </div>
-
     </div>
-
-    <div class="radio-btn-class">
-        <label for="hasEBITDA?">Do EBITDA Records Exist for year {{ selectedYear }}?</label>
-        <input type="radio" :value = "true" v-model = "EBITDAValuesExist">
-        <label for="yes-rd-btn">Yes</label>
-        <input type="radio" :value = "false" v-model = "EBITDAValuesExist">
-        <label for="no-rd-btn">No</label>
-    </div>
-
-    <div class="EBITDA" v-if = "EBITDAValuesExist">
-            <h4>Add EBITDA Values: </h4>
-            <label for="Interest">Interest Rate: </label>
-            <input type = "text" v-model = "InterestRate">
-            <label for="AddBack-Value">Taxes: </label>
-            <input type="text" v-model = "Taxes">
-            <label for="AddBack-Category">Depreciation: </label>
-            <input type="text" v-model = "Depreciation">
-            <label for = "AddBack-ConfidenceLevel">Amortization:</label>
-            <input type="text" v-model = "Amortization">
-    </div>
-
-    <button class = "save-btn" @click = "submitYear">Save Data</button>
-
-</div>
+</body>
 
 </template>
 
@@ -207,6 +224,23 @@ const fields = [
 
 .parent-container {
     display: flex;
+}
+
+.ea-output-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+}
+
+.ea-input-container {
+    display: flex;
+    flex: 1.50;
     flex-direction: column;
     gap: 22px;
     padding: 20px;
@@ -214,8 +248,7 @@ const fields = [
 }
 
 /* Shared input row style */
-.selected-year-input,
-.currency-input {
+.selected-year-input {
     display: flex;
     align-items: center;
     gap: 16px;
@@ -224,15 +257,21 @@ const fields = [
     border-radius: 12px;
     border: 1px solid #e5e7eb;
     box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    min-width: none;
 }
 
 /* Label consistency */
-.selected-year-input label,
-.currency-input label {
+.selected-year-input label {
     font-size: 13px;
     font-weight: 500;
     color: #374151;
     min-width: 140px;
+}
+
+.currency-input-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
 }
 
 /* Inputs */
@@ -240,6 +279,7 @@ input, select, textarea {
     padding: 10px 12px;
     border-radius: 8px;
     border: 1px solid transparent;
+    box-sizing: border-box;
     outline: none;
     font-size: 13px;
     background: #f9fafb;

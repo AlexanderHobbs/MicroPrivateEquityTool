@@ -1,10 +1,7 @@
 <script setup>
-import navBar from '@/components/Side_NavBar.vue';
 import earningInput from '@/services/earningInput.vue';
 
 import {ref} from 'vue';
-
-const isOpen = ref(false)
 
 const yearlyData = ref({})
 
@@ -28,46 +25,60 @@ function saveYearData(year, payload) {
                     </div>
 
                     <div class="metrics">
-                    <div class="metric">
-                        <span class="label">Revenue</span>
-                        <span class="value">{{ entry.revenue }}</span>
+                        <div class="metric">
+                            <span class="label">Revenue</span>
+                            <span class="value">{{ entry.operating.revenue }}</span>
+                        </div>
+
+                        <div class="metric">
+                            <span class="label">Expense</span>
+                            <span class="value">{{ entry.operating.expense }}</span>
+                        </div>
+
+                        <div class="metric">
+                            <span class="label">SDE</span>
+                            <span class="value">{{ entry.operating.ReportedSDE }}</span>
+                        </div>
+
+                        <div class="metric">
+                            <span class="label">Owner Salary</span>
+                            <span class="value">{{ entry.operating.ownerSalary }}</span>
+                        </div>
                     </div>
 
-                    <div class="metric">
-                        <span class="label">Expense</span>
-                        <span class="value">{{ entry.expense }}</span>
-                    </div>
 
-                    <div class="metric">
-                        <span class="label">SDE</span>
-                        <span class="value">{{ entry.SDE }}</span>
-                    </div>
-
-                    <div class="metric">
-                        <span class="label">Owner Salary</span>
-                        <span class="value">{{ entry.ownerSalary }}</span>
-                    </div>
-                    </div>
-
-                    <div class="section" v-if="entry.addBacks?.length">
+                    <div>
                     <h3>Add Backs</h3>
-                    <div class="sub-table">
-                        <div v-for="(addBack, index) in entry.addBacks" :key="index" class="sub-row">
-                        <span>{{ addBack.description }}</span>
-                        <span>{{ addBack.price }}</span>
-                        <span>{{ addBack.category }}</span>
-                        <span>{{ addBack.confidenceLevel }}</span>
+                    
+                    <div class="section">
+                        <div v-for="(addBack, index) in entry.adjustments.addBacks" :key="index" class="sub-table">
+                            <div class = "metric">
+                                <span class = "label">Description:</span>
+                                <span class = "value">{{ addBack.description }}</span>
+                            </div>
+                            <div class = "metric">
+                                <span class = "label">Value: </span>
+                                <span class = "value">{{ addBack.price }}</span>
+                            </div>
+                            <div class = "metric">
+                                <span class = "label">Category: </span>
+                                <span class = "value">{{ addBack.category }}</span>
+                            </div>
+                            <div class = "metric">
+                                <span class = "label">Confidence Level:</span>
+                                <span class = "value">{{ addBack.confidenceLevel }}</span>
+                            </div>
                         </div>
                     </div>
                     </div>
 
-                    <div class="section" v-if="entry.EBITDA">
+                    <div>
                     <h3>EBITDA</h3>
-                    <div class="ebitda-grid">
-                        <div>Interest: {{ entry.EBITDA.interestRate }}</div>
-                        <div>Taxes: {{ entry.EBITDA.taxes }}</div>
-                        <div>Depreciation: {{ entry.EBITDA.depreciation }}</div>
-                        <div>Amortization: {{ entry.EBITDA.amortization }}</div>
+                    <div class="metrics">
+                        <div class = "metric"><span class = "label">Interest:</span><span class = "value">{{ entry.financials.InterestRate }}</span></div>
+                        <div class = "metric"><span class = "label">Taxes:</span><span class = "value">{{ entry.financials.Taxes }}</span></div>
+                        <div class = "metric"><span class = "label">Depreciation:</span><span class = "value">{{ entry.financials.Depreciation }}</span></div>
+                        <div class = "metric"><span class = "label">Amortization:</span><span class = "value">{{ entry.financials.Amortization }}</span></div>
                     </div>
                     </div>
 
@@ -163,7 +174,8 @@ function saveYearData(year, payload) {
 }
 
 .section {
-    margin-top: 14px;
+    gap: 20px;
+    margin-bottom: 15px;
 }
 
 .section h3 {
@@ -173,20 +185,12 @@ function saveYearData(year, payload) {
 }
 
 .sub-table {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 6px;
+    margin-bottom: 20px;
 }
 
-.sub-row {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    font-size: 12px;
-    padding: 6px;
-    border-radius: 8px;
-    background: #f3f4f6;
-    color: #374151;
-}
 
 .ebitda-grid {
     display: grid;
