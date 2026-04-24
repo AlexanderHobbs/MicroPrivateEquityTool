@@ -1,6 +1,6 @@
 <script setup>
 
-import {ref, useId} from 'vue'
+import {ref, useId, computed} from 'vue'
 import CurrencyInput from '@/components/CurrencyInput.vue'
 import CurrencyOutput from '@/components/CurrencyOutput.vue'
 import EBITDAInput from '@/components/EBITDAInput.vue'
@@ -34,7 +34,6 @@ function updateCurrencyValues() {
         currencyForm.value[key] = null;
     })
 
-
 }
 
 
@@ -45,9 +44,9 @@ const AddBackList = ref([])
 const AddBackForm= ref(
     {
         id: useId(),
-        description: "",
+        description: null,
         price: null,
-        category: "",
+        category: null,
         confidenceLevel: null
     }
 )
@@ -60,9 +59,9 @@ async function add_AddBack() {
 
         Object.assign(AddBackForm.value, {
             id: null,
-            description: '',
-            price: '',
-            category: '',
+            description: null,
+            price: null,
+            category: null,
             confidenceLevel: 50
         })
     
@@ -83,6 +82,7 @@ const EBITDAForm = ref({
 const emit = defineEmits(['save'])
 
 function submitYear() {
+    
     const yearData = {
         operating: {
             ...currencyForm.value
@@ -97,7 +97,28 @@ function submitYear() {
         }
     }
 
+    if(!dataIsNotNull(yearData)){
+        alert("Not all fiels have data entered — Please fill in all entries!");
+        yearData.value = null;
+        return;
+    }
+
     emit('save', selectedYear.value, yearData);
+}
+
+function dataIsNotNull(obj){
+    for(let key in obj){
+        if(obj[key] === null){
+            return false;
+        }
+
+        if(typeof obj[key] === 'object' && !dataIsNotNull(obj[key])){
+            return false;
+        }
+    }
+
+    return true;
+
 }
 
 </script>

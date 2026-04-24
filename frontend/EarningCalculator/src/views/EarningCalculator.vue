@@ -51,38 +51,52 @@ function saveYearData(year, payload) {
 
 
                     <div>
-                    <h3>Adjustments</h3>
-                    
-                    <div class="section">
-                        <div v-for="(addBack, index) in entry.adjustments.addBacks" :key="index" class="sub-table">
-                            <div class = "metric">
-                                <span class = "label">Description:</span>
-                                <span class = "value">{{ addBack.description }}</span>
-                            </div>
-                            <div class = "metric">
-                                <span class = "label">Value: </span>
-                                <span class = "value">{{ addBack.price }}</span>
-                            </div>
-                            <div class = "metric">
-                                <span class = "label">Category: </span>
-                                <span class = "value">{{ addBack.category }}</span>
-                            </div>
-                            <div class = "metric">
-                                <span class = "label">Confidence Level:</span>
-                                <span class = "value">{{ addBack.confidenceLevel }}</span>
+                        <h3>Adjustments</h3>
+                        
+                        <div class="section" v-if = "entry.adjustments.addBacks">
+                            <div v-for="(addBack, index) in entry.adjustments.addBacks" :key="index" class="sub-table">
+                                <div class = "metric">
+                                    <span class = "label">Description:</span>
+                                    <span class = "value">{{ addBack.description }}</span>
+                                </div>
+                                <div class = "metric">
+                                    <span class = "label">Value: </span>
+                                    <span class = "value">{{ addBack.price }}</span>
+                                </div>
+                                <div class = "metric">
+                                    <span class = "label">Category: </span>
+                                    <span class = "value">{{ addBack.category }}</span>
+                                </div>
+                                <div class = "metric">
+                                    <span class = "label">Confidence Level:</span>
+                                    <span class = "value">{{ addBack.confidenceLevel }}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <div v-else>
+                            <div class = "metric">
+                                    <span class = "label">Description:</span>
+                                </div>
+                                <div class = "metric">
+                                    <span class = "label">Value: </span>
+                                </div>
+                                <div class = "metric">
+                                    <span class = "label">Category: </span>
+                                </div>
+                                <div class = "metric">
+                                    <span class = "label">Confidence Level:</span>
+                                </div>
+                        </div>
                     </div>
 
                     <div>
-                    <h3>Financials</h3>
-                    <div class="metrics">
-                        <div class = "metric"><span class = "label">Interest:</span><span class = "value">{{ entry.financials.InterestRate }}</span></div>
-                        <div class = "metric"><span class = "label">Taxes:</span><span class = "value">{{ entry.financials.Taxes }}</span></div>
-                        <div class = "metric"><span class = "label">Depreciation:</span><span class = "value">{{ entry.financials.Depreciation }}</span></div>
-                        <div class = "metric"><span class = "label">Amortization:</span><span class = "value">{{ entry.financials.Amortization }}</span></div>
-                    </div>
+                        <h3>Financials</h3>
+                        <div class="metrics">
+                            <div class = "metric"><span class = "label">Interest:</span><span class = "value">{{ entry.financials.InterestRate }}</span></div>
+                            <div class = "metric"><span class = "label">Taxes:</span><span class = "value">{{ entry.financials.Taxes }}</span></div>
+                            <div class = "metric"><span class = "label">Depreciation:</span><span class = "value">{{ entry.financials.Depreciation }}</span></div>
+                            <div class = "metric"><span class = "label">Amortization:</span><span class = "value">{{ entry.financials.Amortization }}</span></div>
+                        </div>
                     </div>
 
                 </div>
