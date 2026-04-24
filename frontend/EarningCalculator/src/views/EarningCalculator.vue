@@ -1,12 +1,30 @@
 <script setup>
-import earningInput from '@/services/earningInput.vue';
+import EarningInput from '@/services/earningInput.vue';
 
 import {ref} from 'vue';
 
-const yearlyData = ref({})
+// ----------------------
+// State
+// ----------------------
 
-function saveYearData(year, payload) {
-   yearlyData.value[year] = payload
+
+const yearlyData = ref({})
+const selectedYearData = ref(null)
+
+
+// ----------------------
+// Actions
+// ----------------------
+
+function saveYearData(payload) {
+    if(!payload?.year) return
+    
+    yearlyData.value[payload.year] = payload
+}
+
+function handleLoadYear(year){
+    selectedYearData.value = yearlyData.value[year] || null
+    alert("function called")
 }
 
 </script>
@@ -16,7 +34,11 @@ function saveYearData(year, payload) {
     <div class = "parent">
 
         <div class = "input">
-            <earningInput @save = "saveYearData"/>
+            <EarningInput 
+                @save = "saveYearData"
+                @load-year = "handleLoadYear"
+                :initialData="selectedYearData"
+            />
             <div class="year-grid">
                 <div v-for="(entry, year) in yearlyData" :key="year" class="year-card">
 
@@ -53,8 +75,8 @@ function saveYearData(year, payload) {
                     <div>
                         <h3>Adjustments</h3>
                         
-                        <div class="section" v-if = "entry.adjustments.addBacks">
-                            <div v-for="(addBack, index) in entry.adjustments.addBacks" :key="index" class="sub-table">
+                        <div class="section" v-if = "entry.adjustments.addBacks.length">
+                            <div v-for="addBack in entry.adjustments.addBacks" :key="addBack.id" class="sub-table">
                                 <div class = "metric">
                                     <span class = "label">Description:</span>
                                     <span class = "value">{{ addBack.description }}</span>
@@ -75,27 +97,30 @@ function saveYearData(year, payload) {
                         </div>
                         <div v-else>
                             <div class = "metric">
-                                    <span class = "label">Description:</span>
-                                </div>
-                                <div class = "metric">
-                                    <span class = "label">Value: </span>
-                                </div>
-                                <div class = "metric">
-                                    <span class = "label">Category: </span>
-                                </div>
-                                <div class = "metric">
-                                    <span class = "label">Confidence Level:</span>
-                                </div>
+                                <span class = "label">No adjustment recorded:</span>
+                            </div>
                         </div>
                     </div>
 
                     <div>
                         <h3>Financials</h3>
                         <div class="metrics">
-                            <div class = "metric"><span class = "label">Interest:</span><span class = "value">{{ entry.financials.InterestRate }}</span></div>
-                            <div class = "metric"><span class = "label">Taxes:</span><span class = "value">{{ entry.financials.Taxes }}</span></div>
-                            <div class = "metric"><span class = "label">Depreciation:</span><span class = "value">{{ entry.financials.Depreciation }}</span></div>
-                            <div class = "metric"><span class = "label">Amortization:</span><span class = "value">{{ entry.financials.Amortization }}</span></div>
+                            <div class = "metric">
+                                <span class = "label">Interest:</span>
+                                <span class = "value">{{ entry.financials.InterestRate }}</span>
+                            </div>
+                            <div class = "metric">
+                                <span class = "label">Taxes:</span>
+                                <span class = "value">{{ entry.financials.Taxes }}</span>
+                            </div>
+                            <div class = "metric">
+                                <span class = "label">Depreciation:</span>
+                                <span class = "value">{{ entry.financials.Depreciation }}</span>
+                            </div>
+                            <div class = "metric">
+                                <span class = "label">Amortization:</span>
+                                <span class = "value">{{ entry.financials.Amortization }}</span>
+                            </div>
                         </div>
                     </div>
 
@@ -116,11 +141,12 @@ function saveYearData(year, payload) {
     display: flex;
     width: 100%;
     height: 100%;
-    background: #ffffff;
+    background: #f2f2f2;
     padding: 12px 14px;
     border-radius: 12px;
     border: 1px solid #e5e7eb;
     box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    box-sizing: border-box;
 }
 
 .input{

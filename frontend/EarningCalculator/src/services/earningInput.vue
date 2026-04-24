@@ -1,14 +1,35 @@
 <script setup>
 
-import {ref, useId, computed} from 'vue'
+import {ref, watch, useId} from 'vue'
 import CurrencyInput from '@/components/CurrencyInput.vue'
 import CurrencyOutput from '@/components/CurrencyOutput.vue'
 import EBITDAInput from '@/components/EBITDAInput.vue'
 import EBITDAOutput from '@/components/EBITDAOutput.vue'
-import { errorMessages } from 'vue/compiler-sfc'
+
+const props = defineProps({
+    initialData: Object
+})
+
+watch(
+    () => props.initialData,
+    (data) => {
+        if(!data) return
+
+        Object.assign(currencyForm, data.operating)
+        Object.assign(EBITDAForm, data.financials)
+
+        AddBackList.value = data.adjustments.addBacks ? data.adjustments.addBacks.map(x => ({...x})) : []
+    },
+        
+    {immediate: true}
+)
+
+// ----------------------
+// State
+// ----------------------
 
 const selectedYear = ref()
-const selectedYear_Options = ref([
+const yearOptions = ref([
     {text: '2025', value: 2025},
     {text: '2024', value: 2024},
     {text: '2023', value: 2023},
@@ -21,54 +42,17 @@ const currencyForm = ref({
     ReportedSDE: null
 })
 
-const updatedValues = ref(null);
-
-function updateCurrencyValues() {
-    try{
-        updatedValues.value = () => structuredClone(currencyForm.value)
-    }catch(err){
-        errorMessages.value = (err)
-    }
-    
-    Object.keys(currencyForm.value).forEach(key => {
-        currencyForm.value[key] = null;
-    })
-
-}
-
-
 const addBackExist = ref(false)
 
 const AddBackList = ref([])
 
-const AddBackForm= ref(
-    {
+const AddBackForm = ref({
         id: useId(),
         description: null,
         price: null,
         category: null,
         confidenceLevel: null
-    }
-)
-
-async function add_AddBack() {
-    try{
-        AddBackList.value.push({
-            ...AddBackForm.value
-        })
-
-        Object.assign(AddBackForm.value, {
-            id: null,
-            description: null,
-            price: null,
-            category: null,
-            confidenceLevel: 50
-        })
-    
-    }catch (err){
-        console.error(err);
-    }
-}
+})
 
 const EBITDAValuesExist = ref(false);
 
@@ -79,47 +63,111 @@ const EBITDAForm = ref({
     Amortization: null
 })
 
-const emit = defineEmits(['save'])
+
+// ----------------------
+// Helpers
+// ----------------------
+
+function generateId() {
+  return crypto.randomUUID()
+}
+
+
+function resetForm() {
+ 
+   Object.assign(currencyForm.value, {
+        revenue: null,
+        expense: null,
+        ownerSalary: null,
+        ReportedSDE: null
+    })
+
+    Object.assign(EBITDAForm.value, {
+        InterestRate: null,
+        Taxes: null,
+        Depreciation: null,
+        Amortization: null
+    })
+
+    selectedYear.value = null
+    addBackExist.value = false
+    EBITDAValuesExist.value = false
+
+}
+
+function resetAddBackForm() {
+    Object.assign(AddBackForm.value, {
+        id: generateId(),
+        description: null,
+        price: null,
+        category: null,
+        confidenceLevel: 50
+    })
+}
+
+// ----------------------
+// Actions
+// ----------------------
+
+
+function add_AddBack() {
+
+
+    if(Object.values(AddBackForm.value).some(val => val === null)) {
+        alert("Please fill in all add back!")
+        return
+    }
+
+    AddBackList.value.push({
+        ...AddBackForm.value
+    })
+
+    resetAddBackForm();
+
+}
+
+
+const emit = defineEmits(['save', 'load-year'])
 
 function submitYear() {
     
-    const yearData = {
-        operating: {
-            ...currencyForm.value
-        },
+    const payload = {
+        year: selectedYear.value,
+        operating: {...currencyForm.value },
+        adjustments: { addBacks: AddBackList.value},
 
-        adjustments: {
-            addBacks: AddBackList.value
-        },
-
-        financials: {
-            ...EBITDAForm.value
-        }
+        financials: {...EBITDAForm.value}
     }
 
-    if(!dataIsNotNull(yearData)){
+    if(!dataIsNotNull(payload)){
         alert("Not all fiels have data entered — Please fill in all entries!");
-        yearData.value = null;
         return;
     }
 
-    emit('save', selectedYear.value, yearData);
+    emit('save', payload);
+    alert("Loaded");
+
+    AddBackList.value = [];
+    resetForm();
+
 }
 
-function dataIsNotNull(obj){
-    for(let key in obj){
-        if(obj[key] === null){
-            return false;
-        }
+function loadYear(year){
+    emit('load-year', year)
+}
 
-        if(typeof obj[key] === 'object' && !dataIsNotNull(obj[key])){
-            return false;
-        }
-    }
-
+function dataIsNotNull(obj) { 
+    for(let key in obj){ 
+        if(obj[key] === null){ 
+            return false; 
+        } 
+        if(typeof obj[key] === 'object' && !dataIsNotNull(obj[key])){ 
+            return false; } 
+    } 
+    
     return true;
-
 }
+
 
 </script>
 
@@ -128,11 +176,12 @@ function dataIsNotNull(obj){
     <div class = "parent-container">
         <div class = "ea-input-container">
             <h1>Earning Calculation</h1>
+
             <div class = "selected-year-input">
-                <label for="SelectedYearInput">Select Fiscal Year: </label>
-                <select name="SelectedYearInput" id="InputYear" v-model = "selectedYear">
+                <label>Select Fiscal Year: </label>
+                <select v-model = "selectedYear"  @change="loadYear(selectedYear)">
                     <option disabled value="">Select a Year</option>
-                    <option v-for = "year in selectedYear_Options" :key = "year.value" :value = "year.value">
+                    <option v-for = "year in yearOptions" :key = "year.value" :value = "year.value">
                         {{ year.text }}
                     </option>
                 </select>
@@ -140,65 +189,55 @@ function dataIsNotNull(obj){
 
             <div class = "currency-input-form">
                 <CurrencyInput  label = "Revenue Amount: " v-model = "currencyForm.revenue"/>
-
                 <CurrencyInput  label = "Expense Amount:" v-model = "currencyForm.expense" />
-
-                <CurrencyInput label = "Reported SDE:" v-model = "currencyForm.ReportedSDE" />
-                
-                <CurrencyInput label = "Owner Salary:" v-model = "currencyForm.ownerSalary" />
-
-                <!-- <button @click="updateCurrencyValues">Submit Values</button> -->
-                
+                <CurrencyInput label = "Reported SDE: " v-model = "currencyForm.ReportedSDE" />           
+                <CurrencyInput label = "Owner Salary: " v-model = "currencyForm.ownerSalary" />                
             </div>
 
             <div class = "radio-btn-class">
-                <label for="hasAddBacks?">Owner Add Backs Exist for year {{ selectedYear }}?: </label>
+                <label>Owner Add Backs Exist? </label>
                 <input type="radio" :value ="true" v-model = "addBackExist">
-                <label for="yes">Yes </label>
+                <label for="yes-rd-btn">Yes</label>
                 <input type="radio" :value = "false" v-model = "addBackExist">
-                <label for="no">No </label>
+                <label for="no-rd-btn">No</label>
             </div>
 
+            <Transition name = "fade"> 
             <div class = "OwnerAddBacks" v-if = "addBackExist">
-
                 <div class = "addBackEntry">
-                    <h4>Add claimed add backs (as many as needed): </h4>
-                    <label for="AddBack-Description">Add Back Description: </label>
-                    <textarea v-model = "AddBackForm.description" placeholder="description..."></textarea>
-                    <label for="AddBack-Value">Add Back Value: </label>
+                    <h4>Add Back Entry: </h4>
+                    <label>Add Back Description: </label>
+                    <textarea v-model = "AddBackForm.description" placeholder="description"></textarea>
+                    <label>Add Back Value: </label>
                     <input type="number" v-model.number = "AddBackForm.price">
-                    <label for="AddBack-Category">Add Back Category: </label>
+                    <label>Add Back Category: </label>
                     <input type="text" v-model = "AddBackForm.category">
-                    <label for = "AddBack-ConfidenceLevel">Add Back Confidence Level:</label>
-                    <input type="range" v-model.number = "AddBackForm.confidenceLevel" min = "0" max = "100" step = "1">
+                    <label>Add Back Confidence Level:</label>
+                    <input type="range" v-model.number = "AddBackForm.confidenceLevel" min = "0" max = "100">
                     <span class = "confidence-value">{{ AddBackForm.confidenceLevel }}%</span>
 
                     <button class = "addBack-btn" @click="add_AddBack()">Create Add Back</button>
                 </div>
-
             </div>
+            </Transition>  
 
             <div class="radio-btn-class">
-                <label for="hasEBITDA?">Do EBITDA Records Exist for year {{ selectedYear }}?</label>
+                <label>Do EBITDA Records Exist?</label>
                 <input type="radio" :value = "true" v-model = "EBITDAValuesExist">
                 <label for="yes-rd-btn">Yes</label>
                 <input type="radio" :value = "false" v-model = "EBITDAValuesExist">
                 <label for="no-rd-btn">No</label>
             </div>
 
-            <div class="EBITDA" v-if = "EBITDAValuesExist">
-                    <h4>Add EBITDA Values: </h4>
-
-                    <EBITDAInput label = "Interest Rate" v-model = "EBITDAForm.InterestRate"/>
-
-                    <EBITDAInput label = "Taxes" v-model = "EBITDAForm.Taxes"/>
-
-                    <EBITDAInput label = "Depreciation" v-model = "EBITDAForm.Depreciation"/>
-
-                    <EBITDAInput label = "Amortization" v-model = "EBITDAForm.Amortization"/>
-
-            </div>
-
+            <Transition name = "fade"> 
+                <div class="EBITDA" v-if = "EBITDAValuesExist">
+                        <h4>Add EBITDA Values: </h4>
+                        <EBITDAInput label = "Interest Rate" v-model = "EBITDAForm.InterestRate"/>
+                        <EBITDAInput label = "Taxes" v-model = "EBITDAForm.Taxes"/>
+                        <EBITDAInput label = "Depreciation" v-model = "EBITDAForm.Depreciation"/>
+                        <EBITDAInput label = "Amortization" v-model = "EBITDAForm.Amortization"/>
+                </div>
+            </Transition>
             <button class = "save-btn" @click = "submitYear">Save Data</button>
 
         </div>
@@ -223,11 +262,11 @@ function dataIsNotNull(obj){
                                 </tr>
                             </thead>
                             <tbody>
-                            <tr v-for = "addBack in AddBackList" :key = "addBack.id">
-                                <td>{{ addBack.description }}</td>
-                                <td>{{ addBack.price }}</td>
-                                <td>{{ addBack.category }}</td>
-                                <td>{{ addBack.confidenceLevel }}</td>
+                            <tr v-for = "item in AddBackList" :key = "item.id">
+                                <td>{{ item.description }}</td>
+                                <td>{{ item.price }}</td>
+                                <td>{{ item.category }}</td>
+                                <td>{{ item.confidenceLevel }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -418,6 +457,16 @@ input:focus, select:focus, textarea:focus {
 .confidence-value {
     font-size: 12px;
     color: #6b7280;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
 }
 
 

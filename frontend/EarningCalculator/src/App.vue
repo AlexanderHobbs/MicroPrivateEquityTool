@@ -22,11 +22,9 @@ const pageNum = ref(0)
     <div class = "hero-section-ea">
 
         <div class = "side-nav-bar">
-            <Side_NavBar />
+            <Side_NavBar @change-page = "(n) => pageNum = n"/>
         </div>
         
-        <div class="vertical-line"></div>
-
         <div class = "input-section" v-if = "pageNum === 0">
             <earningCalculator />
         </div>
@@ -54,10 +52,17 @@ const pageNum = ref(0)
 
 <style scoped>
 
+.app {
+    background-color: red;
+}
+
 .parent-container {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    box-sizing: border-box;
+    background-color: white;
+    box-sizing: border-box;
 }
 
 
@@ -66,6 +71,7 @@ const pageNum = ref(0)
     height: 100%;
     display: flex;
     flex-direction: row;
+    gap: 20px;
 }
 
 .vertical-line {
@@ -78,9 +84,5 @@ const pageNum = ref(0)
     width: 100%;
 }
 
-.side-nav-bar .navbar { 
-    top: 0px;
-    position: sticky;
-}
 
 </style>

@@ -4,7 +4,6 @@
 
 <template>
 <div class = "parent">
-    <div class = "logo"><img src="@/assets/logo.png" alt="logo"></div>
     <div class = "name"><img src="@/assets/name.png" alt="name"></div>
     <div class = "settings"><img src="@/assets/setting.png" alt="settings"></div>
 </div>
@@ -26,7 +25,6 @@
 }
 
 /* Shared image behavior */
-.logo img,
 .name img,
 .settings img {
    height: auto;
@@ -37,15 +35,10 @@
 }
 
 /* Specific sizing */
-.logo img { width: 50px; }
 .name img { width: 110px; }
 .settings img { width: 45px; }
 
 /* Hover interactions */
-.logo img:hover {
-    transform: scale(1.08) rotate(-2deg);
-    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
-}
 
 .name img:hover {
     transform: scale(1.05);
@@ -58,7 +51,6 @@
 }
 
 /* Click feedback */
-.logo img:active,
 .name img:active,
 .settings img:active {
     transform: scale(0.95);
