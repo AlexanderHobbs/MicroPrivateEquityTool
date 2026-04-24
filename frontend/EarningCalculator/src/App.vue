@@ -1,13 +1,32 @@
 <script setup>
-import {ref} from 'vue'
-import earningCalculator from '@/views/EarningCalculator.vue';
+
+import {ref, computed} from 'vue'
+
 import Top_NavBar from './components/Top_NavBar.vue';
 import Side_NavBar from './components/Side_NavBar.vue';
 
-import FinancialSummary from './views/FinancialSummary.vue';
-import LossReport from './views/LossReport.vue';
+import EarningCalculator from '@/views/EarningCalculator.vue';
+import DebtPayment from './views/DebtPaymentCalculator.vue';
+import DSCRCalculator from './views/DSCRCalculator.vue';
+import RevenueStressTool from './views/RevenueStressTool.vue';
+import BreakEvenAnalysis from './views/BreakEvenAnalysis.vue';
+import SummaryDashboard from './views/SummaryDashboard.vue';
+import ScenarioComparison from './views/ScenarioComparison.vue';
 
 const pageNum = ref(0)
+
+const component = [
+    EarningCalculator,
+    DebtPayment,
+    DSCRCalculator,
+    RevenueStressTool,
+    BreakEvenAnalysis,
+    SummaryDashboard,
+    ScenarioComparison
+]
+
+const currentPageComponent = computed(() => component[pageNum.value]);
+
 
 </script>
 
@@ -25,15 +44,12 @@ const pageNum = ref(0)
             <Side_NavBar @change-page = "(n) => pageNum = n"/>
         </div>
         
-        <div class = "input-section" v-if = "pageNum === 0">
-            <earningCalculator />
+        <div class = "input-section">
+            <Transition name = "fade" mode = "out-in">
+                <component :is = "currentPageComponent" />
+            </Transition>
         </div>
-        <div class = "input-section" v-else-if = "pageNum === 1">
-            <FinancialSummary />
-        </div>
-        <div class = "input-section" v-else-if = "pageNum === 2">
-            <LossReport />
-        </div>
+
     </div>
 
 </div>
@@ -51,15 +67,11 @@ const pageNum = ref(0)
 </template>
 
 <style scoped>
-
-.app {
-    background-color: red;
-}
-
 .parent-container {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    padding: 10px;
     box-sizing: border-box;
     background-color: white;
     box-sizing: border-box;
@@ -71,7 +83,7 @@ const pageNum = ref(0)
     height: 100%;
     display: flex;
     flex-direction: row;
-    gap: 20px;
+    gap: 30px;
 }
 
 .vertical-line {
@@ -82,6 +94,16 @@ const pageNum = ref(0)
 
 .input-section {
     width: 100%;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: .25;
 }
 
 

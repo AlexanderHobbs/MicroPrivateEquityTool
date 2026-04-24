@@ -20,8 +20,12 @@ const toggleNav = () => {
         <div class = "logo"><img src="@/assets/logo.png" alt="logo"></div>
         <ul>
             <li><button @click = "$emit('change-page', 0)">Earning Calculator</button></li>
-            <li><button @click = "$emit('change-page', 1)">Loss Report</button></li>
-            <li><button @click = "$emit('change-page', 2)">Financial Summary</button></li>
+            <li><button @click = "$emit('change-page', 1)">Debt Payment</button></li>
+            <li><button @click = "$emit('change-page', 2)">DSCR calculator</button></li>
+            <li><button @click = "$emit('change-page', 3)">Revenue Stress test tool</button></li>
+            <li><button @click = "$emit('change-page', 4)">Break-even analysis</button></li>
+            <li><button @click = "$emit('change-page', 5)">Summary Dashboard</button></li>
+            <li><button @click = "$emit('change-page', 6)">Scenario Comparison</button></li>
         </ul>
     </div>
 
@@ -38,13 +42,12 @@ const toggleNav = () => {
 .navbar {
     display: flex;
     flex-direction: row; /* critical for sidebar layout */
-    width: 220px;
+    width: 230px;
     height: 100vh;
 
     background: #f2f2f2;
     color: black;
 
-    padding: 14px 12px;
     border-radius: 14px;
     border: 1px solid #e5e7eb;
     box-shadow: 0 2px 6px rgba(0,0,0,0.04);
@@ -61,8 +64,13 @@ const toggleNav = () => {
 
 /* Nav section */
 .navbar-links {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    width: 100%;
     flex: 1;
-    padding: 20px 10px;
+    padding: 25px 15px;
+    
 }
 
 .navbar-links ul {
@@ -72,7 +80,7 @@ const toggleNav = () => {
 }
 
 .navbar-links li {
-    margin-bottom: 12px;
+    margin-bottom: 20px;
 }
 
 .navbar-links button {
@@ -133,15 +141,17 @@ const toggleNav = () => {
 /* Toggle button container */
 .toggle-navBar-btn {
     display: flex;
+    flex: .1;
     align-items: center;
-    padding: 10px;
+    padding: 1px;
+    right: 1px;
 }
 
 .toggle-navBar-btn button {
     background: #1f2937;
     border: none;
     color: white;
-    padding: 8px;
+    padding: 4px;
     border-radius: 6px;
     cursor: pointer;
     height: auto;
@@ -161,7 +171,7 @@ const toggleNav = () => {
 
 .logo img:hover {
     transform: scale(1.06);
-    box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.16);
 }
 
 /* Click feedback */

@@ -4,15 +4,24 @@
 
 const prop = defineProps({
     label: {type: String, required: true},
-    modelValue: {type: Number, default: null},
+    modelValue: {type: [Number, String, null], default: null},
+    placeholder: {type: String, default: "00.00"},
+    inputType: {type: Number, default: 1},
+    style: {type: String, default: "single-input"}
 });
 
 const emit = defineEmits(['update:modelValue']);
 
 const onInput = (event) => {
     const value = event.target.value;
-    const parsed = value === "" ? null : Number(value);
-    emit("update:modelValue", parsed);
+
+    if(prop.inputType === 1){
+        const parsed = value === "" ? null : Number(value);
+        emit("update:modelValue", parsed);
+    }else{
+        emit("update:modelValue", value);
+    }
+
 }
 
 // const nonDigit = ref()
@@ -27,10 +36,21 @@ const onInput = (event) => {
 </script>
 
 <template>
-  <div class = "currency-input">
+  <div :class = "style" v-if = "inputType === 1" >
     <label>{{ label }}</label>
-    <input type="number" placeholder="00.00" :value="modelValue" @input="onInput" />
+    <input type="number" :placeholder= "placeholder" :value="modelValue" @input="onInput" />
   </div>
+
+  <div :class = "style" v-if = "inputType === 2" >
+    <label>{{ label }}</label>
+    <input type="text" :value="modelValue" @input="onInput" />
+  </div>
+
+  <div :class = "style" v-if = "inputType === 3" >
+    <label>{{ label }}</label>
+    <textarea :value = "modelValue" @input="onInput"></textarea>
+  </div>
+  
 
     <!-- <Teleport to = "body">
         <div v-show = "nonDigit" class = "error-character">
@@ -43,23 +63,32 @@ const onInput = (event) => {
 
 <style scoped>
 
-.currency-input {
+.single-input {
     display: flex;
     align-items: center;
     gap: 16px;
     background: #ffffff;
+    gap: 20px;
     padding: 12px 14px;
     border-radius: 12px;
     border: 1px solid #e5e7eb;
     box-shadow: 0 2px 6px rgba(0,0,0,0.04);
 }
 
+.no-border{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #ffffff;
+    gap: 20px;
+    padding: 12px 14px;
+}
+
 /* Label consistency */
-.currency-input label {
+.single-input label {
     font-size: 13px;
     font-weight: 500;
     color: #374151;
-    min-width: 140px;
 }
 
 input {

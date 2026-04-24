@@ -1,5 +1,5 @@
 <script setup>
-import EarningInput from '@/services/earningInput.vue';
+import EarningInput from '@/services/EarningCalculatorInput.vue';
 
 import {ref} from 'vue';
 

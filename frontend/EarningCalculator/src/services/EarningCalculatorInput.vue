@@ -1,10 +1,10 @@
 <script setup>
 
 import {ref, watch, useId} from 'vue'
-import CurrencyInput from '@/components/CurrencyInput.vue'
-import CurrencyOutput from '@/components/CurrencyOutput.vue'
-import EBITDAInput from '@/components/EBITDAInput.vue'
-import EBITDAOutput from '@/components/EBITDAOutput.vue'
+import SingleInput from '@/components/basic/SingleInput.vue'
+import CurrencyOutput from '@/components/ea_comp/CurrencyOutput.vue'
+import EBITDAInput from '@/components/ea_comp/EBITDAInput.vue'
+import EBITDAOutput from '@/components/ea_comp/EBITDAOutput.vue'
 
 const props = defineProps({
     initialData: Object
@@ -45,6 +45,13 @@ const currencyForm = ref({
 const addBackExist = ref(false)
 
 const AddBackList = ref([])
+
+const categoryOptions = ref([
+    {text: "non-recurring", value: 1},
+    {text: "discretionary", value: .75},
+    {text: "questionable", value: .25},
+
+])
 
 const AddBackForm = ref({
         id: useId(),
@@ -175,7 +182,7 @@ function dataIsNotNull(obj) {
 <body>
     <div class = "parent-container">
         <div class = "ea-input-container">
-            <h1>Earning Calculation</h1>
+            <h2>Calculate True Earnings</h2>
 
             <div class = "selected-year-input">
                 <label>Select Fiscal Year: </label>
@@ -188,10 +195,10 @@ function dataIsNotNull(obj) {
             </div>
 
             <div class = "currency-input-form">
-                <CurrencyInput  label = "Revenue Amount: " v-model = "currencyForm.revenue"/>
-                <CurrencyInput  label = "Expense Amount:" v-model = "currencyForm.expense" />
-                <CurrencyInput label = "Reported SDE: " v-model = "currencyForm.ReportedSDE" />           
-                <CurrencyInput label = "Owner Salary: " v-model = "currencyForm.ownerSalary" />                
+                <SingleInput  label = "Revenue Amount: " v-model = "currencyForm.revenue"/>
+                <SingleInput  label = "Expense Amount:" v-model = "currencyForm.expense" />
+                <SingleInput label = "Reported SDE: " v-model = "currencyForm.ReportedSDE" />           
+                <SingleInput label = "Owner Salary: " v-model = "currencyForm.ownerSalary" />                
             </div>
 
             <div class = "radio-btn-class">
@@ -211,7 +218,12 @@ function dataIsNotNull(obj) {
                     <label>Add Back Value: </label>
                     <input type="number" v-model.number = "AddBackForm.price">
                     <label>Add Back Category: </label>
-                    <input type="text" v-model = "AddBackForm.category">
+                    <select v-model = "AddBackForm.category">
+                        <option v-for="category in categoryOptions" :key = "category.text" :value="category.text">
+                            {{ category.text }}
+                        </option>
+                    </select>
+                    <!-- <input type="text" v-model = "AddBackForm.category"> -->
                     <label>Add Back Confidence Level:</label>
                     <input type="range" v-model.number = "AddBackForm.confidenceLevel" min = "0" max = "100">
                     <span class = "confidence-value">{{ AddBackForm.confidenceLevel }}%</span>
@@ -294,7 +306,7 @@ function dataIsNotNull(obj) {
     display: flex;
     flex-direction: column;
     gap: 22px;
-    background: #ffffff;
+    background: rgba(255, 255, 255, .75);
     padding: 20px;
     border-radius: 14px;
     border: 1px solid #e5e7eb;
