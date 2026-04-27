@@ -17,15 +17,15 @@ const toggleNav = () => {
 <template>
 <nav :class="['navbar', { closed: !isOpen }]">
     <div class = "navbar-links" v-show = "isOpen">
-        <div class = "logo"><img src="@/assets/logo.png" alt="logo"></div>
+        <!-- <div class = "logo"><img src="@/assets/logo.png" alt="logo"></div> -->
         <ul>
-            <li><button @click = "$emit('change-page', 0)">Earning Calculator</button></li>
-            <li><button @click = "$emit('change-page', 1)">Debt Payment</button></li>
-            <li><button @click = "$emit('change-page', 2)">DSCR calculator</button></li>
-            <li><button @click = "$emit('change-page', 3)">Revenue Stress test tool</button></li>
-            <li><button @click = "$emit('change-page', 4)">Break-even analysis</button></li>
-            <li><button @click = "$emit('change-page', 5)">Summary Dashboard</button></li>
-            <li><button @click = "$emit('change-page', 6)">Scenario Comparison</button></li>
+            <li><button @click = "$emit('change-page', 'earning')">Earning Calculator</button></li>
+            <li><button @click = "$emit('change-page', 'debt')">Debt Payment</button></li>
+            <li><button @click = "$emit('change-page', 'dscr')">DSCR calculator</button></li>
+            <li><button @click = "$emit('change-page', 'stress')">Revenue Stress test tool</button></li>
+            <li><button @click = "$emit('change-page', 'breakEven')">Break-even analysis</button></li>
+            <li><button @click = "$emit('change-page', 'summary')">Summary Dashboard</button></li>
+            <li><button @click = "$emit('change-page', 'comparison')">Scenario Comparison</button></li>
         </ul>
     </div>
 
@@ -109,18 +109,18 @@ const toggleNav = () => {
 .navbar-links button:hover {
     background: rgba(255, 255, 255, 0.10);
     color: gray;
-    transform: translateX(3px);
+    /* transform: translateX(3px); */
 }
 
-.navbar-links button:active {
+/* .navbar-links button:active {
     background: rgba(59, 130, 246, 0.18);
     color: #60a5fa;
     font-weight: 500;
 
     position: relative;
-}
+} */
 
-.navbar-links button:active::before {
+/* .navbar-links button:active::before {
     content: "";
     position: absolute;
     left: -6px;
@@ -132,9 +132,9 @@ const toggleNav = () => {
     border-radius: 6px;
 
     background: #3b82f6;
-}
+} */
 
-.navbar-links button:active:hover {
+.navbar-links button.active:hover {
     background: rgba(59, 130, 246, 0.25);
 }
 
@@ -148,9 +148,8 @@ const toggleNav = () => {
 }
 
 .toggle-navBar-btn button {
-    background: #1f2937;
     border: none;
-    color: white;
+    color: #1f2937;
     padding: 4px;
     border-radius: 6px;
     cursor: pointer;
@@ -159,6 +158,7 @@ const toggleNav = () => {
 
 .toggle-navBar-btn button:hover {
     background: #374151;
+    color: white;
 }
 
 .logo img {

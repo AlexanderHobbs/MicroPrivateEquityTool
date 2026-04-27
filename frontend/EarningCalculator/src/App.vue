@@ -5,6 +5,8 @@ import {ref, computed} from 'vue'
 import Top_NavBar from './components/Top_NavBar.vue';
 import Side_NavBar from './components/Side_NavBar.vue';
 
+import Settings from './views/Settings.vue';
+
 import EarningCalculator from '@/views/EarningCalculator.vue';
 import DebtPayment from './views/DebtPaymentCalculator.vue';
 import DSCRCalculator from './views/DSCRCalculator.vue';
@@ -13,19 +15,32 @@ import BreakEvenAnalysis from './views/BreakEvenAnalysis.vue';
 import SummaryDashboard from './views/SummaryDashboard.vue';
 import ScenarioComparison from './views/ScenarioComparison.vue';
 
-const pageNum = ref(0)
+const currentPage = ref('earning')
+const previousPage = ref()
 
-const component = [
-    EarningCalculator,
-    DebtPayment,
-    DSCRCalculator,
-    RevenueStressTool,
-    BreakEvenAnalysis,
-    SummaryDashboard,
-    ScenarioComparison
-]
+const pages = {
+    earning: EarningCalculator,
+    debt: DebtPayment,
+    dscr: DSCRCalculator,
+    stress:RevenueStressTool,
+    breakEven: BreakEvenAnalysis,
+    summary:SummaryDashboard,
+    comparison: ScenarioComparison,
+    settings: Settings
+}
 
-const currentPageComponent = computed(() => component[pageNum.value]);
+function changePage(page){
+    if(currentPage.value !== 'settings'){
+        previousPage.value = currentPage.value
+    }
+    currentPage.value = page;
+}
+
+function goBackPage(){
+    currentPage.value = previousPage.value
+}
+
+const currentPageComponent = computed(() => pages[currentPage.value]);
 
 
 </script>
@@ -35,13 +50,13 @@ const currentPageComponent = computed(() => component[pageNum.value]);
 <div class = "parent-container">
 
     <div class = "top-nav">
-        <Top_NavBar class = "side-nav"/>
+        <Top_NavBar class = "side-nav" @change-page = "changePage"/>
     </div>
 
-    <div class = "hero-section-ea">
+    <div class = "hero-section-ea" v-if = "currentPage !== 'settings'">
 
         <div class = "side-nav-bar">
-            <Side_NavBar @change-page = "(n) => pageNum = n"/>
+            <Side_NavBar @change-page = "changePage"/>
         </div>
         
         <div class = "input-section">
@@ -49,7 +64,9 @@ const currentPageComponent = computed(() => component[pageNum.value]);
                 <component :is = "currentPageComponent" />
             </Transition>
         </div>
-
+    </div>
+    <div class = "hero-section-ea" v-else>
+        <Settings @close = "goBackPage"/>
     </div>
 
 </div>
@@ -70,7 +87,7 @@ const currentPageComponent = computed(() => component[pageNum.value]);
 .parent-container {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
     padding: 10px;
     box-sizing: border-box;
     background-color: white;
@@ -98,7 +115,7 @@ const currentPageComponent = computed(() => component[pageNum.value]);
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: 0.2s ease;
+  transition: 0.175s ease;
 }
 
 .fade-enter-from,

@@ -84,8 +84,7 @@ const onInput = (event) => {
     padding: 12px 14px;
 }
 
-/* Label consistency */
-.single-input label {
+label {
     font-size: 13px;
     font-weight: 500;
     color: #374151;

@@ -1,11 +1,17 @@
 <script setup>
 
+const emit = defineEmits(['changePage'])
+
+function goToPage(pageName){
+    emit('changePage', pageName)
+}
+
 </script>
 
 <template>
 <div class = "parent">
     <div class = "name"><img src="@/assets/name.png" alt="name"></div>
-    <div class = "settings"><img src="@/assets/setting.png" alt="settings"></div>
+    <div class = "settings" @click = "goToPage('settings')"><img src="@/assets/setting.png" alt="settings"></div>
 </div>
 </template>
 
@@ -16,8 +22,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin: 0px 5px;
-    padding: 12px 14px;
+    padding: 10px;
     border-radius: 12px;
 
     /* Entrance animation */

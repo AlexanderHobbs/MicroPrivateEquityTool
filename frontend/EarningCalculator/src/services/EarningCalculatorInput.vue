@@ -97,8 +97,6 @@ function resetForm() {
     })
 
     selectedYear.value = null
-    addBackExist.value = false
-    EBITDAValuesExist.value = false
 
 }
 
@@ -137,6 +135,8 @@ function add_AddBack() {
 const emit = defineEmits(['save', 'load-year'])
 
 function submitYear() {
+
+    add_AddBack()
     
     const payload = {
         year: selectedYear.value,
@@ -256,6 +256,7 @@ function dataIsNotNull(obj) {
 
         <div class = "earning-output">
         <h1>Review</h1>
+        <!-- Add option to scroll through yearly input using arrows (<>) -->
 
         <div class = "ea-output-container">
 

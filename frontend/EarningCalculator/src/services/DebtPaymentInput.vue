@@ -2,6 +2,7 @@
 
 import {ref} from 'vue'
 import SingleInput from '@/components/basic/SingleInput.vue';
+import ToggleBtn from '@/components/basic/ToggleBtn.vue';
 
 // ----------------------
 // State
@@ -21,8 +22,12 @@ const termOptions = ref([
     {text: "9+ Years", value: 10},
 ])
 
-const purchasePrice = ref()
-const equityInjection = ref()
+const purchaseForm = ref({
+    purchasePrice: null,
+    equityInjection: null
+})
+
+const autoCalculate = ref(false)
 
 const SBA_MetricForm = ref({
     LoanAmount: null,
@@ -38,22 +43,77 @@ const SellersNoteForm = ref({
 })
 
 
-
 // ----------------------
 // Action
 // ----------------------
+
+function calculateDownPayment(){
+
+        const downPayment = null;
+        
+        if(!purchaseForm){
+            alert("Enter Purchase Price and Equity Injection")
+        }else{
+            const percentage = SBA_MetricForm.value.equityInjection * 0.01
+            downPayment = SBA_MetricForm.value.purchasePrice * percentage
+        }
+
+        return downPayment
+}
+
+
+// ----------------------
+// Functions
+// ----------------------
+
+const emit = defineEmits(['save']);
+
+function saveData() {
+    
+    if(autoCalculate){
+        SBA_MetricForm.value.DownPayment = calculateDownPayment().toFixed(2);
+    }
+
+    const debtData = {
+        Purchase: {...purchaseForm.value },
+        SBA_Metrics: {...SBA_MetricForm.value},
+
+        SellersNote: {...SellersNoteForm.value}
+    }
+
+    if(!dataIsNotNull(debtData)){
+        alert("Not all fiels have data entered — Please fill in all entries!");
+        return;
+    }
+
+    emit('save', debtData);
+    alert("Loaded");
+
+}
 
 // ----------------------
 // Helper
 // ----------------------
 
-// ----------------------
-// Derived
-// ----------------------
+function dataIsNotNull(obj) { 
+    for(let key in obj){ 
+        if(obj[key] === null){ 
+            return false; 
+        } 
+        if(typeof obj[key] === 'object' && !dataIsNotNull(obj[key])){ 
+            return false; } 
+    } 
+    
+    return true;
+}
 
-// ----------------------
-// Functions
-// ----------------------
+
+
+
+
+
+
+
 
 
 </script>
@@ -65,8 +125,8 @@ const SellersNoteForm = ref({
             <h2>Calculate Debt Payment</h2>
 
             <div class = "business-purchase-price">
-                <SingleInput label = "Asking/Purchase Price: " v-model = "purchasePrice"/>
-                <SingleInput label = "Equity Injection: " v-model = "equityInjection"/>
+                <SingleInput label = "Asking/Purchase Price: " v-model = "purchaseForm.purchasePrice"/>
+                <SingleInput label = "Equity Injection: " v-model = "purchaseForm.equityInjection" placeholder = "0%"/>
             </div>
 
             <div class="SBA-loan-metrics">
@@ -74,9 +134,11 @@ const SellersNoteForm = ref({
                 <div class = "SBA-loan-container">
                     <h3>SBA Loan Metrics</h3>
                     <SingleInput label = "Loan Amount/Portion: " v-model = "SBA_MetricForm.LoanAmount" />
-                    <div>
+                    <div class = "down-payment-div">
                         <SingleInput label = "Down Payment Amount: " style = "no-border" v-model = "SBA_MetricForm.DownPayment" />
+                        <ToggleBtn v-model = "autoCalculate" label = "Auto Calculate?"/>
                     </div>
+
                     <SingleInput label = "Loan Interest Rate: " v-model = "SBA_MetricForm.InterestRate" placeholder = "0%"/>
                 
                     <div class = "selected-year-input">
@@ -102,9 +164,9 @@ const SellersNoteForm = ref({
                         </select>
                     </div>
                 </div>
-
             </div>
-
+            
+            <button class = "save-btn" @click = "saveData">Save Data</button>
 
         </div>
     </div>
@@ -116,7 +178,6 @@ const SellersNoteForm = ref({
 .parent-container {
     display: flex;
     box-sizing: border-box;
-    padding-right: 20px;
 }
 
 .db-input-container {
@@ -125,9 +186,13 @@ const SellersNoteForm = ref({
     width: 100%;
     flex-direction: column;
     gap: 22px;
-    padding: 20px;
     box-sizing: border-box;
-    
+}
+
+.business-purchase-price {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .SBA-loan-metrics {
@@ -137,6 +202,7 @@ const SellersNoteForm = ref({
     gap: 10%;
     padding: 20px;
     border-radius: 14px;
+    box-sizing: border-box;
     background: rgba(255, 255, 255);
     border: 1px solid #e5e7eb;
     box-shadow: 0 6px 14px rgba(0,0,0,0.05);
@@ -146,14 +212,32 @@ const SellersNoteForm = ref({
     flex: 1;
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
     gap: 22px;
-    
 }
+
+.down-payment-div {
+    display: flex;
+    gap: 40px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    align-items: center;
+}
+
+.down-payment-div label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+}
+
 
 .sellers-note-container {
     flex: 1;
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
     gap: 22px;
 }
 
@@ -190,6 +274,34 @@ input:focus, select:focus, textarea:focus {
     border-color: #111827;
     box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
 }
+
+label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.save-btn {
+    width: fit-content;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: none;
+    background: #111827;
+    color: #ffffff;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.save-btn:hover {
+    background: #1f2937;
+    transform: translateY(-1px);
+}
+
+.save-btn:active {
+    transform: translateY(0);
+}
+
 
 </style>
 

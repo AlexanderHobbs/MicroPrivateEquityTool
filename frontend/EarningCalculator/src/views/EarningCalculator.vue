@@ -1,5 +1,6 @@
 <script setup>
 import EarningInput from '@/services/EarningCalculatorInput.vue';
+import SingleOutput from '@/components/basic/SingeOutput.vue';
 
 import {ref} from 'vue';
 
@@ -31,106 +32,65 @@ function handleLoadYear(year){
 
 <template>
 
-    <div class = "parent">
+<div class = "parent">
 
-        <div class = "input">
-            <EarningInput 
-                @save = "saveYearData"
-                @load-year = "handleLoadYear"
-                :initialData="selectedYearData"
-            />
-            <div class="year-grid">
-                <div v-for="(entry, year) in yearlyData" :key="year" class="year-card">
+    <div class = "input">
+        <EarningInput 
+            @save = "saveYearData"
+            @load-year = "handleLoadYear"
+            :initialData="selectedYearData"
+        />
+        <div class="year-grid">
+            <div v-for="(entry, year) in yearlyData" :key="year" class="year-card">
 
-                    <div class="year-header">
-                    <h2>{{ year }}</h2>
-                    </div>
-
-                    <div>
-                        <h3>Operating</h3>
-                        <div class="metrics">
-                            <div class="metric">
-                                <span class="label">Revenue</span>
-                                <span class="value">{{ entry.operating.revenue }}</span>
-                            </div>
-
-                            <div class="metric">
-                                <span class="label">Expense</span>
-                                <span class="value">{{ entry.operating.expense }}</span>
-                            </div>
-
-                            <div class="metric">
-                                <span class="label">SDE</span>
-                                <span class="value">{{ entry.operating.ReportedSDE }}</span>
-                            </div>
-
-                            <div class="metric">
-                                <span class="label">Owner Salary</span>
-                                <span class="value">{{ entry.operating.ownerSalary }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div>
-                        <h3>Adjustments</h3>
-                        
-                        <div class="section" v-if = "entry.adjustments.addBacks.length">
-                            <div v-for="addBack in entry.adjustments.addBacks" :key="addBack.id" class="sub-table">
-                                <div class = "metric">
-                                    <span class = "label">Description:</span>
-                                    <span class = "value">{{ addBack.description }}</span>
-                                </div>
-                                <div class = "metric">
-                                    <span class = "label">Value: </span>
-                                    <span class = "value">{{ addBack.price }}</span>
-                                </div>
-                                <div class = "metric">
-                                    <span class = "label">Category: </span>
-                                    <span class = "value">{{ addBack.category }}</span>
-                                </div>
-                                <div class = "metric">
-                                    <span class = "label">Confidence Level:</span>
-                                    <span class = "value">{{ addBack.confidenceLevel }}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-else>
-                            <div class = "metric">
-                                <span class = "label">No adjustment recorded:</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h3>Financials</h3>
-                        <div class="metrics">
-                            <div class = "metric">
-                                <span class = "label">Interest:</span>
-                                <span class = "value">{{ entry.financials.InterestRate }}</span>
-                            </div>
-                            <div class = "metric">
-                                <span class = "label">Taxes:</span>
-                                <span class = "value">{{ entry.financials.Taxes }}</span>
-                            </div>
-                            <div class = "metric">
-                                <span class = "label">Depreciation:</span>
-                                <span class = "value">{{ entry.financials.Depreciation }}</span>
-                            </div>
-                            <div class = "metric">
-                                <span class = "label">Amortization:</span>
-                                <span class = "value">{{ entry.financials.Amortization }}</span>
-                            </div>
-                        </div>
-                    </div>
-
+                <div class="year-header">
+                <h2>{{ year }}</h2>
                 </div>
+
+                <!-- Operating -->
+                <div>
+                    <h3>Operating</h3>
+                    <div class="metrics">
+                        <SingleOutput label="Revenue" :value="entry.operating.revenue" />
+                        <SingleOutput label="Expense" :value="entry.operating.expense" />
+                        <SingleOutput label="SDE" :value="entry.operating.ReportedSDE" />
+                        <SingleOutput label="Owner Salary" :value="entry.operating.ownerSalary" />
+                    </div>
+                </div>
+
+                <!-- Adjustments -->
+                <div>
+                    <h3>Adjustments</h3>
+
+                    <div v-if="entry.adjustments.addBacks.length">
+                        <div v-for="addBack in entry.adjustments.addBacks" :key="addBack.id" class="sub-table">
+                            <SingleOutput label="Description" :value="addBack.description" />
+                            <SingleOutput label="Value" :value="addBack.price" />
+                            <SingleOutput label="Category" :value="addBack.category" />
+                            <SingleOutput label="Confidence Level" :value="addBack.confidenceLevel" />
+                        </div>
+                    </div>
+
+                    <div v-else>
+                        <SingleOutput label="Adjustments" value="No adjustments recorded" />
+                    </div>
+                </div>
+
+                <!-- Financials -->
+                <div>
+                <h3>Financials</h3>
+                    <div class="metrics">
+                        <SingleOutput label="Interest" :value="entry.financials.InterestRate" />
+                        <SingleOutput label="Taxes" :value="entry.financials.Taxes" />
+                        <SingleOutput label="Depreciation" :value="entry.financials.Depreciation" />
+                        <SingleOutput label="Amortization" :value="entry.financials.Amortization" />
+                    </div>
+                </div>
+
             </div>
         </div>
-
-        
-
     </div>
+</div>
 
     
 </template>
