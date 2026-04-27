@@ -7,6 +7,9 @@ public class PurchaseDto
 
     public void display()
     {
-        
+        Console.WriteLine(
+            $"{PurchasePrice} \n" +
+            $"{EquityInjection} "
+        );
     }
 }

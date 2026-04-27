@@ -10,6 +10,11 @@ public class SBAMetricsDto
 
     public void display()
     {
-        
+        Console.WriteLine(
+            $"{LoanAmount}\n" + 
+            $"{DownPayment}\n" +
+            $"{InterestRate}\n" + 
+            $"{Term }"
+        );
     }
 }
