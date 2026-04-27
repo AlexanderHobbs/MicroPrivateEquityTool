@@ -27,12 +27,13 @@ const purchaseForm = ref({
     equityInjection: null
 })
 
+const autoCalculate = ref(false)
+
 const SBA_MetricForm = ref({
     LoanAmount: null,
     DownPayment: null,
     InterestRate: null,
     Term: null,
-    autoCalculate: false
 })
 
 const SellersNoteForm = ref({
@@ -49,7 +50,7 @@ const SellersNoteForm = ref({
 function calculateDownPayment(){
 
         const downPayment = null;
-
+        
         if(!purchaseForm){
             alert("Enter Purchase Price and Equity Injection")
         }else{
@@ -76,6 +77,7 @@ function saveData() {
     const debtData = {
         Purchase: {...purchaseForm.value },
         SBA_Metrics: {...SBA_MetricForm.value},
+
         SellersNote: {...SellersNoteForm.value}
     }
 
@@ -106,6 +108,14 @@ function dataIsNotNull(obj) {
 }
 
 
+
+
+
+
+
+
+
+
 </script>
 
 <template>
@@ -126,7 +136,7 @@ function dataIsNotNull(obj) {
                     <SingleInput label = "Loan Amount/Portion: " v-model = "SBA_MetricForm.LoanAmount" />
                     <div class = "down-payment-div">
                         <SingleInput label = "Down Payment Amount: " style = "no-border" v-model = "SBA_MetricForm.DownPayment" />
-                        <ToggleBtn v-model = "SBA_MetricForm.autoCalculate" label = "Auto Calculate?"/>
+                        <ToggleBtn v-model = "autoCalculate" label = "Auto Calculate?"/>
                     </div>
 
                     <SingleInput label = "Loan Interest Rate: " v-model = "SBA_MetricForm.InterestRate" placeholder = "0%"/>

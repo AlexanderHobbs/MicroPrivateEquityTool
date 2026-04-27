@@ -1,15 +1,16 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿
+using EarningsCalculator;
+using DebtPaymentCalculator;
 
-using System.ComponentModel;
-
-namespace EarningsCalculator;
-
+namespace AcquisitionInt;
 public class financialSummary
 {
     public static void Main()
     {
        EarningCalculator compiler = new();
+       DebtCalculator compiler2 = new();
        compiler.RunProgram();
+    //    compiler2.RunProgram();
 
     }
     
