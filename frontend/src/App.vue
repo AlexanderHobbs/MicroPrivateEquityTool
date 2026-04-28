@@ -7,6 +7,7 @@ import Side_NavBar from './components/Side_NavBar.vue';
 
 import Settings from './views/Settings.vue';
 
+import Dashboard from './views/Dashboard.vue';
 import EarningCalculator from '@/views/EarningCalculator.vue';
 import DebtPayment from './views/DebtPaymentCalculator.vue';
 import DSCRCalculator from './views/DSCRCalculator.vue';
@@ -19,6 +20,7 @@ const currentPage = ref('earning')
 const previousPage = ref()
 
 const pages = {
+    dashboard: Dashboard,
     earning: EarningCalculator,
     debt: DebtPayment,
     dscr: DSCRCalculator,

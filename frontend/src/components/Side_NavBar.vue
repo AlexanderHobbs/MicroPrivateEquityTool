@@ -5,12 +5,12 @@ import {ref} from 'vue'
 const emit = defineEmits('change-page')
 
 const isOpen = ref(true)
-var navbar_logo = ref("←");
+// var navbar_logo = ref("←");
 
-const toggleNav = () => {
-    isOpen.value = !isOpen.value
-    navbar_logo.value = isOpen.value ? "←" :  "→" ;
-}
+// const toggleNav = () => {
+//     isOpen.value = !isOpen.value
+//     navbar_logo.value = isOpen.value ? "←" :  "→" ;
+// }
 
 </script>
 
@@ -19,19 +19,19 @@ const toggleNav = () => {
     <div class = "navbar-links" v-show = "isOpen">
         <!-- <div class = "logo"><img src="@/assets/logo.png" alt="logo"></div> -->
         <ul>
-            <li><button @click = "$emit('change-page', 'earning')">Earning Calculator</button></li>
-            <li><button @click = "$emit('change-page', 'debt')">Debt Payment</button></li>
-            <li><button @click = "$emit('change-page', 'dscr')">DSCR calculator</button></li>
-            <li><button @click = "$emit('change-page', 'stress')">Revenue Stress test tool</button></li>
-            <li><button @click = "$emit('change-page', 'breakEven')">Break-even analysis</button></li>
-            <li><button @click = "$emit('change-page', 'summary')">Summary Dashboard</button></li>
-            <li><button @click = "$emit('change-page', 'comparison')">Scenario Comparison</button></li>
+            <li><button @click = "$emit('change-page', 'dashboard')"><img src = "../assets/navbar-icons/dashboard.png"/>Dashboard</button></li>
+            <li><button @click = "$emit('change-page', 'earning')"><img src = "../assets/navbar-icons/earning.png"/>Earning Calculator</button></li>
+            <li><button @click = "$emit('change-page', 'debt')"><img src = "../assets/navbar-icons/debt.png"/>Debt Payment</button></li>
+            <li><button @click = "$emit('change-page', 'dscr')"><img src = "../assets/navbar-icons/dscr.png"/>DSCR calculator</button></li>
+            <li><button @click = "$emit('change-page', 'stress')"><img src = "../assets/navbar-icons/stress-test.png"/>Stress Test Tool</button></li>
+            <li><button @click = "$emit('change-page', 'breakEven')"><img src = "../assets/navbar-icons/break-even.png"/>Break-even analysis</button></li>
+            <li><button @click = "$emit('change-page', 'summary')"><img src = "../assets/navbar-icons/summary.png"/>Summary Dashboard</button></li>
+            <li><button @click = "$emit('change-page', 'comparison')"><img src = "../assets/navbar-icons/comparison.png"/>Scenario Comparison</button></li>
         </ul>
     </div>
-
-    <div class = "toggle-navBar-btn">
+    <!-- <div class = "toggle-navBar-btn">
         <button @click = "toggleNav">{{ navbar_logo }}</button>
-    </div>
+    </div> -->
 </nav>
 
 
@@ -42,8 +42,8 @@ const toggleNav = () => {
 .navbar {
     display: flex;
     flex-direction: row; /* critical for sidebar layout */
-    width: 230px;
-    height: 100vh;
+    width: 200px;
+    height: 100%;
 
     background: #f2f2f2;
     color: black;
@@ -66,7 +66,6 @@ const toggleNav = () => {
 .navbar-links {
     display: flex;
     flex-direction: column;
-    gap: 50px;
     width: 100%;
     flex: 1;
     padding: 25px 15px;
@@ -86,21 +85,16 @@ const toggleNav = () => {
 .navbar-links button {
     width: 100%;
     text-align: left;
-
     display: flex;
     align-items: center;
     gap: 10px;
-
-    padding: 10px 12px;
+    padding: 6px 0px;
     margin-bottom: 6px;
-
     border: none;
     border-radius: 10px;
-
     background: transparent;
     color: black;
-
-    font-size: 14px;
+    font-size: 13px;
     cursor: pointer;
 
     transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
@@ -111,6 +105,18 @@ const toggleNav = () => {
     color: gray;
     /* transform: translateX(3px); */
 }
+
+.navbar-links img {
+    width: 20px;
+    height: auto;
+    transition: 0.2s ease;
+}
+
+.navbar-links button:hover img {
+    opacity: .4;
+}
+
+
 
 /* .navbar-links button:active {
     background: rgba(59, 130, 246, 0.18);
