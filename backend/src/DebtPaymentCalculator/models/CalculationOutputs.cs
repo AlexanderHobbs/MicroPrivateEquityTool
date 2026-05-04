@@ -3,12 +3,11 @@ namespace DebtPaymentCalculator;
 public class CalculationOutput
 {
     public decimal AnnualPayment {get; set;}
-    public decimal TotalAnnualDebtService {get; set;}
+    public decimal AnnualDebtService {get; set;}
     public List<Amortization> AmortizationSchedule {get; set;} = new();
     public List<decimal> YearlyDebtPayments {get; set;} = new();
     public decimal RemainingBalance {get; set;}
     public decimal TotalInterestPaid {get; set;}
-    public decimal AnnualDebtService {get; set;}
     public decimal TotalDebtBurden {get; set;}
 
     public enum Amortization

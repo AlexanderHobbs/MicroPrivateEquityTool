@@ -87,7 +87,7 @@ const isOpen = ref(true)
     text-align: left;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
     padding: 6px 0px;
     margin-bottom: 6px;
     border: none;

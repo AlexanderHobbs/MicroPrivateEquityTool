@@ -3,8 +3,39 @@ namespace DebtPaymentCalculator;
 public class Calculate
 {
 
+    CalculationOutput output = new CalculationOutput();
     public void calculateAnnualPayment()
     {
+
+        SBAMetricsDto sba = new SBAMetricsDto();
+
+        decimal r = sba.InterestRate;
+        int n = sba.Term;
+
+        decimal numerator = r * ((decimal) Math.Pow((double) (1 + r), n));
+        decimal denominator = (decimal) Math.Pow((double) (1 + r), n) - 1;
+
+        decimal A_AnnualPayment = sba.LoanAmount * (numerator / denominator);
+        
+        output.AnnualPayment = A_AnnualPayment;
+
+
+
+        SellersNoteDto s_note = new SellersNoteDto();
+
+        r = s_note.InterestRate;
+        n = s_note.Term;
+
+        numerator = r * ((decimal) Math.Pow((double) (1 + r), n));
+        denominator = (decimal) Math.Pow((double) (1 + r), n) - 1;
+
+        decimal S_AnnualPaymnet = s_note.LoanAmount * (numerator / denominator);
+
+
+
+        output.AnnualDebtService = A_AnnualPayment + S_AnnualPaymnet;
+
+
         /* Annual Payment (A)    
             A = P × [ r(1 + r)^n ] / [ (1 + r)^n − 1 ]
 
@@ -24,17 +55,6 @@ public class Calculate
             That’s your “what do I owe every year” number.
         */
     
-    }
-
-    public void calculateTotalAnnualDebtService()
-    {
-    //    Then:
-    //         Total Annual Debt Service
-    //         = A_sba + A_seller
-
-    //         That’s your “what do I owe every year” number.
-        
-
     }
 
     public void calculateAmortizationZchedule()
@@ -62,6 +82,7 @@ public class Calculate
 
             Do this independently for SBA and seller note.
         */
+        
     }
 
     public void calculateYearlyDebtPayments()

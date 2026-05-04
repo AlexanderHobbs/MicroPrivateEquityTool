@@ -17,7 +17,7 @@ function saveDebtData(data){
 
 <template>
 
-<div class="parent">
+<section class="parent">
     <div class="input">
         <DebtPaymentInput 
         @save = "saveDebtData"
@@ -46,7 +46,7 @@ function saveDebtData(data){
             </div>
         </div>
     </div>
-</div>
+</section>
 
 </template>
 
