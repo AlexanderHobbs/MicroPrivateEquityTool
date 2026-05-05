@@ -1,8 +1,8 @@
 # =========================
 # .NET / C# (MPET.API)
 # =========================
-bin/
-obj/
+*/bin/
+*/obj/
 *.user
 *.rsuser
 *.sln.docstates
