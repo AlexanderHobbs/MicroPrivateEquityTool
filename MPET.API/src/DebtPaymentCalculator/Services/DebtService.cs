@@ -45,7 +45,7 @@ public class DebtService
 
             decimal A_AnnualPayment = sba.LoanAmount * (numerator / denominator);
             
-            output.SBAAnnualPayment = A_AnnualPayment;
+            output.SBA_AnnualPayment = A_AnnualPayment;
 
 
             r = seller.InterestRate;
@@ -55,7 +55,7 @@ public class DebtService
             denominator = (decimal) Math.Pow((double) (1 + r), n) - 1;
 
             decimal S_AnnualPaymnet = seller.LoanAmount * (numerator / denominator);
-            output.SellerAnnualPayment = S_AnnualPaymnet;
+            output.Seller_AnnualPayment = S_AnnualPaymnet;
 
 
             output.AnnualDebtService = A_AnnualPayment + S_AnnualPaymnet;
@@ -98,10 +98,10 @@ public class DebtService
 
             decimal interest = beginningBalance * sba.InterestRate;
 
-            if (output.AnnualPayment <= 0)
+            if (output.SBA_AnnualPayment <= 0)
                 throw new Exception("Annual payment not set");
 
-            decimal principal = output.AnnualPayment - interest;
+            decimal principal = output.SBA_AnnualPayment - interest;
 
             decimal endingBalance = beginningBalance - principal;
 
@@ -151,16 +151,16 @@ public class DebtService
 
     public void calculateYearlyDebtPayments()
     {
-        output.YearlyDebtPayment = new List<OutputDto.YearlyDebt>();
+        output.YearlyDebtPayments = new List<OutputDto.YearlyDebt>();
 
-        decimal sbaPayment = output.SBAAnnualPayment;
-        decimal sellerPayment = output.SellerAnnualPayment;
+        decimal sbaPayment = output.SBA_AnnualPayment;
+        decimal sellerPayment = output.Seller_AnnualPayment;
 
         int maxYears = Math.Max(sba.Term, seller.Term);
 
         for(int i = 1; i <= maxYears; i++)
         {
-            output.YearlyDebtPayment.Add(new OutputDto.YearlyDebt
+            output.YearlyDebtPayments.Add(new OutputDto.YearlyDebt
             {
                 Year = i,
                 SBA_Payment = 1 <= sba.Term ? sbaPayment : 0,
@@ -192,7 +192,7 @@ public class DebtService
 
             output.RemainingBalances.Add(new OutputDto.RemainingBalance
             {
-                Year = year.year,
+                Year = year.Year,
                 SBA_Balance = sbaBalance,
                 Seller_Balance = sellerBalance,
                 TotalBalance = sbaBalance + sellerBalance
@@ -217,7 +217,7 @@ public class DebtService
             sbaInterest += year.InterestPayment;
         }
 
-        sellerInterest = (output.sellerPayment * seller.Term) - seller.LoanAmount;
+        sellerInterest = (output.Seller_AnnualPayment * seller.Term) - seller.LoanAmount;
 
         output.TotalInterestPaid = sbaInterest + sellerInterest;
 
@@ -237,7 +237,7 @@ public class DebtService
     
     public void calculateAnnualDebtService()
     {
-        output.AnnualDebtService = output.SBAAnnualPayment + output.SellerAnnualPayment;
+        output.AnnualDebtService = output.SBA_AnnualPayment + output.Seller_AnnualPayment;
 
         /*
             Annual Debt Service
@@ -259,9 +259,9 @@ public class DebtService
     public void calculateTotalDebtBurden()
     {
 
-        decimal sbaTotal = output.SBAAnnualPayment * sba.Term;
+        decimal sbaTotal = output.SBA_AnnualPayment * sba.Term;
 
-        decimal sellerTotal = output.SellerAnnualPayment * seller.Term;
+        decimal sellerTotal = output.Seller_AnnualPayment * seller.Term;
 
         output.TotalDebtBurden = sbaTotal * sellerTotal;
 
