@@ -1,0 +1,73 @@
+# =========================
+# .NET / C# (MPET.API)
+# =========================
+bin/
+obj/
+*.user
+*.rsuser
+*.sln.docstates
+
+# Build outputs
+out/
+publish/
+
+# Rider / VS / misc
+.idea/
+.vs/
+
+# =========================
+# Node / Vite (MPET.Client)
+# =========================
+node_modules/
+.pnpm-store/
+
+# Vite build output
+dist/
+.vite/
+
+# Cache
+.cache/
+.eslintcache
+
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =========================
+# Environment / secrets
+# =========================
+.env
+.env.*
+.env.local
+.env.*.local
+
+# .NET config overrides
+appsettings.Development.json
+secrets.json
+
+# =========================
+# OS / System
+# =========================
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# =========================
+# VSCode (keep extensions)
+# =========================
+.vscode/*
+!.vscode/extensions.json
+
+# =========================
+# Optional (uncomment if needed)
+# =========================
+
+# Ignore lock files ONLY if you intentionally don't want reproducibility
+# package-lock.json
+# pnpm-lock.yaml
+# yarn.lock
