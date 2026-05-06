@@ -22,7 +22,6 @@ public class DebtController : ControllerBase
         return Ok(result);
     }
 
-
 }
 
 //    Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(

@@ -1,3 +1,9 @@
+<script setup>
+
+import DSCRCalculator from '@/services/DSCRCalculator.vue';
+
+</script>
+
 <template>
-    <h4>DSCR Calculator</h4>
+    <DSCRCalculator />
 </template>

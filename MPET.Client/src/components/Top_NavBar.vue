@@ -10,7 +10,7 @@ function goToPage(pageName){
 
 <template>
 <div class = "parent">
-    <div class = "name"><img src="@/assets/name.png" alt="name"></div>
+    <div class = "name"><img src="@/assets/LUXE_Logo_.png" alt="name"></div>
     <div class = "settings" @click = "goToPage('settings')"><img src="@/assets/setting.png" alt="settings"></div>
 </div>
 </template>
@@ -22,9 +22,7 @@ function goToPage(pageName){
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
     border-radius: 12px;
-
     /* Entrance animation */
     animation: fadeSlideDown 0.6s ease forwards;
 }
@@ -40,7 +38,7 @@ function goToPage(pageName){
 }
 
 /* Specific sizing */
-.name img { width: 110px; }
+.name img { width: 50px; }
 .settings img { width: 45px; }
 
 /* Hover interactions */

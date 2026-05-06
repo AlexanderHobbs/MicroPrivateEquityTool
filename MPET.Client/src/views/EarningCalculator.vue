@@ -101,9 +101,9 @@ function handleLoadYear(year){
     display: flex;
     width: 100%;
     height: 100%;
-    background: #f2f2f2;
+    background: rgb(247, 247, 247);
     padding: 12px 14px;
-    border-radius: 12px;
+    border-radius: 20px;
     border: 1px solid #e5e7eb;
     box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     box-sizing: border-box;

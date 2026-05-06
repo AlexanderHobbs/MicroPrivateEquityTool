@@ -5,9 +5,9 @@ public class OutputDto
     public decimal SBA_AnnualPayment {get; set;}
     public decimal Seller_AnnualPayment {get; set;}
     public decimal AnnualDebtService {get; set;}
-    public List<Amortization> AmortizationSchedule {get; set;}
-    public List<YearlyDebt> YearlyDebtPayments {get; set;}
-    public List<RemainingBalance> RemainingBalances {get; set;}
+    public List<Amortization> AmortizationSchedule {get; set;} = new();
+    public List<YearlyDebt> YearlyDebtPayments {get; set;} = new();
+    public List<RemainingBalance> RemainingBalances {get; set;} = new();
     public decimal TotalInterestPaid {get; set;}
     public decimal TotalDebtBurden {get; set;}
 

@@ -4,34 +4,29 @@ import {ref} from 'vue'
 
 const emit = defineEmits('change-page')
 
-const isOpen = ref(true)
-// var navbar_logo = ref("←");
+const activePage = ref('dashboard')
 
-// const toggleNav = () => {
-//     isOpen.value = !isOpen.value
-//     navbar_logo.value = isOpen.value ? "←" :  "→" ;
-// }
+function changePage(pageName){
+    activePage.value = pageName;
+    emit('change-page', pageName);
+}
 
 </script>
 
 <template>
-<nav :class="['navbar', { closed: !isOpen }]">
-    <div class = "navbar-links" v-show = "isOpen">
-        <!-- <div class = "logo"><img src="@/assets/logo.png" alt="logo"></div> -->
+<nav class= "navbar">
+    <div class = "navbar-links">
         <ul>
-            <li><button @click = "$emit('change-page', 'dashboard')"><img src = "../assets/navbar-icons/dashboard.png"/>Dashboard</button></li>
-            <li><button @click = "$emit('change-page', 'earning')"><img src = "../assets/navbar-icons/earning.png"/>Earning Calculator</button></li>
-            <li><button @click = "$emit('change-page', 'debt')"><img src = "../assets/navbar-icons/debt.png"/>Debt Payment</button></li>
-            <li><button @click = "$emit('change-page', 'dscr')"><img src = "../assets/navbar-icons/dscr.png"/>DSCR calculator</button></li>
-            <li><button @click = "$emit('change-page', 'stress')"><img src = "../assets/navbar-icons/stress-test.png"/>Stress Test Tool</button></li>
-            <li><button @click = "$emit('change-page', 'breakEven')"><img src = "../assets/navbar-icons/break-even.png"/>Break-even analysis</button></li>
-            <li><button @click = "$emit('change-page', 'summary')"><img src = "../assets/navbar-icons/summary.png"/>Summary Dashboard</button></li>
-            <li><button @click = "$emit('change-page', 'comparison')"><img src = "../assets/navbar-icons/comparison.png"/>Scenario Comparison</button></li>
+            <li><button :class = "{active: activePage === 'dashboard'}" @click = "changePage('dashboard')"> <img src = "../assets/navbar-icons/dashboard.png"/>Dashboard</button></li>
+            <li><button :class = "{active: activePage === 'earning'}" @click = "changePage('earning')"> <img src = "../assets/navbar-icons/earning.png"/>Earning Calculator</button></li>
+            <li><button :class = "{active: activePage === 'debt'}" @click = "changePage('debt')"> <img src = "../assets/navbar-icons/debt.png"/>Debt Payment</button></li>
+            <li><button :class = "{active: activePage === 'dscr'}" @click = "changePage('dscr')"> <img src = "../assets/navbar-icons/dscr.png"/>DSCR calculator</button></li>
+            <li><button :class = "{active: activePage === 'stress'}" @click = "changePage('stress')"> <img src = "../assets/navbar-icons/stress-test.png"/>Stress Test Tool</button></li>
+            <li><button :class = "{active: activePage === 'breakEven'}" @click = "changePage('breakEven')"> <img src = "../assets/navbar-icons/break-even.png"/>Break-even analysis</button></li>
+            <li><button :class = "{active: activePage === 'summary'}" @click = "changePage('summary')"> <img src = "../assets/navbar-icons/summary.png"/>Summary Dashboard</button></li>
+            <li><button :class = "{active: activePage === 'comparison'}" @click = "changePage('comparison')"> <img src = "../assets/navbar-icons/comparison.png"/>Scenario Comparison</button></li>
         </ul>
     </div>
-    <!-- <div class = "toggle-navBar-btn">
-        <button @click = "toggleNav">{{ navbar_logo }}</button>
-    </div> -->
 </nav>
 
 
@@ -42,18 +37,14 @@ const isOpen = ref(true)
 .navbar {
     display: flex;
     flex-direction: row; /* critical for sidebar layout */
-    width: 200px;
+    width: 100%;
     height: 100%;
-
     background: #f2f2f2;
     color: black;
-
-    border-radius: 14px;
+    border-radius: 20px;
     border: 1px solid #e5e7eb;
     box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-
     overflow: hidden;
-
     transition: width 0.25s ease, background 0.25s ease;
 }
 
@@ -79,7 +70,7 @@ const isOpen = ref(true)
 }
 
 .navbar-links li {
-    margin-bottom: 20px;
+    margin-bottom: 35px;
 }
 
 .navbar-links button {
@@ -87,27 +78,30 @@ const isOpen = ref(true)
     text-align: left;
     display: flex;
     align-items: center;
-    gap: 5px;
-    padding: 6px 0px;
+    gap: 15px;
+    padding: 6px;
     margin-bottom: 6px;
     border: none;
     border-radius: 10px;
-    background: transparent;
     color: black;
-    font-size: 13px;
+    font-size: 15px;
     cursor: pointer;
+    background-color: transparent;
 
     transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
 }
 
 .navbar-links button:hover {
-    background: rgba(255, 255, 255, 0.10);
     color: gray;
     /* transform: translateX(3px); */
 }
 
+button.active {
+    background-color: rgba(0, 102, 255, 0.25);
+}
+
 .navbar-links img {
-    width: 20px;
+    width: 25px;
     height: auto;
     transition: 0.2s ease;
 }
@@ -116,6 +110,9 @@ const isOpen = ref(true)
     opacity: .4;
 }
 
+.navbar-links button::after {
+    background-color: rgba(0, 145, 255, 0.277);
+}
 
 
 /* .navbar-links button:active {
@@ -139,10 +136,6 @@ const isOpen = ref(true)
 
     background: #3b82f6;
 } */
-
-.navbar-links button.active:hover {
-    background: rgba(59, 130, 246, 0.25);
-}
 
 /* Toggle button container */
 .toggle-navBar-btn {

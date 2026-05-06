@@ -85,7 +85,7 @@ function calculateDownPayment(){
 // Functions
 // ----------------------
 
-const emit = defineEmits(['save']);
+const emit = defineEmits(['save', 'results']);
 
 async function saveData() {
     
@@ -104,9 +104,6 @@ async function saveData() {
         return;
     }
 
-    emit('save', debtData);
-    console.log("Sending payload:", JSON.stringify(debtData, null, 2));
-
     try{
         
         const response = await fetch('http://localhost:5000/api/debt/calculate', {
@@ -117,14 +114,22 @@ async function saveData() {
             body: JSON.stringify(debtData)
         });
 
+
         if (!response.ok) {
-            alert("Server error");
+            const errorText = await response.text(); // Try to get server error details
+            alert(`Server error: ${response.status} - ${errorText}`);
             return;
         }
 
+        const data = await response.json();
+        emit('results', data)
+        console.log(data); // ← check the exact property names
+        emit('save', debtData);
+
+
     }catch(err){
-        console.error("API call failed:", err);
-        alert("Server error - check backend");
+        console.error("API Error:", err);
+        alert(`API call failed: ${err.message}`);
     }
 
 }
@@ -165,7 +170,7 @@ function dataIsNotNull(obj) {
                     <h3>SBA Loan Metrics</h3>
                     <SingleInput label = "Loan Amount/Portion: " v-model = "SBA_MetricForm.LoanAmount" />
                     <div class = "down-payment-div">
-                        <SingleInput label = "Down Payment Amount: " style = "no-border" v-model = "SBA_MetricForm.DownPayment" />
+                        <div style = "flex: 1"><SingleInput label = "Down Payment Amount: " class = "no-border" v-model = "SBA_MetricForm.DownPayment" /></div>
                         <ToggleBtn v-model = "SBA_MetricForm.autoCalculate" label = "Auto Calculate?"/>
                     </div>
 
@@ -183,8 +188,8 @@ function dataIsNotNull(obj) {
 
                 <div class = "sellers-note-container">
                     <h3>Sellers Note Data</h3>
-                    <SingleInput label = "Sellers Note Amount" v-model = "SellersNoteForm.LoanAmount"/>
-                    <SingleInput label = "Sellers Note Interest Rate" v-model = "SellersNoteForm.InterestRate"/>
+                        <SingleInput label = "Sellers Note Amount" v-model = "SellersNoteForm.LoanAmount"/>
+                        <SingleInput label = "Sellers Note Interest Rate" v-model = "SellersNoteForm.InterestRate"/>
                     <div class = "selected-year-input">
                         <label>Term Length:</label>
                         <select v-model="SellersNoteForm.Term">
@@ -222,7 +227,12 @@ function dataIsNotNull(obj) {
 .business-purchase-price {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    padding: 20px;
+    border-radius: 14px;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255);
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.05);
 }
 
 .SBA-loan-metrics {
@@ -249,19 +259,9 @@ function dataIsNotNull(obj) {
 .down-payment-div {
     display: flex;
     gap: 40px;
-    padding: 12px 14px;
-    border-radius: 12px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    padding: 12px 0px;
     align-items: center;
 }
-
-.down-payment-div label {
-    font-size: 13px;
-    font-weight: 500;
-    color: #374151;
-}
-
 
 .sellers-note-container {
     flex: 1;
@@ -276,11 +276,20 @@ function dataIsNotNull(obj) {
     align-items: center;
     gap: 16px;
     background: #ffffff;
-    padding: 12px 14px;
-    border-radius: 12px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     min-width: none;
+    padding: 14px 0px;
+    
+}
+
+.selected-year-input select {
+    flex: 2;
+    border-radius: 6px;
+    border: 1px solid #e6e8ec;
+    outline: none;
+}
+
+.selected-year-input label {
+    flex: 1;
 }
 
 input, select, textarea {

@@ -181,81 +181,92 @@ function dataIsNotNull(obj) {
 <template>
 <body>
     <div class = "parent-container">
-        <div class = "ea-input-container">
+        <div class = "input-container">
             <h2>Calculate True Earnings</h2>
-
-            <div class = "selected-year-input">
-                <label>Select Fiscal Year: </label>
-                <select v-model = "selectedYear"  @change="loadYear(selectedYear)">
-                    <option disabled value="">Select a Year</option>
-                    <option v-for = "year in yearOptions" :key = "year.value" :value = "year.value">
-                        {{ year.text }}
-                    </option>
-                </select>
-            </div>
-
-            <div class = "currency-input-form">
-                <SingleInput  label = "Revenue Amount: " v-model = "currencyForm.revenue"/>
-                <SingleInput  label = "Expense Amount:" v-model = "currencyForm.expense" />
-                <SingleInput label = "Reported SDE: " v-model = "currencyForm.ReportedSDE" />           
-                <SingleInput label = "Owner Salary: " v-model = "currencyForm.ownerSalary" />                
-            </div>
-
-            <div class = "radio-btn-class">
-                <label>Owner Add Backs Exist? </label>
-                <input type="radio" :value ="true" v-model = "addBackExist">
-                <label for="yes-rd-btn">Yes</label>
-                <input type="radio" :value = "false" v-model = "addBackExist">
-                <label for="no-rd-btn">No</label>
-            </div>
-
-            <Transition name = "fade"> 
-            <div class = "OwnerAddBacks" v-if = "addBackExist">
-                <div class = "addBackEntry">
-                    <h4>Add Back Entry: </h4>
-                    <label>Add Back Description: </label>
-                    <textarea v-model = "AddBackForm.description" placeholder="description"></textarea>
-                    <label>Add Back Value: </label>
-                    <input type="number" v-model.number = "AddBackForm.price">
-                    <label>Add Back Category: </label>
-                    <select v-model = "AddBackForm.category">
-                        <option v-for="category in categoryOptions" :key = "category.text" :value="category.text">
-                            {{ category.text }}
+            
+            <div class = "ea-input-container">
+                <div class = "selected-year-input">
+                    <label>Select Fiscal Year: </label>
+                    <select class = "year_select" v-model = "selectedYear"  @change="loadYear(selectedYear)">
+                        <option disabled value="">Select a Year</option>
+                        <option v-for = "year in yearOptions" :key = "year.value" :value = "year.value">
+                            {{ year.text }}
                         </option>
                     </select>
-                    <!-- <input type="text" v-model = "AddBackForm.category"> -->
-                    <label>Add Back Confidence Level:</label>
-                    <input type="range" v-model.number = "AddBackForm.confidenceLevel" min = "0" max = "100">
-                    <span class = "confidence-value">{{ AddBackForm.confidenceLevel }}%</span>
-
-                    <button class = "addBack-btn" @click="add_AddBack()">Create Add Back</button>
                 </div>
-            </div>
-            </Transition>  
 
-            <div class="radio-btn-class">
-                <label>Do EBITDA Records Exist?</label>
-                <input type="radio" :value = "true" v-model = "EBITDAValuesExist">
-                <label for="yes-rd-btn">Yes</label>
-                <input type="radio" :value = "false" v-model = "EBITDAValuesExist">
-                <label for="no-rd-btn">No</label>
-            </div>
-
-            <Transition name = "fade"> 
-                <div class="EBITDA" v-if = "EBITDAValuesExist">
-                        <h4>Add EBITDA Values: </h4>
-                        <EBITDAInput label = "Interest Rate" v-model = "EBITDAForm.InterestRate"/>
-                        <EBITDAInput label = "Taxes" v-model = "EBITDAForm.Taxes"/>
-                        <EBITDAInput label = "Depreciation" v-model = "EBITDAForm.Depreciation"/>
-                        <EBITDAInput label = "Amortization" v-model = "EBITDAForm.Amortization"/>
+                <div class = "currency-input-form">
+                    <SingleInput  label = "Revenue Amount: " v-model = "currencyForm.revenue"/>
+                    <SingleInput  label = "Expense Amount:" v-model = "currencyForm.expense" />
+                    <SingleInput label = "Reported SDE: " v-model = "currencyForm.ReportedSDE" />           
+                    <SingleInput label = "Owner Salary: " v-model = "currencyForm.ownerSalary" />                
                 </div>
-            </Transition>
-            <button class = "save-btn" @click = "submitYear">Save Data</button>
 
+                <div class = "vertical-line"></div>
+
+                <div class = "radio-btn-class">
+                    <!-- <img  class = "label-icon" src = "../assets/navbar-icons/comparison.png"/> -->
+                    <div>
+                        <label>Owner Add Backs Exist? </label>
+                        <input type="radio" :value ="true" v-model = "addBackExist">
+                        <label for="yes-rd-btn">Yes</label>
+                        <input type="radio" :value = "false" v-model = "addBackExist">
+                        <label for="no-rd-btn">No</label>
+                    </div>
+                </div>
+
+                <Transition name = "fade"> 
+                <div class = "OwnerAddBacks" v-if = "addBackExist">
+                    <div class = "addBackEntry">
+                        <h4>Add Back Entry: </h4>
+                        <label>Add Back Description: </label>
+                        <textarea v-model = "AddBackForm.description" placeholder="description"></textarea>
+                        <label>Add Back Value: </label>
+                        <input type="number" v-model.number = "AddBackForm.price">
+                        <label>Add Back Category: </label>
+                        <select v-model = "AddBackForm.category">
+                            <option v-for="category in categoryOptions" :key = "category.text" :value="category.text">
+                                {{ category.text }}
+                            </option>
+                        </select>
+                        <!-- <input type="text" v-model = "AddBackForm.category"> -->
+                        <label>Add Back Confidence Level:</label>
+                        <input type="range" v-model.number = "AddBackForm.confidenceLevel" min = "0" max = "100">
+                        <span class = "confidence-value">{{ AddBackForm.confidenceLevel }}%</span>
+
+                        <button class = "addBack-btn" @click="add_AddBack()">Create Add Back</button>
+                    </div>
+                </div>
+                </Transition>  
+
+                <div class = "vertical-line"></div>
+
+                <div class="radio-btn-class">
+                    <!-- <img  class = "label-icon" src = "../assets/navbar-icons/comparison.png"/> -->
+                    <div>
+                        <label>Do EBITDA Records Exist?</label>
+                        <input type="radio" :value = "true" v-model = "EBITDAValuesExist">
+                        <label for="yes-rd-btn">Yes</label>
+                        <input type="radio" :value = "false" v-model = "EBITDAValuesExist">
+                        <label for="no-rd-btn">No</label>
+                    </div>
+                </div>
+
+                <Transition name = "fade"> 
+                    <div class="EBITDA" v-if = "EBITDAValuesExist">
+                            <h4>Add EBITDA Values: </h4>
+                            <EBITDAInput label = "Interest Rate" v-model = "EBITDAForm.InterestRate"/>
+                            <EBITDAInput label = "Taxes" v-model = "EBITDAForm.Taxes"/>
+                            <EBITDAInput label = "Depreciation" v-model = "EBITDAForm.Depreciation"/>
+                            <EBITDAInput label = "Amortization" v-model = "EBITDAForm.Amortization"/>
+                    </div>
+                </Transition>
+                <button class = "save-btn" @click = "submitYear">Save Data</button>
+            </div>
         </div>
 
         <div class = "earning-output">
-        <h1>Review</h1>
+        <h2>Review</h2>
         <!-- Add option to scroll through yearly input using arrows (<>) -->
 
         <div class = "ea-output-container">
@@ -263,6 +274,7 @@ function dataIsNotNull(obj) {
             <div class = "output-container"><CurrencyOutput :data = "currencyForm" :label = "selectedYear"/></div>
 
             <div class="output-container">
+                <div><hr></div>
                 <div class = "AddBackList">
                         <h4>Add Backs</h4>
                         <table class = "Table">
@@ -275,17 +287,25 @@ function dataIsNotNull(obj) {
                                 </tr>
                             </thead>
                             <tbody>
-                            <tr v-for = "item in AddBackList" :key = "item.id">
-                                <td>{{ item.description }}</td>
-                                <td>{{ item.price }}</td>
-                                <td>{{ item.category }}</td>
-                                <td>{{ item.confidenceLevel }}</td>
-                            </tr>
+                                <tr v-if = "AddBackList.length" v-for = "item in AddBackList" :key = "item.id">
+                                    <td>{{ item.description }}</td>
+                                    <td>{{ item.price }}</td>
+                                    <td>{{ item.category }}</td>
+                                    <td>{{ item.confidenceLevel }}</td>
+                                </tr>
+                                <tr v-else>
+                                    <td colspan="4">
+                                        <div class = "blank-table-data">
+                                            <img src="../assets/setting.png" alt="no add backs">
+                                            <p>No add backs added yet</p>
+                                        </div>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-
+                <div><hr></div>
                 <div class = "output-container">
                     <EBITDAOutput :data = "EBITDAForm"/>
                 </div>
@@ -301,6 +321,11 @@ function dataIsNotNull(obj) {
 
 .parent-container {
     display: flex;
+}
+
+.vertical-line {
+  border-top: 1px solid rgb(204, 204, 204);
+  background-color: black;
 }
 
 .ea-output-container {
@@ -321,8 +346,17 @@ function dataIsNotNull(obj) {
     display: flex;
     flex: 1;
     flex-direction: column;
-    gap: 22px;
     padding: 20px;
+    gap: 22px;
+    box-sizing: border-box;
+}
+
+.input-container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 20px;
+    gap: 22px;
     box-sizing: border-box;
 }
 
@@ -331,8 +365,12 @@ function dataIsNotNull(obj) {
     flex: 1.50;
     flex-direction: column;
     gap: 22px;
-    padding: 20px;
+    padding: 25px 20px;
     box-sizing: border-box;
+    background-color: white;
+    border-radius: 20px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.05);
 }
 
 /* Shared input row style */
@@ -341,25 +379,35 @@ function dataIsNotNull(obj) {
     align-items: center;
     gap: 16px;
     background: #ffffff;
-    padding: 12px 14px;
-    border-radius: 12px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    padding: 12px 0px;
     min-width: none;
 }
 
 /* Label consistency */
 .selected-year-input label {
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 500;
     color: #374151;
     min-width: 140px;
+    flex: 1;
+}
+
+.year_select {
+    flex: 3;
+    padding: 15px 10px;
+}
+
+.label-icon {
+    height: 20px;
+    width: auto;
+    border-radius: 7px;
+    background-color: #f1f2f2;
+    padding: 8px;
 }
 
 .currency-input-form {
     display: flex;
     flex-direction: column;
-    gap: 22px;
 }
 
 /* Inputs */
@@ -383,6 +431,12 @@ input:focus, select:focus, textarea:focus {
     background: #ffffff;
     border-color: #111827;
     box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
+}
+
+.radio-btn-class {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
 /* AddBack section container */
@@ -416,6 +470,8 @@ input:focus, select:focus, textarea:focus {
     width: 100%;
     border-collapse: collapse;
     font-size: 12px;
+    padding: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.105);
 }
 
 .Table th {
@@ -433,6 +489,17 @@ input:focus, select:focus, textarea:focus {
     color: #111827;
 }
 
+
+.blank-table-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.blank-table-data img {
+    width: 60px;
+}
 /* EBITDA section styled like a card */
 .EBITDA {
     display: flex;

@@ -6,4 +6,5 @@ public class DebtDataDto
     public SBAMetricsDto SBA_Metrics {get; set;}
     public SellersNoteDto SellersNote {get; set;}
     
+    
 }

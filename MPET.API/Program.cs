@@ -10,6 +10,7 @@ public class financialSummary
 
     var builder = WebApplication.CreateBuilder(args);
 
+
     builder.Services.AddCors(options => {
         options.AddPolicy("VueAppPolicy", policy => {
             policy.WithOrigins("http://localhost:5173")
@@ -21,10 +22,14 @@ public class financialSummary
     builder.Services.AddControllers();
 
     builder.Services.AddScoped<DebtService>();
-
+    
     var app = builder.Build();
 
+    app.UseRouting();
+
     app.UseCors("VueAppPolicy");
+
+    app.UseAuthorization();
 
     app.MapControllers();
 

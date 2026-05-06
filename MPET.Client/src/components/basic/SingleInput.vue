@@ -7,7 +7,8 @@ const prop = defineProps({
     modelValue: {type: [Number, String, null], default: null},
     placeholder: {type: String, default: "00.00"},
     inputType: {type: Number, default: 1},
-    style: {type: String, default: "single-input"}
+    class: {type: String, default: "single-input"},
+    icon: {type: Image, default: "/src/assets/navbar-icons/break-even.png"}
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -36,17 +37,17 @@ const onInput = (event) => {
 </script>
 
 <template>
-  <div :class = "style" v-if = "inputType === 1" >
-    <label>{{ label }}</label>
+  <div :class = "class" v-if = "inputType === 1" >
+    <div class = "label"><label>{{ label }}</label></div>
     <input type="number" :placeholder= "placeholder" :value="modelValue" @input="onInput" />
   </div>
 
-  <div :class = "style" v-if = "inputType === 2" >
+  <div :class = "class" v-if = "inputType === 2" >
     <label>{{ label }}</label>
     <input type="text" :value="modelValue" @input="onInput" />
   </div>
 
-  <div :class = "style" v-if = "inputType === 3" >
+  <div :class = "class" v-if = "inputType === 3" >
     <label>{{ label }}</label>
     <textarea :value = "modelValue" @input="onInput"></textarea>
   </div>
@@ -62,52 +63,68 @@ const onInput = (event) => {
 
 
 <style scoped>
-
 .single-input {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
     background: #ffffff;
-    gap: 20px;
-    padding: 12px 14px;
-    border-radius: 12px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    padding: 14px 0px;
 }
 
-.no-border{
+.label {
+    flex: 1;
+    min-width: max-content;
     display: flex;
     align-items: center;
-    gap: 16px;
-    background: #ffffff;
     gap: 20px;
-    padding: 12px 14px;
+}
+
+img {
+    height: 20px;
+    width: auto;
+    border-radius: 7px;
+    background-color: #f1f2f2;
+    padding: 8px;
+}
+
+.no-border {
+    display: flex;
+    align-items: center;
+    gap: 60px;
 }
 
 label {
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 500;
-    color: #374151;
+    color: #6b7280;
 }
 
-input {
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid transparent;
+input,
+textarea {
+    flex: 2;
+    padding: 15px 10px;
+    border-radius: 6px;
+    border: 1px solid #e6e8ec;
     outline: none;
     font-size: 13px;
     background: #f9fafb;
-    transition: all 0.2s ease;
-    font-family: 'Arial', sans-serif;
+    transition: all 0.15s ease;
+    font-family: inherit;
 }
 
-input:hover {
+input::placeholder {
+    color: #9ca3af;
+}
+
+input:hover,
+textarea:hover {
     background: #f3f4f6;
 }
 
-input:focus {
+input:focus,
+textarea:focus {
     background: #ffffff;
-    border-color: #111827;
-    box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
+    border-color: #d1d5db;
+    box-shadow: 0 0 0 1px rgba(17, 24, 39, 0.05);
 }
 </style>

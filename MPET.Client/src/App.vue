@@ -91,8 +91,7 @@ const currentPageComponent = computed(() => pages[currentPage.value]);
     flex-direction: column;
     gap: 10px;
     padding: 10px;
-    box-sizing: border-box;
-    background-color: white;
+    background: rgb(247, 247, 247);
     box-sizing: border-box;
 }
 
@@ -103,6 +102,7 @@ const currentPageComponent = computed(() => pages[currentPage.value]);
     display: flex;
     flex-direction: row;
     gap: 30px;
+    box-sizing: border-box;
 }
 
 .vertical-line {
@@ -111,8 +111,13 @@ const currentPageComponent = computed(() => pages[currentPage.value]);
   margin: 0 20px;
 }
 
+.side-nav-bar{
+    flex: 1;
+}
+
 .input-section {
     width: 100%;
+    flex: 7;
 }
 
 .fade-enter-active,
