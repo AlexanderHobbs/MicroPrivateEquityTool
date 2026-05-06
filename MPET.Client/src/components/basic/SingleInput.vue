@@ -68,7 +68,6 @@ const onInput = (event) => {
     align-items: center;
     gap: 12px;
     background: #ffffff;
-    padding: 14px 0px;
 }
 
 .label {

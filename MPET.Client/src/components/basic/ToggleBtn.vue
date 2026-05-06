@@ -32,8 +32,13 @@ const swap = () => {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: right;
+    justify-content: left;
     gap: 5px;
+    background-color: #e0e0e06c;
+    border: 1px solid rgba(0, 0, 0, 0.085);
+    border-radius: 8px;
+    padding: 0px 5px;
+    width: fit-content
 }
 
 .toggle-switch {
@@ -42,6 +47,7 @@ const swap = () => {
   display: flex;
   align-items: center;
   cursor: pointer;
+  
 }
 
 .track {

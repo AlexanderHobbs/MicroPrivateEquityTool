@@ -266,50 +266,50 @@ function dataIsNotNull(obj) {
         </div>
 
         <div class = "earning-output">
-        <h2>Review</h2>
-        <!-- Add option to scroll through yearly input using arrows (<>) -->
+            <h2>Review</h2>
+            <!-- Add option to scroll through yearly input using arrows (<>) -->
 
-        <div class = "ea-output-container">
+            <div class = "ea-output-container">
 
-            <div class = "output-container"><CurrencyOutput :data = "currencyForm" :label = "selectedYear"/></div>
+                <div class = "output-container"><CurrencyOutput :data = "currencyForm" :label = "selectedYear"/></div>
 
-            <div class="output-container">
-                <div><hr></div>
-                <div class = "AddBackList">
-                        <h4>Add Backs</h4>
-                        <table class = "Table">
-                            <thead>
-                                <tr>
-                                    <th>Description</th>
-                                    <th>Price</th>
-                                    <th>Category</th>
-                                    <th>Confidence Level</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-if = "AddBackList.length" v-for = "item in AddBackList" :key = "item.id">
-                                    <td>{{ item.description }}</td>
-                                    <td>{{ item.price }}</td>
-                                    <td>{{ item.category }}</td>
-                                    <td>{{ item.confidenceLevel }}</td>
-                                </tr>
-                                <tr v-else>
-                                    <td colspan="4">
-                                        <div class = "blank-table-data">
-                                            <img src="../assets/setting.png" alt="no add backs">
-                                            <p>No add backs added yet</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class="output-container">
+                    <div><hr></div>
+                    <div class = "AddBackList">
+                            <h4>Add Backs</h4>
+                            <table class = "Table">
+                                <thead>
+                                    <tr>
+                                        <th>Description</th>
+                                        <th>Price</th>
+                                        <th>Category</th>
+                                        <th>Confidence Level</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-if = "AddBackList.length" v-for = "item in AddBackList" :key = "item.id">
+                                        <td>{{ item.description }}</td>
+                                        <td>{{ item.price }}</td>
+                                        <td>{{ item.category }}</td>
+                                        <td>{{ item.confidenceLevel }}</td>
+                                    </tr>
+                                    <tr v-else>
+                                        <td colspan="4">
+                                            <div class = "blank-table-data">
+                                                <img src="../assets/setting.png" alt="no add backs">
+                                                <p>No add backs added yet</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-                <div><hr></div>
-                <div class = "output-container">
-                    <EBITDAOutput :data = "EBITDAForm"/>
-                </div>
-        </div>
+                    <div><hr></div>
+                    <div class = "output-container">
+                        <EBITDAOutput :data = "EBITDAForm"/>
+                    </div>
+            </div>
         </div>
     </div>
 </body>
@@ -344,7 +344,7 @@ function dataIsNotNull(obj) {
 
 .earning-output {
     display: flex;
-    flex: 1;
+    flex: .75;
     flex-direction: column;
     padding: 20px;
     gap: 22px;

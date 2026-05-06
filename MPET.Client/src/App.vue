@@ -16,7 +16,7 @@ import BreakEvenAnalysis from './views/BreakEvenAnalysis.vue';
 import SummaryDashboard from './views/SummaryDashboard.vue';
 import ScenarioComparison from './views/ScenarioComparison.vue';
 
-const currentPage = ref('earning')
+const currentPage = ref('dashboard')
 const previousPage = ref()
 
 const pages = {

@@ -171,7 +171,7 @@ function dataIsNotNull(obj) {
                     <SingleInput label = "Loan Amount/Portion: " v-model = "SBA_MetricForm.LoanAmount" />
                     <div class = "down-payment-div">
                         <SingleInput label = "Down Payment Amount: " v-model = "SBA_MetricForm.DownPayment" />
-                        <ToggleBtn v-model = "SBA_MetricForm.autoCalculate" label = "Auto Calculate?"/>
+                        <ToggleBtn v-model = "SBA_MetricForm.autoCalculate" label = "Auto Calculate:"/>
                     </div>
 
                     <SingleInput label = "Loan Interest Rate: " v-model = "SBA_MetricForm.InterestRate" placeholder = "0%"/>
@@ -218,7 +218,6 @@ function dataIsNotNull(obj) {
 .db-input-container {
     display: flex;
     flex: 1.50;
-    width: 100%;
     flex-direction: column;
     gap: 22px;
     box-sizing: border-box;
@@ -228,6 +227,7 @@ function dataIsNotNull(obj) {
     display: flex;
     flex-direction: column;
     padding: 20px;
+    gap: 22px;
     border-radius: 14px;
     box-sizing: border-box;
     background: rgba(255, 255, 255);
@@ -259,7 +259,6 @@ function dataIsNotNull(obj) {
 .down-payment-div {
     display: flex;
     flex-direction: column;
-    padding: 12px 0px;
 }
 
 .sellers-note-container {
@@ -289,6 +288,9 @@ function dataIsNotNull(obj) {
 
 .selected-year-input label {
     flex: 1;
+    font-size: 16px;
+    font-weight: 500;
+    color: #6b7280;
 }
 
 input, select, textarea {
