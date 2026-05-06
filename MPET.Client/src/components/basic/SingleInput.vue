@@ -79,6 +79,10 @@ const onInput = (event) => {
     gap: 20px;
 }
 
+.single-input input {
+    flex: 1;
+}
+
 img {
     height: 20px;
     width: auto;

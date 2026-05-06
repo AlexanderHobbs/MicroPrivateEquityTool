@@ -170,7 +170,7 @@ function dataIsNotNull(obj) {
                     <h3>SBA Loan Metrics</h3>
                     <SingleInput label = "Loan Amount/Portion: " v-model = "SBA_MetricForm.LoanAmount" />
                     <div class = "down-payment-div">
-                        <div style = "flex: 1"><SingleInput label = "Down Payment Amount: " class = "no-border" v-model = "SBA_MetricForm.DownPayment" /></div>
+                        <SingleInput label = "Down Payment Amount: " v-model = "SBA_MetricForm.DownPayment" />
                         <ToggleBtn v-model = "SBA_MetricForm.autoCalculate" label = "Auto Calculate?"/>
                     </div>
 
@@ -258,9 +258,8 @@ function dataIsNotNull(obj) {
 
 .down-payment-div {
     display: flex;
-    gap: 40px;
+    flex-direction: column;
     padding: 12px 0px;
-    align-items: center;
 }
 
 .sellers-note-container {

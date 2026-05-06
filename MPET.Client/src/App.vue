@@ -112,12 +112,11 @@ const currentPageComponent = computed(() => pages[currentPage.value]);
 }
 
 .side-nav-bar{
-    flex: 1;
+    width: 16%;
 }
 
 .input-section {
-    width: 100%;
-    flex: 7;
+    width: 84%;
 }
 
 .fade-enter-active,

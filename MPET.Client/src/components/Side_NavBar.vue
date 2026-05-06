@@ -101,7 +101,7 @@ button.active {
 }
 
 .navbar-links img {
-    width: 25px;
+    width: 12%;
     height: auto;
     transition: 0.2s ease;
 }

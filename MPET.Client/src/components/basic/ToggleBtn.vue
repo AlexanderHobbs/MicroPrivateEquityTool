@@ -30,8 +30,9 @@ const swap = () => {
 
 .toggle-wrapper{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    justify-content: right;
     gap: 5px;
 }
 
