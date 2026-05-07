@@ -1,66 +1,37 @@
 <script setup>
 
-import {ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import SingleInput from '@/components/basic/SingleInput.vue';
 
 
-const emit = defineEmits(['save', 'results']);
-
-async function saveData() {
-
-    const dscrData = {
-      
-    }
-
-    if(!dataIsNotNull(dscrData)){
-        alert("Not all fiels have data entered — Please fill in all entries!");
-        return;
-    }
-
+async function loadData() {
     try{
-        
-        const response = await fetch('http://localhost:5000/api/debt/calculate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dscrData)
-        });
+    const response = await fetch("http://localhost:5000/api/dscr/controller", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(debtData)
+    })
 
-        emit('save', dscrData);
-
-        if (!response.ok) {
-            const errorText = await response.text(); // Try to get server error details
-            return;
-        }
-
-        const data = await response.json();
-        emit('results', data)
+    const data = await response.json();
 
     }catch(err){
-        console.error("API Error:", err);
-        alert(`API call failed: ${err.message}`);
+        console.log(err)
     }
-
-}
-
-function dataIsNotNull(obj) { 
-    for(let key in obj){ 
-        if(obj[key] === null){ 
-            return false; 
-        } 
-        if(typeof obj[key] === 'object' && !dataIsNotNull(obj[key])){ 
-            return false; } 
-    } 
-    
-    return true;
 }
 
 </script>
 
 <template>
     <div class = "parent-conatiner">
+        <div>
 
+        </div>
+
+        <div>
+
+        </div>
     </div>
 </template>
 
@@ -72,3 +43,18 @@ function dataIsNotNull(obj) {
 }
 
 </style>
+
+<!-- 
+DSCR calculator (Debt Service Coverage Ratio)
+Will the bank approve this?
+Profit / Annual loan payment (want above 1.25)
+Input (carry over):
+Profit
+Annual loan payment 
+Preferred DSCR level
+Output:
+DSCR calculation
+Green / yellow / red status
+Cash flow remaining after debt
+Warning if below preferred level
+ -->
