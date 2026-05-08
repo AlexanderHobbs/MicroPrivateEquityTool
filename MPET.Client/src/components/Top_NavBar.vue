@@ -10,8 +10,8 @@ function goToPage(pageName){
 
 <template>
 <div class = "parent">
-    <div class = "name"><img src="@/assets/LUXE_Logo_.png" alt="name"></div>
-    <div class = "settings" @click = "goToPage('settings')"><img src="@/assets/setting.png" alt="settings"></div>
+    <div class = "name"><img src="@/assets/top-navbar-icons/LUXE_Logo_.png" alt="name"></div>
+    <div class = "settings" @click = "goToPage('settings')"><img src="@/assets/top-navbar-icons/setting.png" alt="settings"></div>
 </div>
 </template>
 

@@ -11,7 +11,7 @@ public class DebtController : ControllerBase
     private readonly IMemoryCache _cache;
 
 
-    public DebtController(DebtService service IMemoryCache cache)
+    public DebtController(DebtService service, IMemoryCache cache)
     {
         _service = service;
         _cache = cache;

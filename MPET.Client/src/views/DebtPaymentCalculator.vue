@@ -4,6 +4,11 @@ import {ref} from 'vue';
 import DebtPaymentInput from '@/services/DebtPaymentInput.vue';
 import SingleOutput from '@/components/basic/SingeOutput.vue';
 
+const prop = defineProps({
+    id: {crypto}
+})
+
+
 const debtPaymentData = ref(null)
 const calculationResults = ref(null)
 const successful = ref(false);
@@ -27,6 +32,7 @@ function DebtDataResults(savedData){
         <DebtPaymentInput 
         @save = "saveDebtData"
         @results = "DebtDataResults"
+        :sessionId = "prop.id"
         />
     </div>
     <div class = "output" v-if = "successful">

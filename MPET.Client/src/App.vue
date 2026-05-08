@@ -16,6 +16,9 @@ import BreakEvenAnalysis from './views/BreakEvenAnalysis.vue';
 import SummaryDashboard from './views/SummaryDashboard.vue';
 import ScenarioComparison from './views/ScenarioComparison.vue';
 
+const sessionId = crypto.randomUUID();
+alert(sessionId);
+
 const currentPage = ref('dashboard')
 const previousPage = ref()
 
@@ -24,9 +27,9 @@ const pages = {
     earning: EarningCalculator,
     debt: DebtPayment,
     dscr: DSCRCalculator,
-    stress:RevenueStressTool,
+    stress: RevenueStressTool,
     breakEven: BreakEvenAnalysis,
-    summary:SummaryDashboard,
+    summary: SummaryDashboard,
     comparison: ScenarioComparison,
     settings: Settings
 }
@@ -63,7 +66,7 @@ const currentPageComponent = computed(() => pages[currentPage.value]);
         
         <div class = "input-section">
             <Transition name = "fade" mode = "out-in">
-                <component :is = "currentPageComponent" />
+                <component :is = "currentPageComponent" :id = "sessionId"/>
             </Transition>
         </div>
     </div>
@@ -112,11 +115,11 @@ const currentPageComponent = computed(() => pages[currentPage.value]);
 }
 
 .side-nav-bar{
-    width: 16%;
+    width: 14%;
 }
 
 .input-section {
-    width: 84%;
+    width: 86%;
 }
 
 .fade-enter-active,

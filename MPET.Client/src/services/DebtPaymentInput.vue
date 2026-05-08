@@ -8,6 +8,7 @@ import ToggleBtn from '@/components/basic/ToggleBtn.vue';
 // State
 // ----------------------
 
+const props = defineProps({sessionId: {crypto}});
 
 const termOptions = ref([
     {text: "1 Year", value: 1},
@@ -109,7 +110,7 @@ async function saveData() {
         const response = await fetch('http://localhost:5000/api/debt/calculate', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json', 'X-Session-Id' : props.sessionId
             },
             body: JSON.stringify(debtData)
         });

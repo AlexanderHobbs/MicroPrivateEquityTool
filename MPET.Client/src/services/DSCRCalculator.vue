@@ -21,12 +21,16 @@ async function loadData() {
     }
 }
 
+onMounted(loadData);
+
 </script>
 
 <template>
     <div class = "parent-conatiner">
         <div>
-
+            <SingleInput />
+            <SingleInput />
+            <SingleInput />
         </div>
 
         <div>

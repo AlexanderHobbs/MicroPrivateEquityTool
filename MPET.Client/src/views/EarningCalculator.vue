@@ -4,6 +4,8 @@ import SingleOutput from '@/components/basic/SingeOutput.vue';
 
 import {ref} from 'vue';
 
+const prop = defineProps({sessionId: {crypto}});
+
 // ----------------------
 // State
 // ----------------------
@@ -39,6 +41,7 @@ function handleLoadYear(year){
             @save = "saveYearData"
             @load-year = "handleLoadYear"
             :initialData="selectedYearData"
+            :sessionId = "prop.sessionId"
         />
         <div class="year-grid">
             <div v-for="(entry, year) in yearlyData" :key="year" class="year-card">

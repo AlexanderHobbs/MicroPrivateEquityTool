@@ -7,7 +7,8 @@ import EBITDAInput from '@/components/ea_comp/EBITDAInput.vue'
 import EBITDAOutput from '@/components/ea_comp/EBITDAOutput.vue'
 
 const props = defineProps({
-    initialData: Object
+    initialData: Object,
+    sessionId: crypto
 })
 
 watch(
@@ -142,7 +143,6 @@ function submitYear() {
         year: selectedYear.value,
         operating: {...currencyForm.value },
         adjustments: { addBacks: AddBackList.value},
-
         financials: {...EBITDAForm.value}
     }
 
@@ -296,7 +296,7 @@ function dataIsNotNull(obj) {
                                     <tr v-else>
                                         <td colspan="4">
                                             <div class = "blank-table-data">
-                                                <img src="../assets/setting.png" alt="no add backs">
+                                                <img src="../assets/top-navbar-icons/setting.png" alt="no add backs">
                                                 <p>No add backs added yet</p>
                                             </div>
                                         </td>
@@ -408,6 +408,7 @@ function dataIsNotNull(obj) {
 .currency-input-form {
     display: flex;
     flex-direction: column;
+    gap: 15px;
 }
 
 /* Inputs */

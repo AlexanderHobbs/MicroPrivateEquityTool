@@ -22,9 +22,9 @@ public class financialSummary
     builder.Services.AddControllers();
     builder.Services.AddMemoryCache();
 
-    builder.Services.AddScoped<EarningService>();
+    // builder.Services.AddScoped<EarningService>();
     builder.Services.AddScoped<DebtService>();
-    builder.Services.AddScoped<DSCRService>();
+    // builder.Services.AddScoped<DSCRService>();
     
     var app = builder.Build();
 

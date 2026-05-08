@@ -18,13 +18,13 @@ function changePage(pageName){
     <div class = "navbar-links">
         <ul>
             <li><button :class = "{active: activePage === 'dashboard'}" @click = "changePage('dashboard')"> <img src = "../assets/navbar-icons/dashboard.png"/>Dashboard</button></li>
-            <li><button :class = "{active: activePage === 'earning'}" @click = "changePage('earning')"> <img src = "../assets/navbar-icons/earning.png"/>Earning Calculator</button></li>
+            <li><button :class = "{active: activePage === 'earning'}" @click = "changePage('earning')"> <img src = "../assets/navbar-icons/earning.png"/>Earning Calc</button></li>
             <li><button :class = "{active: activePage === 'debt'}" @click = "changePage('debt')"> <img src = "../assets/navbar-icons/debt.png"/>Debt Payment</button></li>
-            <li><button :class = "{active: activePage === 'dscr'}" @click = "changePage('dscr')"> <img src = "../assets/navbar-icons/dscr.png"/>DSCR calculator</button></li>
-            <li><button :class = "{active: activePage === 'stress'}" @click = "changePage('stress')"> <img src = "../assets/navbar-icons/stress-test.png"/>Stress Test Tool</button></li>
-            <li><button :class = "{active: activePage === 'breakEven'}" @click = "changePage('breakEven')"> <img src = "../assets/navbar-icons/break-even.png"/>Break-even analysis</button></li>
-            <li><button :class = "{active: activePage === 'summary'}" @click = "changePage('summary')"> <img src = "../assets/navbar-icons/summary.png"/>Summary Dashboard</button></li>
-            <li><button :class = "{active: activePage === 'comparison'}" @click = "changePage('comparison')"> <img src = "../assets/navbar-icons/comparison.png"/>Scenario Comparison</button></li>
+            <li><button :class = "{active: activePage === 'dscr'}" @click = "changePage('dscr')"> <img src = "../assets/navbar-icons/dscr.png"/>DSCR Calc</button></li>
+            <li><button :class = "{active: activePage === 'stress'}" @click = "changePage('stress')"> <img src = "../assets/navbar-icons/stress-test.png"/>Stress Test</button></li>
+            <li><button :class = "{active: activePage === 'breakEven'}" @click = "changePage('breakEven')"> <img src = "../assets/navbar-icons/break-even.png"/>Break-even</button></li>
+            <li><button :class = "{active: activePage === 'summary'}" @click = "changePage('summary')"> <img src = "../assets/navbar-icons/summary.png"/>Summary</button></li>
+            <li><button :class = "{active: activePage === 'comparison'}" @click = "changePage('comparison')"> <img src = "../assets/navbar-icons/comparison.png"/>Scenarios</button></li>
         </ul>
     </div>
 </nav>
@@ -59,8 +59,7 @@ function changePage(pageName){
     flex-direction: column;
     width: 100%;
     flex: 1;
-    padding: 25px 15px;
-    
+    margin-top: 25px;
 }
 
 .navbar-links ul {
@@ -70,19 +69,18 @@ function changePage(pageName){
 }
 
 .navbar-links li {
-    margin-bottom: 35px;
+    margin-bottom: 25px;
 }
 
 .navbar-links button {
+    padding: 10px 20px;
     width: 100%;
-    text-align: left;
     display: flex;
+    text-align: left;
     align-items: center;
     gap: 15px;
-    padding: 6px;
     margin-bottom: 6px;
     border: none;
-    border-radius: 10px;
     color: black;
     font-size: 15px;
     cursor: pointer;
@@ -97,11 +95,21 @@ function changePage(pageName){
 }
 
 button.active {
-    background-color: rgba(0, 102, 255, 0.25);
+    background-color: rgba(174, 176, 180, 0.25);
+    border-left: 4px solid;
+    border-image: linear-gradient(to bottom, #f5c518, #c9920a) 1;
+}
+
+.navbar-links button.active:hover {
+    color: black;
+}
+
+.navbar-links button.active:hover img {
+    opacity: 1;
 }
 
 .navbar-links img {
-    width: 12%;
+    width: 12.5%;
     height: auto;
     transition: 0.2s ease;
 }
@@ -114,28 +122,6 @@ button.active {
     background-color: rgba(0, 145, 255, 0.277);
 }
 
-
-/* .navbar-links button:active {
-    background: rgba(59, 130, 246, 0.18);
-    color: #60a5fa;
-    font-weight: 500;
-
-    position: relative;
-} */
-
-/* .navbar-links button:active::before {
-    content: "";
-    position: absolute;
-    left: -6px;
-    top: 50%;
-    transform: translateY(-50%);
-
-    width: 3px;
-    height: 60%;
-    border-radius: 6px;
-
-    background: #3b82f6;
-} */
 
 /* Toggle button container */
 .toggle-navBar-btn {
@@ -178,5 +164,27 @@ button.active {
     transform: scale(0.95);
 }
 
+/* .navbar-links button:active {
+    background: rgba(59, 130, 246, 0.18);
+    color: #60a5fa;
+    font-weight: 500;
+
+    position: relative;
+} */
+
+/* .navbar-links button:active::before {
+    content: "";
+    position: absolute;
+    left: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 3px;
+    height: 60%;
+    border-radius: 6px;
+
+    background: #3b82f6;
+} */
 
 </style>
+
