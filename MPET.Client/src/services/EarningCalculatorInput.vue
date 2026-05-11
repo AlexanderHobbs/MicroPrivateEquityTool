@@ -179,7 +179,6 @@ function dataIsNotNull(obj) {
 </script>
 
 <template>
-<body>
     <div class = "parent-container">
         <div class = "input-container">
             <h2>Calculate True Earnings</h2>
@@ -312,8 +311,6 @@ function dataIsNotNull(obj) {
             </div>
         </div>
     </div>
-</body>
-
 </template>
 
 

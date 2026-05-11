@@ -2,10 +2,15 @@
 
 import {onMounted, ref} from 'vue'
 import SingleInput from '@/components/basic/SingleInput.vue';
+import SingeOutput from '@/components/basic/SingeOutput.vue';
 
-const data = ref(null);
+const props = defineProps({sessionId: {crypto}});
 
-const prefferedDSCR = ref();
+
+const savedData = ref(null);
+const calculatedData = ref(null)
+
+const prefferedDSCR = ref(1);
 
 async function loadData() {
     try{
@@ -13,7 +18,7 @@ async function loadData() {
         const response = await fetch('http://localhost:5000/api/dscr/default', {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json', 'X-Session-Id' : props.sessionId
             },
         })
 
@@ -23,7 +28,7 @@ async function loadData() {
             return;
         }
 
-        data.value = await response.json();
+        savedData.value = await response.json();
 
     }catch(err){
         console.log(err)
@@ -32,24 +37,45 @@ async function loadData() {
 
 onMounted(loadData);
 
+const emits = defineEmits('calculate')
+
+async function calculateDscr(){
+  try{
+    const results = await fetch('http://localhost:5000/api/dscr/default', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'X-Session-Id' : props.sessionId}
+    })
+
+    if (!response.ok) {
+        const errorText = await response.text(); // Try to get server error details
+        alert(`Server error: ${response.status} - ${errorText}`);
+        return;
+    }
+
+    calculatedData = await results.json();
+
+    emits('calculate', calculatedData)
+
+  }catch (err){
+    console.error("API Error:", err);
+    alert(`API call failed: ${err.message}`);
+  }
+
+}
+
+
+
 </script>
 
 <template>
-    <div class = "parent-conatiner"  v-if = "data">
-
-        <div>
-            <div>
-                <SingleInput v-if = "data.AnnualDebtService" v-model = "data.AnnualDebtService"/>
-                <div v-else><h4>No Annual Debt Service Exist</h4></div>
-                <SingleInput />
-                <SingleInput label = "Preffered DSCR amount: " v-model = "prefferedDSCR"/>
-            </div>
-
-            <div>
-
-            </div>
+    <div class = "parent-container"  v-if = "savedData">
+        <h2>Calculate Debt Payment</h2>
+        <div class = "input-container">
+            <SingeOutput v-if = "!savedData.annualDebtService" label = "Annual Debt Service" :value = "savedData.annualDebtService" :style = "'no-border'"/>
+            <div v-else><h4>No Annual Debt Service Exist</h4></div>
+            <SingeOutput label = "Annual Payment" :value = "savedData.annualProfit" :style = "'no-border'"/>
+            <SingleInput label = "Preffered DSCR amount: " :inputType = "4" v-model = "prefferedDSCR"/>
         </div>
-
         
     </div>
     <div v-else class = "loading-container">
@@ -69,13 +95,26 @@ onMounted(loadData);
 
 <style scoped>
 
-.parent-conatiner {
+.parent-container {
     display: flex;
+    flex-direction: column;
     box-sizing: border-box;
     width: 100%;
     height: 100%;
 }
 
+.input-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 20px;
+    gap: 22px;
+    border-radius: 14px;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255);
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+}
 
 
 

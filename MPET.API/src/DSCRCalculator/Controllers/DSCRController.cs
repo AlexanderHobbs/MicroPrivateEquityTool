@@ -1,4 +1,5 @@
 namespace DSCRCalculator;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Shared.DTOs;
@@ -19,7 +20,9 @@ public class DSCRController : ControllerBase
     [HttpGet("default")]
     public IActionResult GetDscrData()
     {
-        var result = _service.getData();
+
+        DebtOutputDto debtResult = getDebtData();
+        var result = _service.getData(debtResult);
 
         return Ok(result);
     }
@@ -29,7 +32,7 @@ public class DSCRController : ControllerBase
     [HttpPost("calculate")]
     public IActionResult Calculate([FromBody] DSCRDataDto dscrData)
     {
-        var sessionId = Request.Headers["X-Session-Id"].ToString();
+        var sessionId = getSessionId();
 
         if (!_cache.TryGetValue($"{sessionId}:debt_result", out DebtOutputDto debtResult))
         {
@@ -48,5 +51,17 @@ public class DSCRController : ControllerBase
         });
 
         return Ok(result);
+    }
+
+    public DebtOutputDto? getDebtData()
+    {
+        var sessionId = getSessionId();
+        
+        return _cache.TryGetValue($"{sessionId}:debt_result", out DebtOutputDto debtResult) ? debtResult : null;
+    }
+
+    public string getSessionId()
+    {
+            return Request.Headers["X-Session-Id"].ToString();
     }
 }

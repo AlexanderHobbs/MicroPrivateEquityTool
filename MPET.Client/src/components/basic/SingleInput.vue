@@ -16,7 +16,7 @@ const emit = defineEmits(['update:modelValue']);
 const onInput = (event) => {
     const value = event.target.value;
 
-    if(prop.inputType === 1){
+    if(prop.inputType === (1 || 4)){
         const parsed = value === "" ? null : Number(value);
         emit("update:modelValue", parsed);
     }else{
@@ -50,6 +50,11 @@ const onInput = (event) => {
   <div :class = "class" v-if = "inputType === 3" >
     <label>{{ label }}</label>
     <textarea :value = "modelValue" @input="onInput"></textarea>
+  </div>
+
+  <div class="range" v-if = "inputType === 4">
+    <div class = "label"><label>{{ label }} {{ modelValue }}%</label></div>
+    <input type="range" :value = "modelValue" @input = "onInput" min = "-1" max = "3" step = ".5">
   </div>
   
 
@@ -129,5 +134,20 @@ textarea:focus {
     background: #ffffff;
     border-color: #d1d5db;
     box-shadow: 0 0 0 1px rgba(17, 24, 39, 0.05);
+}
+
+.range {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.range .label {
+    flex: 1;
+}
+
+.range input {
+    flex: 2;
 }
 </style>

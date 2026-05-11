@@ -17,7 +17,6 @@ import SummaryDashboard from './views/SummaryDashboard.vue';
 import ScenarioComparison from './views/ScenarioComparison.vue';
 
 const sessionId = crypto.randomUUID();
-alert(sessionId);
 
 const currentPage = ref('dashboard')
 const previousPage = ref()

@@ -2,6 +2,6 @@ namespace DSCRCalculator;
 
 public class DSCRDataDto
 {
-    public DscrDto? DscrData {get; set;} 
+    public DscrDto DscrData {get; set;} 
    
 }

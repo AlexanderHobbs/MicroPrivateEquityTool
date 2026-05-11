@@ -2,8 +2,8 @@ namespace DSCRCalculator;
 
 public class DSCROutputDto
 {
-    public decimal DscrRatio {get; set;}
-    public decimal RemainingCashFlow {get; set;}
+    public decimal DscrRatio {get; set;} = 0;
+    public decimal RemainingCashFlow {get; set;} = 0;
     public Level WarningLevel {get; set;}
     public enum Level
     {
@@ -12,6 +12,6 @@ public class DSCROutputDto
         Red
     } 
 
-    public decimal AnnualDebtService {get; set;}
-    public decimal AnnualProfit {get; set;}
+    public decimal AnnualDebtService {get; set;} = 0;
+    public decimal AnnualProfit {get; set;} = 0;
 }

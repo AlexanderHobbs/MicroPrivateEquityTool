@@ -12,7 +12,7 @@ const props = defineProps({
 
 <template>
 
-<div :class="style">
+<div :class = "style">
     <span class="label">{{label}}</span>
     <span class="value">{{value}}</span>
 </div>
@@ -38,6 +38,25 @@ const props = defineProps({
 
 .output-container .value {
     color: #111827;
+    font-weight: 600;
+}
+
+.no-border {
+    padding: 10px 0px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+}
+
+.no-border .label {
+    flex: 1;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.no-border .value {
+    flex: 1;
+   color: #6b7280;
     font-weight: 600;
 }
 

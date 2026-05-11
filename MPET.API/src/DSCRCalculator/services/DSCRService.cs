@@ -56,12 +56,12 @@ public class DSCRService
         output.RemainingCashFlow = profit - debtService;
     }
 
-    public DSCROutputDto getData()
+    public DSCROutputDto getData(DebtOutputDto debtData)
     {
         return new DSCROutputDto {
             DscrRatio = 0,
-            AnnualDebtService = output.AnnualDebtService,
-            AnnualProfit = profit,
+            AnnualDebtService = debtData?.AnnualDebtService ?? 100,
+            AnnualProfit = 0,
             RemainingCashFlow = 0,
             WarningLevel = DSCROutputDto.Level.Red
         };

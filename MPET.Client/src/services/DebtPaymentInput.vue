@@ -74,8 +74,8 @@ function calculateDownPayment(){
         if(!purchaseForm){
             alert("Enter Purchase Price and Equity Injection")
         }else{
-            const percentage = SBA_MetricForm.value.equityInjection * 0.01
-            downPayment = SBA_MetricForm.value.purchasePrice * percentage
+            const percentage = purchaseForm.value.equityInjection * 0.01
+            downPayment = purchaseForm.value.purchasePrice * percentage
         }
 
         return downPayment
@@ -124,7 +124,6 @@ async function saveData() {
 
         const data = await response.json();
         emit('results', data)
-        console.log(data); // ← check the exact property names
         emit('save', debtData);
 
 
@@ -155,7 +154,6 @@ function dataIsNotNull(obj) {
 </script>
 
 <template>
-<body>
     <div class = "parent-container">
         <div class="db-input-container">
             <h2>Calculate Debt Payment</h2>
@@ -206,7 +204,6 @@ function dataIsNotNull(obj) {
 
         </div>
     </div>
-</body>
 </template>
 
 <style scoped>
