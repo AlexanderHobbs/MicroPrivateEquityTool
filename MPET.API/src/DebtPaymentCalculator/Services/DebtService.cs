@@ -6,16 +6,16 @@ public class DebtService
     SBAMetricsDto sba;
     SellersNoteDto seller;
     PurchaseDto purchase;
-    OutputDto output;
+    DebtOutputDto output;
 
 
-    public OutputDto Calculate(DebtDataDto dto)
+    public DebtOutputDto Calculate(DebtDataDto dto)
     {
-        output = new OutputDto();
+        output = new DebtOutputDto();
 
-        this.sba = dto.SBA_Metrics;
-        this.seller = dto.SellersNote;
-        this.purchase = dto.Purchase;
+        sba = dto.SBA_Metrics;
+        seller = dto.SellersNote;
+        purchase = dto.Purchase;
 
         calculateAnnualPayment();
         calculateAmortizationSchedule();
@@ -94,7 +94,7 @@ public class DebtService
 
         for(int i = 1; i <= sba.Term; i++)
         {   
-            OutputDto.Amortization amortized = new OutputDto.Amortization();
+            DebtOutputDto.Amortization amortized = new DebtOutputDto.Amortization();
 
             decimal interest = beginningBalance * sba.InterestRate;
 
@@ -151,7 +151,7 @@ public class DebtService
 
     public void calculateYearlyDebtPayments()
     {
-        output.YearlyDebtPayments = new List<OutputDto.YearlyDebt>();
+        output.YearlyDebtPayments = new List<DebtOutputDto.YearlyDebt>();
 
         decimal sbaPayment = output.SBA_AnnualPayment;
         decimal sellerPayment = output.Seller_AnnualPayment;
@@ -160,7 +160,7 @@ public class DebtService
 
         for(int i = 1; i <= maxYears; i++)
         {
-            output.YearlyDebtPayments.Add(new OutputDto.YearlyDebt
+            output.YearlyDebtPayments.Add(new DebtOutputDto.YearlyDebt
             {
                 Year = i,
                 SBA_Payment = 1 <= sba.Term ? sbaPayment : 0,
@@ -180,7 +180,7 @@ public class DebtService
 
     public void calculateRemainingBalance()
     {
-        output.RemainingBalances = new List<OutputDto.RemainingBalance>();
+        output.RemainingBalances = new List<DebtOutputDto.RemainingBalance>();
 
         decimal sbaBalance = sba.LoanAmount;
         decimal sellerBalance = seller.LoanAmount;
@@ -190,7 +190,7 @@ public class DebtService
             sbaBalance = Math.Max(0, sbaBalance - year.SBA_Payment);
             sellerBalance = Math.Max(0, sellerBalance - year.Seller_Payment);
 
-            output.RemainingBalances.Add(new OutputDto.RemainingBalance
+            output.RemainingBalances.Add(new DebtOutputDto.RemainingBalance
             {
                 Year = year.Year,
                 SBA_Balance = sbaBalance,

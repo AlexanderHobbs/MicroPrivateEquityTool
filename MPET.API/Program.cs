@@ -1,6 +1,7 @@
-﻿
-using EarningsCalculator;
+﻿using EarningsCalculator;
 using DebtPaymentCalculator;
+using DSCRCalculator;
+
 
 namespace AcquisitionInc;
 public class financialSummary
@@ -24,13 +25,13 @@ public class financialSummary
 
     // builder.Services.AddScoped<EarningService>();
     builder.Services.AddScoped<DebtService>();
-    // builder.Services.AddScoped<DSCRService>();
+    builder.Services.AddScoped<DSCRService>();
     
     var app = builder.Build();
 
-    app.UseRouting();
-
     app.UseCors("VueAppPolicy");
+
+    app.UseRouting();
 
     app.UseAuthorization();
 

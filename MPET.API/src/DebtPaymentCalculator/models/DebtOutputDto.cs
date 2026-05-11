@@ -1,6 +1,6 @@
 namespace DebtPaymentCalculator;
 
-public class OutputDto
+public class DebtOutputDto
 {
     public decimal SBA_AnnualPayment {get; set;}
     public decimal Seller_AnnualPayment {get; set;}
