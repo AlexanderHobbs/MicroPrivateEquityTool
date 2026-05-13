@@ -2,6 +2,7 @@ namespace DSCRCalculator;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+
 using Shared.DTOs;
 
 [ApiController]
@@ -20,11 +21,14 @@ public class DSCRController : ControllerBase
     [HttpGet("default")]
     public IActionResult GetDscrData()
     {
+        var sessionId = GetSessionId();
 
-        DebtOutputDto debtResult = getDebtData();
-        var result = _service.getData(debtResult);
+        if (!_cache.TryGetValue($"{sessionId}:debt_result", out DebtOutputDto? debtResult))
+            return Ok(new DSCROutputDto());
 
+        var result = _service.GetData(debtResult!);
         return Ok(result);
+
     }
 
 
@@ -32,10 +36,21 @@ public class DSCRController : ControllerBase
     [HttpPost("calculate")]
     public IActionResult Calculate([FromBody] DSCRDataDto dscrData)
     {
-        var sessionId = getSessionId();
+        if (dscrData == null)
+            return BadRequest(new { error = "Request body is required." });
 
-        if (!_cache.TryGetValue($"{sessionId}:debt_result", out DebtOutputDto debtResult))
+
+        var sessionId = GetSessionId();
+        Console.WriteLine(sessionId);
+
+        if (string.IsNullOrEmpty(sessionId)){
+            return BadRequest(new { error = "X-Session-Id header is required." });
+        }
+
+
+        if (!_cache.TryGetValue($"{sessionId}:debt_result", out DebtOutputDto? debtResult))
         {
+            Console.WriteLine("Debt calculation not found. Please complete the debt step first.");
             return BadRequest(new
             {
                 error = "Debt calculation not found. Please complete the debt step first."
@@ -53,14 +68,7 @@ public class DSCRController : ControllerBase
         return Ok(result);
     }
 
-    public DebtOutputDto? getDebtData()
-    {
-        var sessionId = getSessionId();
-        
-        return _cache.TryGetValue($"{sessionId}:debt_result", out DebtOutputDto debtResult) ? debtResult : null;
-    }
-
-    public string getSessionId()
+    public string GetSessionId()
     {
             return Request.Headers["X-Session-Id"].ToString();
     }

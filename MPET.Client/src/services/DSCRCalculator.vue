@@ -6,11 +6,14 @@ import SingeOutput from '@/components/basic/SingeOutput.vue';
 
 const props = defineProps({sessionId: {crypto}});
 
-
 const savedData = ref(null);
-const calculatedData = ref(null)
 
-const prefferedDSCR = ref(1);
+
+const dscrForm = ref({
+    prefferedDSCR: 1,
+    annualDebtService: savedData.annualDebtService,
+    annualProfit: savedData.annualProfit
+})
 
 async function loadData() {
     try{
@@ -18,7 +21,8 @@ async function loadData() {
         const response = await fetch('http://localhost:5000/api/dscr/default', {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json', 'X-Session-Id' : props.sessionId
+                'Content-Type': 'application/json', 
+                'X-Session-Id' : props.sessionId
             },
         })
 
@@ -30,20 +34,32 @@ async function loadData() {
 
         savedData.value = await response.json();
 
+        dscrForm.annualDebtService = savedData.value.annualDebtService;
+        dscrForm.annualProfit = savedData.value.annualProfit;
+
     }catch(err){
-        console.log(err)
+        console.error(err)
     }
 }
 
 onMounted(loadData);
 
-const emits = defineEmits('calculate')
+
+const emits = defineEmits(['calculate'])
 
 async function calculateDscr(){
   try{
-    const results = await fetch('http://localhost:5000/api/dscr/default', {
+
+    const calculatedData = {
+        DSCR: {...dscrForm.value}
+    }
+
+    const response = await fetch('http://localhost:5000/api/dscr/calculate', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json', 'X-Session-Id' : props.sessionId}
+      headers: {'Content-Type': 'application/json', 
+      'X-Session-Id' : props.sessionId
+      },
+      body: JSON.stringify(calculatedData)
     })
 
     if (!response.ok) {
@@ -52,9 +68,9 @@ async function calculateDscr(){
         return;
     }
 
-    calculatedData = await results.json();
+    const data = await response.json();
 
-    emits('calculate', calculatedData)
+    emits('calculate', data)
 
   }catch (err){
     console.error("API Error:", err);
@@ -71,13 +87,17 @@ async function calculateDscr(){
     <div class = "parent-container"  v-if = "savedData">
         <h2>Calculate Debt Payment</h2>
         <div class = "input-container">
-            <SingeOutput v-if = "!savedData.annualDebtService" label = "Annual Debt Service" :value = "savedData.annualDebtService" :style = "'no-border'"/>
+            <SingeOutput v-if = "savedData.annualDebtService" label = "Annual Debt Service" :value = "savedData.annualDebtService" :style = "'no-border'"/>
             <div v-else><h4>No Annual Debt Service Exist</h4></div>
             <SingeOutput label = "Annual Payment" :value = "savedData.annualProfit" :style = "'no-border'"/>
-            <SingleInput label = "Preffered DSCR amount: " :inputType = "4" v-model = "prefferedDSCR"/>
+            <SingleInput label = "Preffered DSCR amount: " :inputType = "4" v-model = "dscrForm.prefferedDSCR"/>
+        </div>
+        <div>
+          <button @click="calculateDscr">Calculate DSCR</button>
         </div>
         
     </div>
+
     <div v-else class = "loading-container">
         <transition name="fade-slide" mode="out-in">
             <div>

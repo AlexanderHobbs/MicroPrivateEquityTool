@@ -4,7 +4,7 @@ using DSCRCalculator;
 
 
 namespace AcquisitionInc;
-public class financialSummary
+public class FinancialSummary
 {
     public static void Main(string[] args)
     {
@@ -29,9 +29,14 @@ public class financialSummary
     
     var app = builder.Build();
 
-    app.UseCors("VueAppPolicy");
+    if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage(); // full stack traces on 500s
+}
 
     app.UseRouting();
+
+    app.UseCors("VueAppPolicy");
 
     app.UseAuthorization();
 

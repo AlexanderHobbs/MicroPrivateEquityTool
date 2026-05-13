@@ -1,14 +1,12 @@
-<!-- CurrencyInput.vue -->
-
 <script setup>
 
-const prop = defineProps({
-    label: {type: String, required: true},
-    modelValue: {type: [Number, String, null], default: null},
-    placeholder: {type: String, default: "00.00"},
-    inputType: {type: Number, default: 1},
-    class: {type: String, default: "single-input"},
-    icon: {type: Image, default: "/src/assets/navbar-icons/break-even.png"}
+const props = defineProps({  
+    label: { type: String, required: true },
+    modelValue: { type: [Number, String], default: null },  
+    placeholder: { type: String, default: "00.00" },
+    inputType: { type: Number, default: 1 },
+    class: { type: String, default: "single-input" },
+    icon: { type: String, default: "/src/assets/navbar-icons/break-even.png" }  
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -16,56 +14,58 @@ const emit = defineEmits(['update:modelValue']);
 const onInput = (event) => {
     const value = event.target.value;
 
-    if(prop.inputType === (1 || 4)){
+    if (props.inputType === 1 || props.inputType === 4) {
         const parsed = value === "" ? null : Number(value);
         emit("update:modelValue", parsed);
-    }else{
+    } else {
         emit("update:modelValue", value);
     }
-
 }
 
-// const nonDigit = ref()
-// const checkDigit = (event) => {
-//     if (isNaN(Number(event.key))) {
-//         nonDigit = false
-//         event.preventDefault(); // Stop the character from being entered
-//     }else{
-//         nonDigit = true
-//     }
-// }
 </script>
 
 <template>
-  <div :class = "class" v-if = "inputType === 1" >
-    <div class = "label"><label>{{ label }}</label></div>
-    <input type="number" :placeholder= "placeholder" :value="modelValue" @input="onInput" />
-  </div>
+   
+    <div :class="props.class" v-if="props.inputType === 1">
+        <div class="label"><label>{{ props.label }}</label></div>
+        <input 
+            type="number" 
+            :placeholder="props.placeholder" 
+            :value="props.modelValue" 
+            @input="onInput"/>
+    </div>
 
-  <div :class = "class" v-if = "inputType === 2" >
-    <label>{{ label }}</label>
-    <input type="text" :value="modelValue" @input="onInput" />
-  </div>
+    <div :class="props.class" v-else-if="props.inputType === 2">
+        <label>{{ props.label }}</label>
+        <input 
+            type="text" 
+            :value="props.modelValue" 
+            @input="onInput" 
+            :placeholder="props.placeholder"/>
+    </div>
 
-  <div :class = "class" v-if = "inputType === 3" >
-    <label>{{ label }}</label>
-    <textarea :value = "modelValue" @input="onInput"></textarea>
-  </div>
+    <div :class="props.class" v-else-if="props.inputType === 3">
+        <label>{{ props.label }}</label>
+        <textarea 
+            :value="props.modelValue" 
+            @input="onInput" 
+            :placeholder="props.placeholder">
+        </textarea>
+    </div>
 
-  <div class="range" v-if = "inputType === 4">
-    <div class = "label"><label>{{ label }} {{ modelValue }}%</label></div>
-    <input type="range" :value = "modelValue" @input = "onInput" min = "-1" max = "3" step = ".5">
-  </div>
-  
-
-    <!-- <Teleport to = "body">
-        <div v-show = "nonDigit" class = "error-character">
-            <p>Please enter a number</p>
-            <button @click="nonDigit = true">Close</button>
+    <div class="range" v-else-if="props.inputType === 4">
+        <div class="label">
+            <label>{{ props.label }} {{ props.modelValue }}%</label>
         </div>
-    </Teleport> -->
+        <input 
+            type="range" 
+            :value="props.modelValue" 
+            @input="onInput" 
+            min="-1" 
+            max="3" 
+            step=".5"/>
+    </div>
 </template>
-
 
 <style scoped>
 .single-input {

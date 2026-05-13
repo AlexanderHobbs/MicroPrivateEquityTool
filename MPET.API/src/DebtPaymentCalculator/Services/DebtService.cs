@@ -1,4 +1,6 @@
 namespace DebtPaymentCalculator;
+using Shared.DTOs;
+
 
 public class DebtService
 {

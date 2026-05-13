@@ -1,6 +1,6 @@
 <script setup>
 
-import {ref} from 'vue'
+import {ref, onMounted} from 'vue'
 import SingleInput from '@/components/basic/SingleInput.vue';
 import ToggleBtn from '@/components/basic/ToggleBtn.vue';
 
@@ -9,6 +9,9 @@ import ToggleBtn from '@/components/basic/ToggleBtn.vue';
 // ----------------------
 
 const props = defineProps({sessionId: {crypto}});
+
+const savedData = ref(null);
+
 
 const termOptions = ref([
     {text: "1 Year", value: 1},
@@ -69,7 +72,7 @@ const SellersNoteForm = ref({
 
 function calculateDownPayment(){
 
-        const downPayment = null;
+        let downPayment = null;
 
         if(!purchaseForm){
             alert("Enter Purchase Price and Equity Injection")
@@ -85,6 +88,52 @@ function calculateDownPayment(){
 // ----------------------
 // Functions
 // ----------------------
+
+async function loadData() {
+    
+    try{
+
+        const response = await fetch('http://localhost:5000/api/debt/default', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json', 
+                'X-Session-Id' : props.sessionId
+            },
+        })
+
+        if (!response.ok) {
+            const errorText = await response.text(); // Try to get server error details
+            alert(`Server error: ${response.status} - ${errorText}`);
+            return;
+        }
+
+        savedData.value = await response.json();
+
+        setValues(savedData);
+
+    }catch(err){
+        console.error(err)
+    }
+}
+
+function setValues(data) {
+
+    purchaseForm.purchasePrice   = data.purchase?.PurchasePrice ?? null;
+    purchaseForm.equityInjection = data.purchase?.EquityInjection ?? null;
+
+    SBA_MetricForm.LoanAmount    = data.sBA_Metrics?.LoanAmount ?? null;
+    SBA_MetricForm.DownPayment   = data.sBA_Metrics?.DownPayment ?? null;
+    SBA_MetricForm.InterestRate  = data.sBA_Metrics?.InterestRate ?? null;
+    SBA_MetricForm.Term          = data.sBA_Metrics?.Term ?? null;
+    SBA_MetricForm.autoCalculate = data.sBA_Metrics?.IsAutocalculated ?? false;
+
+
+    SellersNoteForm.LoanAmount   = data.sellersNote?.LoanAmount ?? null;
+    SellersNoteForm.InterestRate = data.sellersNote?.InterestRate ?? null;
+    SellersNoteForm.Term         = data.sellersNote?.Term ?? null;
+}
+
+onMounted(loadData)
 
 const emit = defineEmits(['save', 'results']);
 
@@ -123,7 +172,9 @@ async function saveData() {
         }
 
         const data = await response.json();
-        emit('results', data)
+        emit('results', data);
+
+        //save data to pinia
         emit('save', debtData);
 
 
@@ -158,50 +209,72 @@ function dataIsNotNull(obj) {
         <div class="db-input-container">
             <h2>Calculate Debt Payment</h2>
 
-            <div class = "business-purchase-price">
-                <SingleInput label = "Asking/Purchase Price: " v-model = "purchaseForm.purchasePrice"/>
-                <SingleInput label = "Equity Injection: " v-model = "purchaseForm.equityInjection" placeholder = "0%"/>
+            <div class="business-purchase-price">
+                <SingleInput 
+                    label="Asking/Purchase Price: " 
+                    v-model="purchaseForm.purchasePrice" 
+                    :placeholder="purchaseForm.purchasePrice ?? '00.00'"/>
+                <SingleInput 
+                    label="Equity Injection: " 
+                    v-model="purchaseForm.equityInjection" 
+                    :placeholder="purchaseForm.equityInjection"/>
             </div>
 
             <div class="SBA-loan-metrics">
 
-                <div class = "SBA-loan-container">
+                <div class="SBA-loan-container">
                     <h3>SBA Loan Metrics</h3>
-                    <SingleInput label = "Loan Amount/Portion: " v-model = "SBA_MetricForm.LoanAmount" />
-                    <div class = "down-payment-div">
-                        <SingleInput label = "Down Payment Amount: " v-model = "SBA_MetricForm.DownPayment" />
-                        <ToggleBtn v-model = "SBA_MetricForm.autoCalculate" label = "Auto Calculate:"/>
+                    <SingleInput 
+                        label="Loan Amount/Portion: " 
+                        v-model="SBA_MetricForm.LoanAmount"
+                        :placeholder="SBA_MetricForm.LoanAmount ?? '0'"/>
+                    <div class="down-payment-div">
+                        <SingleInput 
+                            label="Down Payment Amount: " 
+                            v-model="SBA_MetricForm.DownPayment"
+                            :placeholder="SBA_MetricForm.DownPayment ?? '0'"/>
+                        <ToggleBtn v-model="SBA_MetricForm.autoCalculate" label="Auto Calculate:"/>
                     </div>
 
-                    <SingleInput label = "Loan Interest Rate: " v-model = "SBA_MetricForm.InterestRate" placeholder = "0%"/>
-                
-                    <div class = "selected-year-input">
+                    <SingleInput 
+                        label="Loan Interest Rate: " 
+                        v-model="SBA_MetricForm.InterestRate" 
+                        :placeholder="SBA_MetricForm.InterestRate ?? '0%'"/>
+
+                    <div class="selected-year-input">
                         <label>Term Length:</label>
                         <select v-model="SBA_MetricForm.Term">
-                            <option v-for="amount in termOptions" :key = "amount.value" :value = "amount.value">
+                            <option disabled value="">{{ SBA_MetricForm.Term ?? 'Select a term' }}</option>
+                            <option v-for="amount in termOptions" :key="amount.value" :value="amount.value">
                                 {{ amount.text }}
                             </option>
                         </select>
                     </div>
                 </div>
 
-                <div class = "sellers-note-container">
+                <div class="sellers-note-container">
                     <h3>Sellers Note Data</h3>
-                        <SingleInput label = "Sellers Note Amount" v-model = "SellersNoteForm.LoanAmount"/>
-                        <SingleInput label = "Sellers Note Interest Rate" v-model = "SellersNoteForm.InterestRate"/>
-                    <div class = "selected-year-input">
+                    <SingleInput 
+                        label="Sellers Note Amount" 
+                        v-model="SellersNoteForm.LoanAmount"
+                        :placeholder="SellersNoteForm.LoanAmount ?? '0'"/>
+                    <SingleInput 
+                        label="Sellers Note Interest Rate" 
+                        v-model="SellersNoteForm.InterestRate"
+                        :placeholder="SellersNoteForm.InterestRate ?? '0'"/>
+                    <div class="selected-year-input">
                         <label>Term Length:</label>
                         <select v-model="SellersNoteForm.Term">
-                            <option v-for="amount in termOptions" :key = "amount.value" :value = "amount.value">
+                            <option disabled value="">{{ SellersNoteForm.Term ?? 'Select a term' }}</option>
+                            <option v-for="amount in termOptions" :key="amount.value" :value="amount.value">
                                 {{ amount.text }}
                             </option>
                         </select>
                     </div>
                 </div>
             </div>
-            
-            <button class = "save-btn" @click = "saveData">Save Data</button>
 
+            <button class="save-btn" @click="saveData">Save Data</button>
         </div>
     </div>
 </template>

@@ -7,6 +7,7 @@ const prop = defineProps({
     id: {crypto}
 })
 
+
 const calculationResults = ref(null)
 const successful = ref(false)
 

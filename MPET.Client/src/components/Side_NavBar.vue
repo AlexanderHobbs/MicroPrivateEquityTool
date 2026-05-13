@@ -2,7 +2,7 @@
 
 import {ref} from 'vue' 
 
-const emit = defineEmits('change-page')
+const emit = defineEmits(['change-page'])
 
 const activePage = ref('dashboard')
 

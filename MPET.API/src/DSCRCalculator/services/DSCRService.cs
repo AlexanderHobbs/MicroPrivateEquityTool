@@ -4,69 +4,62 @@ using Shared.DTOs;
 
 public class DSCRService
 {
-
-    DscrDto data;
-    DSCROutputDto output;
-    decimal debtService;
-
-    decimal profit = 100000;
-
-
     public DSCROutputDto Calculate(DSCRDataDto dscrData, DebtOutputDto debtData)
     {
-        data = dscrData.DscrData;
-        output = new();
-        debtService = debtData.AnnualDebtService;
+        if (dscrData?.DSCR == null)
+            throw new ArgumentNullException(nameof(dscrData), "DSCR data is required.");
 
-        calculateDSCR();
-        calculateRemainingCashFlow();
+        if (debtData == null)
+            throw new ArgumentNullException(nameof(debtData), "Debt data is required.");
+
+        decimal profit = 100;
+        decimal debtService = debtData.AnnualDebtService;
+        DscrDto data = dscrData.DSCR;
+
+        if (debtService == 0)
+            throw new InvalidOperationException("Annual debt service cannot be zero.");
+
+        var output = new DSCROutputDto();
+
+        output.DscrRatio = CalculateDSCR(profit, debtService, data, output);
+        output.AnnualDebtService = debtService;
+        output.AnnualProfit = profit;
+        output.WarningLevel = CalculateStatus(output.DscrRatio, data.PreferredDscr);
+        output.RemainingCashFlow = CalculateRemainingCashFlow(profit, debtService);
 
         return output;
     }
 
-    public void calculateDSCR()
+    private decimal CalculateDSCR(decimal profit, decimal debtService, DscrDto data, DSCROutputDto output)
     {
-        output.DscrRatio = profit / debtService;
-
-        calculateStatus(output.DscrRatio);
-
-        output.AnnualDebtService = debtService;
-        output.AnnualProfit = profit;
+        return profit / debtService;
     }
 
-    public void calculateStatus(decimal dscrRatio)
+    private DSCROutputDto.Level CalculateStatus(decimal dscrRatio, decimal preferredDscr)
     {
-        if(dscrRatio > data.PreferredDscr)
-        {
-            output.WarningLevel = DSCROutputDto.Level.Green;
-        }else if (dscrRatio == data.PreferredDscr)
-        {
-            output.WarningLevel = DSCROutputDto.Level.Yellow;
+        if (dscrRatio > preferredDscr)
+            return DSCROutputDto.Level.Green;
 
-        }
-        else
-        {
-            output.WarningLevel = DSCROutputDto.Level.Red;
-        }
+        if (dscrRatio == preferredDscr)
+            return DSCROutputDto.Level.Yellow;
 
+        return DSCROutputDto.Level.Red;
     }
 
-    public void calculateRemainingCashFlow()
+    private decimal CalculateRemainingCashFlow(decimal profit, decimal debtService)
     {
-        output.RemainingCashFlow = profit - debtService;
+        return profit - debtService;
     }
 
-    public DSCROutputDto getData(DebtOutputDto debtData)
+    public DSCROutputDto GetData(DebtOutputDto debtData)
     {
-        return new DSCROutputDto {
+        return new DSCROutputDto
+        {
             DscrRatio = 0,
-            AnnualDebtService = debtData?.AnnualDebtService ?? 100,
-            AnnualProfit = 0,
+            AnnualDebtService = debtData?.AnnualDebtService ?? 0,
+            AnnualProfit = 0, 
             RemainingCashFlow = 0,
             WarningLevel = DSCROutputDto.Level.Red
         };
     }
-
-
-
 }

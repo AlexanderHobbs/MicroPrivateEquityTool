@@ -2,6 +2,8 @@ namespace DebtPaymentCalculator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 
+using Shared.DTOs;
+
 
 [ApiController]
 [Route("api/[controller]")]
@@ -17,21 +19,45 @@ public class DebtController : ControllerBase
         _cache = cache;
     }
 
-    [HttpPost("calculate")]
+    [HttpGet("default")]
+    public IActionResult GetDebtData()
+    {
+        var sessionId = GetSessionId();
 
+        if (string.IsNullOrEmpty(sessionId))
+            return Ok(new DebtDataDto());
+
+        if (!_cache.TryGetValue($"{sessionId}:debt_input", out DebtDataDto? debtInput))
+            return Ok(new DebtDataDto());
+
+        
+        return Ok(debtInput); 
+    }
+
+
+    [HttpPost("calculate")]
     public IActionResult Calculate([FromBody] DebtDataDto debtData)
     {   
 
-        var result = _service.Calculate(debtData);
-        var sessionId = Request.Headers["X-Session-Id"].ToString();
+        var sessionId = GetSessionId();
 
-        _cache.Set($"{sessionId}:debt_result", result, new MemoryCacheEntryOptions
+        var result = _service.Calculate(debtData);
+
+        var options = new MemoryCacheEntryOptions
         {
             AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1),
             SlidingExpiration = TimeSpan.FromMinutes(30)
-        });
+        };
+
+        _cache.Set($"{sessionId}:debt_result", result, options);
+        _cache.Set($"{sessionId}:debt_input", debtData, options);
 
         return Ok(result);
+    }
+
+    private string GetSessionId()
+    {
+            return Request.Headers["X-Session-Id"].ToString();
     }
 
 }
