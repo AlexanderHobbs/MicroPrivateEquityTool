@@ -57,7 +57,7 @@ public class DSCRService
         {
             DscrRatio = 0,
             AnnualDebtService = debtData?.AnnualDebtService ?? 0,
-            AnnualProfit = 0, 
+            AnnualProfit = 100, 
             RemainingCashFlow = 0,
             WarningLevel = DSCROutputDto.Level.Red
         };

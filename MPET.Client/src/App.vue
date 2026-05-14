@@ -65,7 +65,9 @@ const currentPageComponent = computed(() => pages[currentPage.value]);
         
         <div class = "input-section">
             <Transition name = "fade" mode = "out-in">
-                <component :is = "currentPageComponent" :id = "sessionId"/>
+                <KeepAlive>
+                    <component :is = "currentPageComponent" :id = "sessionId"/>
+                </KeepAlive>
             </Transition>
         </div>
     </div>

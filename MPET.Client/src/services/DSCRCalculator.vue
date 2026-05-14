@@ -34,6 +34,8 @@ async function loadData() {
 
         savedData.value = await response.json();
 
+        console.log(savedData);
+
         dscrForm.annualDebtService = savedData.value.annualDebtService;
         dscrForm.annualProfit = savedData.value.annualProfit;
 
@@ -69,6 +71,7 @@ async function calculateDscr(){
     }
 
     const data = await response.json();
+    console.log(data);
 
     emits('calculate', data)
 
