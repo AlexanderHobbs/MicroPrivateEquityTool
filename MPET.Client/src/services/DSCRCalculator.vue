@@ -12,7 +12,7 @@ const savedData = ref(null);
 const dscrForm = ref({
     prefferedDSCR: 1,
     annualDebtService: savedData.annualDebtService,
-    annualProfit: savedData.annualProfit
+    annualProfit: savedData.annualProfit,
 })
 
 async function loadData() {
@@ -90,13 +90,14 @@ async function calculateDscr(){
     <div class = "parent-container"  v-if = "savedData">
         <h2>Calculate Debt Payment</h2>
         <div class = "input-container">
-            <SingeOutput v-if = "savedData.annualDebtService" label = "Annual Debt Service" :value = "savedData.annualDebtService" :style = "'no-border'"/>
-            <div v-else><h4>No Annual Debt Service Exist</h4></div>
-            <SingeOutput label = "Annual Payment" :value = "savedData.annualProfit" :style = "'no-border'"/>
+          <div class = "prev-input">
+            <SingeOutput label = "Annual Debt Service: " :value = "savedData.annualDebtService" :style = "'no-border'"/>
+            <SingeOutput label = "Annual Profit: " :value = "savedData.annualProfit" :style = "'no-border'"/>
+          </div>
             <SingleInput label = "Preffered DSCR amount: " :inputType = "4" v-model = "dscrForm.prefferedDSCR"/>
         </div>
         <div>
-          <button @click="calculateDscr">Calculate DSCR</button>
+          <button class = "save-btn" @click="calculateDscr">Calculate DSCR</button>
         </div>
         
     </div>
@@ -122,6 +123,7 @@ async function calculateDscr(){
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+    gap: 22px;
     width: 100%;
     height: 100%;
 }
@@ -137,6 +139,26 @@ async function calculateDscr(){
     background: rgba(255, 255, 255);
     border: 1px solid #e5e7eb;
     box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+}
+
+.prev-input {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  gap: 12px;
+}
+
+
+.save-btn {
+    width: fit-content;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: none;
+    background: #111827;
+    color: #ffffff;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s ease;
 }
 
 
@@ -211,6 +233,7 @@ async function calculateDscr(){
     opacity: 1;
   }
 }
+
 </style>
 
 <!-- 

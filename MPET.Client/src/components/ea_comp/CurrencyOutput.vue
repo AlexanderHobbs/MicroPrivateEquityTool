@@ -23,19 +23,19 @@ const formatCurrency = (value) => {
 
   <div class = "output-container">
 
-    <div class = "data year"><img src = "../../assets/output-icons/calendar.png"/><span>Year: </span>
+    <div class = "data year"><img src = "../../assets/navbar-icons/earning.png"/><span>Year: </span>
       <span class = "output" v-if = "label">{{label}}</span><span v-else> — </span></div>
 
-    <div class = "data revenue"><img src = "../../assets/output-icons/moneyg.png"/><span>Revenue Amount: </span>
+    <div class = "data revenue"><img src = "../../assets/navbar-icons/earning.png"/><span>Revenue Amount: </span>
       <span class = "output" v-if = "data.revenue">{{ formatCurrency(data.revenue)}}</span><span v-else> — </span></div>
 
-    <div class = "data expense"><img src = "../../assets/output-icons/moneyr.png"/><span>Expense Amount: </span>
+    <div class = "data expense"><img src = "../../assets/navbar-icons/earning.png"/><span>Expense Amount: </span>
       <span class = "output" v-if = "data.expense">{{ formatCurrency(data.expense) }}</span><span v-else> — </span></div>
 
-    <div class = "data sde"><img src = "../../assets/output-icons/percent.png"/><span>Reported SDE Amount: </span>
+    <div class = "data sde"><img src = "../../assets/navbar-icons/earning.png"/><span>Reported SDE Amount: </span>
       <span class = "output" v-if = "data.ReportedSDE">{{ formatCurrency(data.ReportedSDE) }}</span><span v-else> — </span></div>
 
-    <div class = "data salary"><img src = "../../assets/output-icons/moneyb.png"/><span>Owner Salary Amount: </span>
+    <div class = "data salary"><img src = "../../assets/navbar-icons/earning.png"/><span>Owner Salary Amount: </span>
       <span class = "output" v-if = "data.ownerSalary">{{ formatCurrency(data.ownerSalary) }}</span><span v-else> — </span></div>
   </div>
 
@@ -51,7 +51,6 @@ const formatCurrency = (value) => {
     margin-bottom: 10px;
 }
 
-
 .data {
   display: flex;
   gap: 10px;
@@ -59,9 +58,6 @@ const formatCurrency = (value) => {
   border-radius: 15px;
 }
 
-.data.year {
-  background-color: rgb(128, 128, 128, 0.06);
-}
 
 span {
   flex: 1;
@@ -71,42 +67,12 @@ span {
   font-weight: 550;
 }
 
-.data.revenue {
-  background-color: rgb(128, 128, 128, 0.06);
-}
-
-.data.revenue .output {
-  /* color: #2E8B57 */
-}
-
-.data.expense {
-  background-color: rgb(128, 128, 128, 0.06);
-}
-
-.data.expense .output {
-  /* color:#B94A48; */
-}
-
-.data.sde {
-  background-color: rgb(128, 128, 128, 0.06);
-}
-
-.data.sde .output {
-  /* color: #B8963A; */
-}
-
-.data.salary {
-  background-color: rgb(128, 128, 128, 0.06);
-}
-
-.data.salary .output {
-  /* color: #3A5F8A; */
-}
-
 
 img {
-    height: 40px;
+    height: 30px;
     border-radius: 50px;
+    padding: 5px;
+    background-color: rgb(128, 128, 128, 0.06);
 }
 
 

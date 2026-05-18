@@ -3,6 +3,7 @@ namespace DSCRCalculator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 
+using MPET.Controller;
 using Shared.DTOs;
 
 [ApiController]
@@ -41,7 +42,6 @@ public class DSCRController : ControllerBase
 
 
         var sessionId = GetSessionId();
-        Console.WriteLine(sessionId);
 
         if (string.IsNullOrEmpty(sessionId)){
             return BadRequest(new { error = "X-Session-Id header is required." });

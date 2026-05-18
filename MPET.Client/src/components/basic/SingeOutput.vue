@@ -14,7 +14,8 @@ const props = defineProps({
 
 <div :class = "style">
     <span class="label">{{label}}</span>
-    <span class="value">{{value}}</span>
+    <span v-if = "value" class="value">{{value}}</span>
+    <span v-else>-</span>
 </div>
 
 </template>

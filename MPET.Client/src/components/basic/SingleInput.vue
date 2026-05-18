@@ -53,9 +53,9 @@ const onInput = (event) => {
         </textarea>
     </div>
 
-    <div class="range" v-else-if="props.inputType === 4">
+    <div :class="props.class + '-range'" v-else-if="props.inputType === 4">
         <div class="label">
-            <label>{{ props.label }} {{ props.modelValue }}%</label>
+            <label>{{ props.label }}</label> <label>{{ props.modelValue }}%</label>
         </div>
         <input 
             type="range" 
@@ -77,10 +77,13 @@ const onInput = (event) => {
 
 .label {
     flex: 1;
-    min-width: max-content;
     display: flex;
-    align-items: center;
-    gap: 20px;
+    justify-content: space-between;
+    text-align: left;
+}
+
+.label label {
+    flex: 1;
 }
 
 .single-input input {
@@ -136,11 +139,20 @@ textarea:focus {
     box-shadow: 0 0 0 1px rgba(17, 24, 39, 0.05);
 }
 
+.single-input-range {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
 .range {
     width: 100%;
     height: auto;
     display: flex;
     flex-direction: column;
+    gap: 5px;
 }
 
 .range .label {

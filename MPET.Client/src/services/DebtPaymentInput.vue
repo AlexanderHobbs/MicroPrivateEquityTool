@@ -89,6 +89,28 @@ function calculateDownPayment(){
 // Functions
 // ----------------------
 
+function autoFillMarketValues() {
+    const price = purchaseForm.value.purchasePrice ?? 500_000;
+ 
+    const equityInjectionPct = 10;                               // 10% SBA minimum
+    const equityInjection    = Math.round(price * 0.10);
+    const sbaLoanAmount      = price - equityInjection;
+    const sellerNoteAmount   = Math.round(price * 0.10);         // market convention
+ 
+    purchaseForm.value.purchasePrice   = price;
+    purchaseForm.value.equityInjection = equityInjectionPct;     // stored as % for calculateDownPayment()
+ 
+    SBA_MetricForm.value.LoanAmount    = sbaLoanAmount;
+    SBA_MetricForm.value.DownPayment   = equityInjection;
+    SBA_MetricForm.value.InterestRate  = 11.25;                  // WSJ Prime + spread, Jun 2025
+    SBA_MetricForm.value.Term          = 10;                     // 10-year SBA acquisition max
+    SBA_MetricForm.value.autoCalculate = true;
+ 
+    SellersNoteForm.value.LoanAmount   = sellerNoteAmount;
+    SellersNoteForm.value.InterestRate = 6.00;                   // typical subordinated seller note
+    SellersNoteForm.value.Term         = 5;                      // 5-yr SBA standby requirement
+}
+
 async function loadData() {
     
     try{
@@ -118,14 +140,14 @@ async function loadData() {
 
 function setValues(data) {
 
-    purchaseForm.purchasePrice   = data.purchase?.PurchasePrice ?? null;
-    purchaseForm.equityInjection = data.purchase?.EquityInjection ?? null;
+    purchaseForm.value.purchasePrice   = data.purchase?.PurchasePrice ?? null;
+    purchaseForm.value.equityInjection = data.purchase?.EquityInjection ?? null;
 
-    SBA_MetricForm.LoanAmount    = data.sBA_Metrics?.LoanAmount ?? null;
-    SBA_MetricForm.DownPayment   = data.sBA_Metrics?.DownPayment ?? null;
-    SBA_MetricForm.InterestRate  = data.sBA_Metrics?.InterestRate ?? null;
-    SBA_MetricForm.Term          = data.sBA_Metrics?.Term ?? null;
-    SBA_MetricForm.autoCalculate = data.sBA_Metrics?.IsAutocalculated ?? false;
+    SBA_MetricForm.value.LoanAmount    = data.sBA_Metrics?.LoanAmount ?? null;
+    SBA_MetricForm.value.DownPayment   = data.sBA_Metrics?.DownPayment ?? null;
+    SBA_MetricForm.value.InterestRate  = data.sBA_Metrics?.InterestRate ?? null;
+    SBA_MetricForm.value.Term          = data.sBA_Metrics?.Term ?? null;
+    SBA_MetricForm.value.autoCalculate = data.sBA_Metrics?.IsAutocalculated ?? false;
 
 
     SellersNoteForm.LoanAmount   = data.sellersNote?.LoanAmount ?? null;
@@ -137,7 +159,7 @@ onMounted(loadData)
 
 const emit = defineEmits(['save', 'results']);
 
-async function saveData() {
+async function calculateData() {
     
     if(SBA_MetricForm.autoCalculate){
         SBA_MetricForm.value.DownPayment = calculateDownPayment().toFixed(2);
@@ -217,7 +239,7 @@ function dataIsNotNull(obj) {
                 <SingleInput 
                     label="Equity Injection: " 
                     v-model="purchaseForm.equityInjection" 
-                    :placeholder="purchaseForm.equityInjection"/>
+                    :placeholder="purchaseForm.equityInjection ?? '0%'"/>
             </div>
 
             <div class="SBA-loan-metrics">
@@ -274,7 +296,8 @@ function dataIsNotNull(obj) {
                 </div>
             </div>
 
-            <button class="save-btn" @click="saveData">Save Data</button>
+            <button class="save-btn" @click="calculateData">Calculate Debt Payment</button>
+            <button class = "save-btn" @click = "autoFillMarketValues">Auto Fill</button>
         </div>
     </div>
 </template>

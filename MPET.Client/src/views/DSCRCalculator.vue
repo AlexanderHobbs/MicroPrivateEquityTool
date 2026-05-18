@@ -16,10 +16,20 @@ let gaugeChart = null
 function DscrResults(data) {
     calculationResults.value = data;
     successful.value = true;
-    nextTick(() => renderGauge(data.dscrRatio));
+
+    let style = null;
+
+    if(calculationResults.warningLevel == 0){
+        style = "red"
+    }else if (calculationResults.warningLevel == 1){
+        style = "yellow"
+    }else{
+        style = "green"
+    }
+    nextTick(() => renderGauge(data.dscrRatio, style));
 }
 
-function renderGauge(value) {
+function renderGauge(value, style) {
     const ctx = document.getElementById('dscrGauge');
     if (!ctx) return;
     if (gaugeChart) gaugeChart.destroy();
@@ -32,7 +42,7 @@ function renderGauge(value) {
         data: {
             datasets: [{
                 data: [clamped, remaining],
-                backgroundColor: ['#4f46e5', '#e5e7eb'],
+                backgroundColor: [style, '#e5e7eb'],
                 borderWidth: 0,
                 circumference: 180,
                 rotation: 270,
@@ -78,16 +88,9 @@ function formatCash(val) {
                 <div class="gauge-wrapper">
                     <canvas id="dscrGauge"></canvas>
                     <div class="gauge-center">
-                        <span class="gauge-value">{{ (calculationResults.dscrRatio * 100).toFixed(1) }}%</span>
+                        <span class="gauge-value">{{ (calculationResults.dscrRatio * 10).toFixed(2) }}x</span>
                     </div>
                 </div>
-                <input
-                    type="range"
-                    min="0" max="3" step="0.01"
-                    :value="calculationResults.dscrRatio"
-                    disabled
-                    class="dscr-slider"
-                />
                 <p class="slider-hint">0 — 3x range</p>
             </div>
 
@@ -175,6 +178,8 @@ function formatCash(val) {
 /* Gauge */
 .gauge-wrapper {
     position: relative;
+    display: flex;
+    justify-content: center;
     width: 180px;
     height: 90px;
     overflow: hidden;

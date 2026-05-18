@@ -1,5 +1,7 @@
 namespace EarningsCalculator;
 
+using MPET.Controller;
+
 public class EarningCalculator
 {
 
