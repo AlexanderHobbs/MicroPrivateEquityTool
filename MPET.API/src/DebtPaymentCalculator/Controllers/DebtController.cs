@@ -37,12 +37,12 @@ public class DebtController : ControllerBase
 
 
     [HttpPost("calculate")]
-    public IActionResult Calculate([FromBody] DebtDataDto debtData)
+    public IActionResult Calculate([FromBody] DebtDataDto? debtData)
     {   
 
         var sessionId = GetSessionId();
 
-        var result = _service.Calculate(debtData);
+        var result = _service.Calculate(debtData!);
 
         var options = new MemoryCacheEntryOptions
         {

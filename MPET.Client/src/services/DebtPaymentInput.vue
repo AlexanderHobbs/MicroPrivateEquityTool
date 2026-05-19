@@ -1,6 +1,6 @@
 <script setup>
 
-import {ref, onMounted} from 'vue'
+import {ref, watch} from 'vue'
 import SingleInput from '@/components/basic/SingleInput.vue';
 import ToggleBtn from '@/components/basic/ToggleBtn.vue';
 
@@ -8,7 +8,15 @@ import ToggleBtn from '@/components/basic/ToggleBtn.vue';
 // State
 // ----------------------
 
-const props = defineProps({sessionId: {crypto}});
+const props = defineProps({sessionId: String});
+
+watch(
+    () => props.sessionId,
+    (newId) => {
+        if (newId) loadData()
+    },
+    { immediate: true }
+)
 
 const savedData = ref(null);
 
@@ -115,7 +123,7 @@ async function loadData() {
     
     try{
 
-        const response = await fetch('http://localhost:5000/api/debt/default', {
+        const response = await fetch('/api/debt/default', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json', 
@@ -134,7 +142,7 @@ async function loadData() {
         setValues(savedData);
 
     }catch(err){
-        console.error(err)
+        console.error('Fetch failed:', err.name, err.message);
     }
 }
 
@@ -154,8 +162,6 @@ function setValues(data) {
     SellersNoteForm.InterestRate = data.sellersNote?.InterestRate ?? null;
     SellersNoteForm.Term         = data.sellersNote?.Term ?? null;
 }
-
-onMounted(loadData)
 
 const emit = defineEmits(['save', 'results']);
 
@@ -178,7 +184,7 @@ async function calculateData() {
 
     try{
         
-        const response = await fetch('http://localhost:5000/api/debt/calculate', {
+        const response = await fetch('/api/debt/calculate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', 'X-Session-Id' : props.sessionId
@@ -201,8 +207,7 @@ async function calculateData() {
 
 
     }catch(err){
-        console.error("API Error:", err);
-        alert(`API call failed: ${err.message}`);
+        console.error('Fetch failed:', err.name, err.message);
     }
 
 }

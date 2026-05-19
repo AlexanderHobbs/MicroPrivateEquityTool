@@ -1,13 +1,20 @@
 <script setup>
 
-import {onMounted, ref} from 'vue'
+import {watch, ref} from 'vue'
 import SingleInput from '@/components/basic/SingleInput.vue';
 import SingeOutput from '@/components/basic/SingeOutput.vue';
 
-const props = defineProps({sessionId: {crypto}});
+const props = defineProps({sessionId: String});
 
 const savedData = ref(null);
 
+watch(
+    () => props.sessionId,
+    (newId) => {
+        if (newId) loadData()
+    },
+    { immediate: true }
+)
 
 const dscrForm = ref({
     prefferedDSCR: 1,
@@ -18,7 +25,7 @@ const dscrForm = ref({
 async function loadData() {
     try{
 
-        const response = await fetch('http://localhost:5000/api/dscr/default', {
+        const response = await fetch('/api/dscr/default', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json', 
@@ -40,12 +47,9 @@ async function loadData() {
         dscrForm.annualProfit = savedData.value.annualProfit;
 
     }catch(err){
-        console.error(err)
+      console.error('Fetch failed:', err.name, err.message);
     }
 }
-
-onMounted(loadData);
-
 
 const emits = defineEmits(['calculate'])
 
@@ -56,7 +60,7 @@ async function calculateDscr(){
         DSCR: {...dscrForm.value}
     }
 
-    const response = await fetch('http://localhost:5000/api/dscr/calculate', {
+    const response = await fetch('/api/dscr/calculate', {
       method: 'POST',
       headers: {'Content-Type': 'application/json', 
       'X-Session-Id' : props.sessionId
@@ -71,13 +75,11 @@ async function calculateDscr(){
     }
 
     const data = await response.json();
-    console.log(data);
 
     emits('calculate', data)
 
   }catch (err){
-    console.error("API Error:", err);
-    alert(`API call failed: ${err.message}`);
+    console.error('Fetch failed:', err.name, err.message);
   }
 
 }

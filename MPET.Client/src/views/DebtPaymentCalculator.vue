@@ -5,7 +5,7 @@ import DebtPaymentInput from '@/services/DebtPaymentInput.vue';
 import SingleOutput from '@/components/basic/SingeOutput.vue';
 
 const prop = defineProps({
-    id: {crypto}
+    id: String
 })
 
 

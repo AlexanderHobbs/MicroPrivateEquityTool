@@ -6,7 +6,7 @@ import { Chart, ArcElement, DoughnutController, Tooltip } from 'chart.js';
 Chart.register(ArcElement, DoughnutController, Tooltip);
 
 const prop = defineProps({
-    id: { crypto }
+    id: String 
 })
 
 const calculationResults = ref(null)

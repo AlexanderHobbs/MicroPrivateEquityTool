@@ -1,13 +1,15 @@
 <script setup>
 import StressTest from '@/services/StressTest.vue';
 
-const props = defineProps({id: crypto});
+const props = defineProps({
+    id: String
+});
 
 </script>
 
 <template>
     <div class="parent">
-        <StressTest :id = "props.sessionId"/>
+        <StressTest :sessionId = "props.id"/>
     </div>
 </template>
 

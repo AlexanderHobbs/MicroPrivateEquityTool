@@ -1,6 +1,7 @@
 ﻿using EarningsCalculator;
 using DebtPaymentCalculator;
 using DSCRCalculator;
+using StressTestCalculator;
 
 
 namespace AcquisitionInc;
@@ -20,12 +21,17 @@ public class FinancialSummary
         });
     });
 
+    
+
     builder.Services.AddControllers();
     builder.Services.AddMemoryCache();
+
+
 
     // builder.Services.AddScoped<EarningService>();
     builder.Services.AddScoped<DebtService>();
     builder.Services.AddScoped<DSCRService>();
+    builder.Services.AddScoped<StressTestService>();
     
     var app = builder.Build();
 
