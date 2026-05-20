@@ -1,5 +1,5 @@
 <script setup>
-import StressTest from '@/services/StressTest.vue';
+import StressTestService from '@/services/StressTestService.vue';
 
 const props = defineProps({
     id: String
@@ -16,9 +16,9 @@ const navigateToDebtPage = (data) => {
 
 <template>
     <div class="parent">
-        <h2>Calculate Stress Test</h2>
+        <h2>Revenue Stress Testing Simulator</h2>
 
-        <StressTest 
+        <StressTestService
             :sessionId = "props.id" 
             @navigateTo = "navigateToDebtPage"
         />

@@ -1,7 +1,7 @@
 <script setup>
 import {ref} from 'vue';
 
-import DebtPaymentInput from '@/services/DebtPaymentInput.vue';
+import DebtPaymentService from '@/services/DebtPaymentService.vue';
 import SingleOutput from '@/components/basic/SingeOutput.vue';
 
 const prop = defineProps({
@@ -29,7 +29,7 @@ function DebtDataResults(savedData){
 
 <section class="parent">
     <div class="input">
-        <DebtPaymentInput 
+        <DebtPaymentService
         @save = "saveDebtData"
         @results = "DebtDataResults"
         :sessionId = "prop.id"

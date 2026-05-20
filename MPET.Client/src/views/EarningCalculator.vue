@@ -1,5 +1,5 @@
 <script setup>
-import EarningInput from '@/services/EarningCalculatorInput.vue';
+import EarningService from '@/services/EarningService.vue';
 import SingleOutput from '@/components/basic/SingeOutput.vue';
 
 import {ref} from 'vue';
@@ -43,7 +43,7 @@ function EarningResults(data){
 <div class = "parent">
 
     <div class = "input">
-        <EarningInput 
+        <EarningService 
             @save = "saveYearData"
             @load-year = "handleLoadYear"
             @calculate = "EarningResults"

@@ -33,9 +33,10 @@ const inputDictionary = ref({})
 
 const selectedYear = ref()
 const yearOptions = ref([
+    {text: 'CURRENT', value: 2026},
     {text: '2025', value: 2025},
     {text: '2024', value: 2024},
-    {text: '2023', value: 2023},
+    {text: '2023', value: 2023}
 ])
 
 const currencyForm = ref({ 

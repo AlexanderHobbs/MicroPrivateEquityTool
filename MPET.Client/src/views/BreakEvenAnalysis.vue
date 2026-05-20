@@ -1,7 +1,15 @@
+<script setup>
+import BreakEvenService from '@/services/BreakEvenService.vue';
+
+
+</script>
+
 <template>
 <section class="parent">
+    <h2>Conduct a Break Even Analysis</h2>
 
- </section>
+    <BreakEvenService />
+</section>
 
 </template>
 

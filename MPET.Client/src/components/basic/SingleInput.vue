@@ -65,6 +65,20 @@ const onInput = (event) => {
             max="3" 
             step=".5"/>
     </div>
+
+     <div :class="props.class" v-if="props.inputType === 5">
+        <input class="label"
+            type = "text"
+            :value = "props.label"
+            @input = "onInput"
+        />
+        <input 
+            type="number" 
+            :placeholder="props.placeholder" 
+            :value="props.modelValue" 
+            @input="onInput"/>
+    </div>
+    
 </template>
 
 <style scoped>

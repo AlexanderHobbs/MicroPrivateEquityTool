@@ -1,5 +1,5 @@
 <script setup>
-import DSCRCalculator from '@/services/DSCRCalculator.vue';
+import DSCRService from '@/services/DSCRService.vue';
 import { ref, onMounted, watch, nextTick } from 'vue';
 import { Chart, ArcElement, DoughnutController, Tooltip } from 'chart.js';
 
@@ -77,7 +77,7 @@ function formatCash(val) {
     <div class="parent">
 
         <div class="input">
-            <DSCRCalculator :sessionId="prop.id" @calculate="DscrResults" />
+            <DSCRService :sessionId="prop.id" @calculate="DscrResults" />
         </div>
 
         <div class="output" v-if="successful">
