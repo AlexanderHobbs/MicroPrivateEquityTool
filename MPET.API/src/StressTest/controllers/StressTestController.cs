@@ -30,13 +30,14 @@ public class StressTestController : ControllerBase
 
         // _cache.TryGetValue($"{sessionId}:earning_result", out EarningOutputDto earningResult);
         _cache.TryGetValue($"{sessionId}:debt_result", out DebtOutputDto? debtResult);
+        _cache.TryGetValue($"{sessionId}:dscr_result", out DSCROutputDto dscrResult);
 
         StressTestModel st = new(){
-            NerveLevel = 50,
+            NerveLevel = 5,
             Revenue = 100,
             Expense = 200,
-            RevenueDrop = 10,
-            MarginLevelShift = 10,
+            RevenueDrop = 0,
+            MarginLevelShift = 0,
             InterestRateShift = 5
         };
 
@@ -61,7 +62,7 @@ public class StressTestController : ControllerBase
             return BadRequest("Debt data not found. Please complete the debt calculator first.");
         }
 
-        StressTestModel stModel = stDto.stModel;
+        StressTestModel stModel = stDto.STModel;
         
         var result = _service.calculate(stModel, db);
 

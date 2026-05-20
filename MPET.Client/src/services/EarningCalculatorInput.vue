@@ -8,7 +8,7 @@ import EBITDAOutput from '@/components/ea_comp/EBITDAOutput.vue'
 
 const props = defineProps({
     initialData: Object,
-    sessionId: crypto
+    sessionId: String
 })
 
 watch(
@@ -29,6 +29,8 @@ watch(
 // State
 // ----------------------
 
+const inputDictionary = ref({})
+
 const selectedYear = ref()
 const yearOptions = ref([
     {text: '2025', value: 2025},
@@ -36,12 +38,11 @@ const yearOptions = ref([
     {text: '2023', value: 2023},
 ])
 
-const currencyForm = ref({
-    revenue: null,
-    expense: null,
-    ownerSalary: null,
-    ReportedSDE: null
-})
+const currencyForm = ref({ 
+    Revenue: null,
+    Expense: null, 
+    OwnerSalary: null, 
+    ReportedSDE: null })
 
 const addBackExist = ref(false)
 
@@ -55,16 +56,18 @@ const categoryOptions = ref([
 ])
 
 const AddBackForm = ref({
-        id: useId(),
-        description: null,
-        price: null,
+        Id: useId(),
+        Description: null,
+        Amount: null,
         category: null,
-        confidenceLevel: null
+        CategoryWeight: null,
+        ConfidenceLevel: null
 })
 
 const EBITDAValuesExist = ref(false);
 
 const EBITDAForm = ref({
+    IsAvailable: addBackExist.value,
     InterestRate: null,
     Taxes: null,
     Depreciation: null,
@@ -84,9 +87,9 @@ function generateId() {
 function resetForm() {
  
    Object.assign(currencyForm.value, {
-        revenue: null,
-        expense: null,
-        ownerSalary: null,
+        Revenue: null,
+        Expense: null,
+        OwnerSalary: null,
         ReportedSDE: null
     })
 
@@ -103,11 +106,11 @@ function resetForm() {
 
 function resetAddBackForm() {
     Object.assign(AddBackForm.value, {
-        id: generateId(),
-        description: null,
-        price: null,
+        Id: generateId(),
+        Description: null,
+        Amount: null,
         category: null,
-        confidenceLevel: 50
+        ConfidenceLevel: 50
     })
 }
 
@@ -120,7 +123,7 @@ function add_AddBack() {
 
 
     if(Object.values(AddBackForm.value).some(val => val === null)) {
-        alert("Please fill in all add back!")
+        alert("Please fill in all add backs!")
         return
     }
 
@@ -133,30 +136,56 @@ function add_AddBack() {
 }
 
 
-const emit = defineEmits(['save', 'load-year'])
+const emit = defineEmits(['save', 'load-year', 'calculate'])
 
-function submitYear() {
+function saveYear() {
 
-    add_AddBack()
+    if (addBackExist.value && AddBackForm.value.description) {
+        add_AddBack()
+    }
     
     const payload = {
-        year: selectedYear.value,
-        operating: {...currencyForm.value },
-        adjustments: { addBacks: AddBackList.value},
-        financials: {...EBITDAForm.value}
+        Operating: {...currencyForm.value },
+        Adjustments: { addBacks: AddBackList.value},
+        Financials: {...EBITDAForm.value}
     }
 
-    if(!dataIsNotNull(payload)){
+    if (!dataIsNotNull(payload)) { 
         alert("Not all fiels have data entered — Please fill in all entries!");
-        return;
-    }
-
-    emit('save', payload);
-    alert("Loaded");
+        return 
+    }   
+    
+    inputDictionary.value[selectedYear.value] = payload
 
     AddBackList.value = [];
     resetForm();
 
+}
+
+async function calculateEarnings(){
+
+    const dictionary = {
+        InputDictionary: {...inputDictionary.value}
+    }
+
+    const response = await fetch('/api/earning/calculate', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 
+      'X-Session-Id' : props.sessionId
+      },
+      body: JSON.stringify(dictionary)
+    })
+
+    if (!response.ok) {
+        const errorText = await response.text(); // Try to get server error details
+        alert(`Server error: ${response.status} - ${errorText}`);
+        return;
+    }
+
+    const data = await response.json();
+    console.log(data)
+
+    emit('calculate', data)
 }
 
 function loadYear(year){
@@ -195,10 +224,10 @@ function dataIsNotNull(obj) {
                 </div>
 
                 <div class = "currency-input-form">
-                    <SingleInput  label = "Revenue Amount: " v-model = "currencyForm.revenue"/>
-                    <SingleInput  label = "Expense Amount:" v-model = "currencyForm.expense" />
+                    <SingleInput label = "Revenue" v-model="currencyForm.Revenue"/>
+                    <SingleInput label = "Expense" v-model="currencyForm.Expense"/>
                     <SingleInput label = "Reported SDE: " v-model = "currencyForm.ReportedSDE" />           
-                    <SingleInput label = "Owner Salary: " v-model = "currencyForm.ownerSalary" />                
+                    <SingleInput label = "Owner Salary" v-model="currencyForm.OwnerSalary"/>
                 </div>
 
                 <div class = "vertical-line"></div>
@@ -219,9 +248,9 @@ function dataIsNotNull(obj) {
                     <div class = "addBackEntry">
                         <h4>Add Back Entry: </h4>
                         <label>Add Back Description: </label>
-                        <textarea v-model = "AddBackForm.description" placeholder="description"></textarea>
+                        <textarea v-model = "AddBackForm.Description" placeholder="description"></textarea>
                         <label>Add Back Value: </label>
-                        <input type="number" v-model.number = "AddBackForm.price">
+                        <input type="number" v-model.number = "AddBackForm.Amount">
                         <label>Add Back Category: </label>
                         <select v-model = "AddBackForm.category">
                             <option v-for="category in categoryOptions" :key = "category.text" :value="category.text">
@@ -230,8 +259,8 @@ function dataIsNotNull(obj) {
                         </select>
                         <!-- <input type="text" v-model = "AddBackForm.category"> -->
                         <label>Add Back Confidence Level:</label>
-                        <input type="range" v-model.number = "AddBackForm.confidenceLevel" min = "0" max = "100">
-                        <span class = "confidence-value">{{ AddBackForm.confidenceLevel }}%</span>
+                        <input type="range" v-model.number = "AddBackForm.ConfidenceLevel" min = "0" max = "100">
+                        <span class = "confidence-value">{{ AddBackForm.ConfidenceLevel }}%</span>
 
                         <button class = "addBack-btn" @click="add_AddBack()">Create Add Back</button>
                     </div>
@@ -260,7 +289,8 @@ function dataIsNotNull(obj) {
                             <EBITDAInput label = "Amortization" v-model = "EBITDAForm.Amortization"/>
                     </div>
                 </Transition>
-                <button class = "save-btn" @click = "submitYear">Save Data</button>
+                <button class = "save-btn" @click = "saveYear">Save Year</button>
+                <button class = "save-btn" @click = "calculateEarnings">Calculate Earnings</button>
             </div>
         </div>
 
@@ -287,10 +317,10 @@ function dataIsNotNull(obj) {
                                 </thead>
                                 <tbody>
                                     <tr v-if = "AddBackList.length" v-for = "item in AddBackList" :key = "item.id">
-                                        <td>{{ item.description }}</td>
-                                        <td>{{ item.price }}</td>
+                                        <td>{{ item.Description }}</td>
+                                        <td>{{ item.Amount }}</td>
                                         <td>{{ item.category }}</td>
-                                        <td>{{ item.confidenceLevel }}</td>
+                                        <td>{{ item.ConfidenceLevel }}</td>
                                     </tr>
                                     <tr v-else>
                                         <td colspan="4">
@@ -318,6 +348,8 @@ function dataIsNotNull(obj) {
 
 .parent-container {
     display: flex;
+    flex-direction: row;
+    gap: 20px;
 }
 
 .vertical-line {
@@ -343,7 +375,6 @@ function dataIsNotNull(obj) {
     display: flex;
     flex: .75;
     flex-direction: column;
-    padding: 20px;
     gap: 22px;
     box-sizing: border-box;
 }
@@ -352,7 +383,6 @@ function dataIsNotNull(obj) {
     display: flex;
     flex: 1;
     flex-direction: column;
-    padding: 20px;
     gap: 22px;
     box-sizing: border-box;
 }

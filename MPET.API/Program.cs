@@ -1,4 +1,4 @@
-﻿using EarningsCalculator;
+﻿using EarningCalculator;
 using DebtPaymentCalculator;
 using DSCRCalculator;
 using StressTestCalculator;
@@ -28,7 +28,7 @@ public class FinancialSummary
 
 
 
-    // builder.Services.AddScoped<EarningService>();
+    builder.Services.AddScoped<EarningService>();
     builder.Services.AddScoped<DebtService>();
     builder.Services.AddScoped<DSCRService>();
     builder.Services.AddScoped<StressTestService>();

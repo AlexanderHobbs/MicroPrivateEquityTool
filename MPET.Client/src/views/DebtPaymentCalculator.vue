@@ -124,12 +124,8 @@ function DebtDataResults(savedData){
     flex-direction: column;
     width: 100%;
     height: 100%;
-    background: #f2f2f2;
-    border-radius: 12px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    padding: 30px;
     box-sizing: border-box;
-    padding: 40px;
 }
 
 .input{

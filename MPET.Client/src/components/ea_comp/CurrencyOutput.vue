@@ -27,16 +27,16 @@ const formatCurrency = (value) => {
       <span class = "output" v-if = "label">{{label}}</span><span v-else> — </span></div>
 
     <div class = "data revenue"><img src = "../../assets/navbar-icons/earning.png"/><span>Revenue Amount: </span>
-      <span class = "output" v-if = "data.revenue">{{ formatCurrency(data.revenue)}}</span><span v-else> — </span></div>
+      <span class = "output" v-if = "data.Revenue">{{ formatCurrency(data.Revenue)}}</span><span v-else> — </span></div>
 
     <div class = "data expense"><img src = "../../assets/navbar-icons/earning.png"/><span>Expense Amount: </span>
-      <span class = "output" v-if = "data.expense">{{ formatCurrency(data.expense) }}</span><span v-else> — </span></div>
+      <span class = "output" v-if = "data.Expense">{{ formatCurrency(data.Expense) }}</span><span v-else> — </span></div>
 
     <div class = "data sde"><img src = "../../assets/navbar-icons/earning.png"/><span>Reported SDE Amount: </span>
       <span class = "output" v-if = "data.ReportedSDE">{{ formatCurrency(data.ReportedSDE) }}</span><span v-else> — </span></div>
 
     <div class = "data salary"><img src = "../../assets/navbar-icons/earning.png"/><span>Owner Salary Amount: </span>
-      <span class = "output" v-if = "data.ownerSalary">{{ formatCurrency(data.ownerSalary) }}</span><span v-else> — </span></div>
+      <span class = "output" v-if = "data.OwnerSalary">{{ formatCurrency(data.OwnerSalary) }}</span><span v-else> — </span></div>
   </div>
 
 </template>

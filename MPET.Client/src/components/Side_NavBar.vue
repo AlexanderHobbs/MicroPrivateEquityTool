@@ -39,7 +39,7 @@ function changePage(pageName){
     flex-direction: row; /* critical for sidebar layout */
     width: 100%;
     height: 100%;
-    background: #f2f2f2;
+    background: #ebeaea;
     color: black;
     border-radius: 20px;
     border: 1px solid #e5e7eb;
@@ -85,8 +85,6 @@ function changePage(pageName){
     font-size: 15px;
     cursor: pointer;
     background-color: transparent;
-
-    transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
 }
 
 .navbar-links button:hover {
@@ -95,9 +93,9 @@ function changePage(pageName){
 }
 
 button.active {
-    background-color: rgba(174, 176, 180, 0.25);
-    border-left: 4px solid;
+    border-left: 5px solid;
     border-image: linear-gradient(to bottom, #f5c518, #c9920a) 1;
+    background: linear-gradient(to right, rgb(245, 197, 24, 0.25), rgb(201, 146, 10, 0.8));
 }
 
 .navbar-links button.active:hover {

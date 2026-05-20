@@ -5,25 +5,35 @@ const props = defineProps({
     id: String
 });
 
+const emit = defineEmits(['navigateTo'])
+
+const navigateToDebtPage = (data) => {
+    showDebtPopup.value = false;
+    emit('navigateTo', data);
+};
+
 </script>
 
 <template>
     <div class="parent">
-        <StressTest :sessionId = "props.id"/>
+        <h2>Calculate Stress Test</h2>
+
+        <StressTest 
+            :sessionId = "props.id" 
+            @navigateTo = "navigateToDebtPage"
+        />
+        
     </div>
 </template>
 
 <style scoped>
 .parent {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     width: 100%;
     height: 100%;
-    background: #f2f2f2;
-    border-radius: 12px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
     box-sizing: border-box;
-    padding: 40px;
+    padding: 30px;
+    gap: 22px;
 }
 </style>

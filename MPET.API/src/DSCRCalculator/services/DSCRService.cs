@@ -12,9 +12,9 @@ public class DSCRService
         if (debtData == null)
             throw new ArgumentNullException(nameof(debtData), "Debt data is required.");
 
-        decimal profit = 100;
-        decimal debtService = debtData.AnnualDebtService;
         DscrDto data = dscrData.DSCR;
+        decimal debtService = data.AnnualDebtService;
+        decimal profit = data.AnnualProfit;
 
         if (debtService == 0)
             throw new InvalidOperationException("Annual debt service cannot be zero.");
@@ -57,7 +57,7 @@ public class DSCRService
         {
             DscrRatio = 0,
             AnnualDebtService = debtData?.AnnualDebtService ?? 0,
-            AnnualProfit = 108225, 
+            AnnualProfit = 508225, 
             RemainingCashFlow = 0,
             WarningLevel = DSCROutputDto.Level.Red
         };

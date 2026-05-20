@@ -14,6 +14,8 @@ const prop = defineProps({sessionId: {crypto}});
 const yearlyData = ref({})
 const selectedYearData = ref(null)
 
+const success = ref(false)
+const calculationResults = ref()
 
 // ----------------------
 // Actions
@@ -27,7 +29,11 @@ function saveYearData(payload) {
 
 function handleLoadYear(year){
     selectedYearData.value = yearlyData.value[year] || null
-    alert("function called")
+}
+
+function EarningResults(data){
+    calculationResults.value = data;
+    success.value = true;
 }
 
 </script>
@@ -40,6 +46,7 @@ function handleLoadYear(year){
         <EarningInput 
             @save = "saveYearData"
             @load-year = "handleLoadYear"
+            @calculate = "EarningResults"
             :initialData="selectedYearData"
             :sessionId = "prop.sessionId"
         />
@@ -93,6 +100,46 @@ function handleLoadYear(year){
             </div>
         </div>
     </div>
+
+    <div class="output">
+        <div v-if = "success">
+            <h4>True Earnings for Business</h4>
+            <div v-for = "(metrics, year) in calculationResults.earning_Output_Dictionary" :key = "year">
+                <div class="SBA-container">
+
+                    <div class="year-card">
+                        <h3>Core Metrics</h3>
+                        <SingleOutput label="Profit"         :value="metrics.Profit" />
+                        <SingleOutput label="Margin"         :value="metrics.Margin" />
+                        <SingleOutput label="Revenue Growth" :value="metrics.RevenueGrowth" />
+                        <SingleOutput label="EBITDA"         :value="metrics.EBITDA" />
+                    </div>
+
+                    <div class="year-card">
+                        <h3>Add Backs</h3>
+                        <SingleOutput label="Total Add Backs"       :value="metrics.TotalAddBacks" />
+                        <SingleOutput label="Weighted Add Backs"    :value="metrics.WeightedAddBacks" />
+                        <SingleOutput label="Conservative Add Backs":value="metrics.ConservativeAddBacks" />
+                        <SingleOutput label="Effective Add Backs"   :value="metrics.EffectiveAddBacks" />
+                    </div>
+
+                    <div class="year-card">
+                        <h3>SDE</h3>
+                        <SingleOutput label="Base SDE"           :value="metrics.BaseSDE" />
+                        <SingleOutput label="Risk Adjusted SDE"  :value="metrics.RiskAdjustedSDE" />
+                        <SingleOutput label="Conservative SDE"   :value="metrics.ConservativeSDE" />
+                    </div>
+
+                    <div class="year-card">
+                        <h3>Adjusted</h3>
+                        <SingleOutput label="Adjusted Profit" :value="metrics.AdjustedProfit" />
+                        <SingleOutput label="Adjusted Margin" :value="metrics.AdjustedMargin" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
     
@@ -102,14 +149,11 @@ function handleLoadYear(year){
 
 .parent {
     display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
-    background: rgb(247, 247, 247);
-    padding: 12px 14px;
-    border-radius: 20px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     box-sizing: border-box;
+    padding: 30px;
 }
 
 .input{

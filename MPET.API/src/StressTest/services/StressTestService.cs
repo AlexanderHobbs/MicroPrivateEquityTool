@@ -1,4 +1,3 @@
-using EarningsCalculator;
 using Shared.DTOs;
 
 namespace StressTestCalculator;

@@ -1,6 +1,6 @@
 <script setup>
 
-import {watch, ref} from 'vue'
+import {watch, ref, onActivated} from 'vue'
 import SingleInput from '@/components/basic/SingleInput.vue';
 import SingeOutput from '@/components/basic/SingeOutput.vue';
 
@@ -16,10 +16,14 @@ watch(
     { immediate: true }
 )
 
+onActivated(() => {
+    loadData();
+});
+
 const dscrForm = ref({
     prefferedDSCR: 1,
-    annualDebtService: savedData.annualDebtService,
-    annualProfit: savedData.annualProfit,
+    annualDebtService: 0,
+    annualProfit: 0,
 })
 
 async function loadData() {
@@ -41,10 +45,10 @@ async function loadData() {
 
         savedData.value = await response.json();
 
-        console.log(savedData);
+        // console.log(savedData.value);
 
-        dscrForm.annualDebtService = savedData.value.annualDebtService;
-        dscrForm.annualProfit = savedData.value.annualProfit;
+        dscrForm.value.annualDebtService = savedData.value.annualDebtService;
+        dscrForm.value.annualProfit = savedData.value.annualProfit;
 
     }catch(err){
       console.error('Fetch failed:', err.name, err.message);
@@ -59,6 +63,8 @@ async function calculateDscr(){
     const calculatedData = {
         DSCR: {...dscrForm.value}
     }
+
+    // console.log(calculatedData)
 
     const response = await fetch('/api/dscr/calculate', {
       method: 'POST',
@@ -90,7 +96,7 @@ async function calculateDscr(){
 
 <template>
     <div class = "parent-container"  v-if = "savedData">
-        <h2>Calculate Debt Payment</h2>
+        <h2>Calculate DSCR</h2>
         <div class = "input-container">
           <div class = "prev-input">
             <SingeOutput label = "Annual Debt Service: " :value = "savedData.annualDebtService" :style = "'no-border'"/>

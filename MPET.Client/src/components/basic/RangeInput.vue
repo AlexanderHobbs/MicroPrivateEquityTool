@@ -5,7 +5,10 @@ const props = defineProps({
     placeholder: { type: String, default: "00.00" },
     type: {type: String, default: "currency"},
     class: { type: String, default: "range" },
-    icon: { type: String, default: "/src/assets/navbar-icons/break-even.png" }
+    icon: { type: String, default: "/src/assets/navbar-icons/break-even.png" },
+    max: {type: Number, default: 5000000},
+    min: {type: Number, default: 0},
+    step: {type: Number, default: 1}
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -30,7 +33,7 @@ const onInput = (event) => {
             <div v-if = "type === 'percent'">
             <input class = "place-value"
                 type="number" 
-                :placeholder="props.modelValue + ' %'"
+                :placeholder="props.modelValue"
                 :value = "props.modelValue"
                 @input = "onInput"
                 >%
@@ -38,28 +41,30 @@ const onInput = (event) => {
             <div  v-if = "type === 'currency'">
             <input class = "place-value"
                 type="number" 
-                :placeholder="props.modelValue + ' $'"
+                :placeholder="props.modelValue"
                 :value = "props.modelValue"
                 @input = "onInput"
                 > $
             </div>
+            <div  v-if = "type === 'none'">
+            <input class = "place-value"
+                type="number" 
+                :placeholder="props.modelValue"
+                :value = "props.modelValue"
+                @input = "onInput"
+                >
+            </div>
         </div>
 
-        <input v-if = "type === 'percent'"
+        <input
             type="range" 
             :value="props.modelValue" 
             @input="onInput" 
-            min="4" 
-            max="12" 
-            step=".5"/>
-
-        <input v-else-if = "type === 'currency'"
-            type="range" 
-            :value="props.modelValue" 
-            @input="onInput" 
-            min="-5000000" 
-            max="5000000" 
-            step="1"/>
+            :min="min" 
+            :max="max" 
+            :step="step"
+            />
+            
         
     </div>
 </template>

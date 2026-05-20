@@ -66,7 +66,11 @@ const currentPageComponent = computed(() => pages[currentPage.value]);
         <div class = "input-section">
             <Transition name = "fade" mode = "out-in">
                 <KeepAlive>
-                    <component :is = "currentPageComponent" :id = "sessionId"/>
+                    <component 
+                        :is = "currentPageComponent" 
+                        :id = "sessionId"
+                        @navigateTo = "changePage"
+                    />
                 </KeepAlive>
             </Transition>
         </div>
@@ -97,16 +101,32 @@ const currentPageComponent = computed(() => pages[currentPage.value]);
     padding: 10px;
     background: rgb(247, 247, 247);
     box-sizing: border-box;
+    height: 100vh;
+}
+
+.parent {
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+    display: none;
+    }
+
+  /* Firefox */
+    scrollbar-width: none;
+
+  /* Internet Explorer and older Edge */
+    -ms-overflow-style: none;
 }
 
 
 .hero-section-ea {
     width: 100%;
-    height: 100%;
+    flex: 1;
+    min-height: 0;
     display: flex;
     flex-direction: row;
     gap: 30px;
     box-sizing: border-box;
+    
 }
 
 .vertical-line {
@@ -116,11 +136,19 @@ const currentPageComponent = computed(() => pages[currentPage.value]);
 }
 
 .side-nav-bar{
+    height: 100%;
     width: 14%;
 }
 
 .input-section {
     width: 86%;
+    height: 100%;
+    background: rgb(247, 247, 247);
+    padding: 12px 14px;
+    border-radius: 20px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    box-sizing: border-box;
 }
 
 .fade-enter-active,

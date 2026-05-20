@@ -88,7 +88,9 @@ function formatCash(val) {
                 <div class="gauge-wrapper">
                     <canvas id="dscrGauge"></canvas>
                     <div class="gauge-center">
-                        <span class="gauge-value">{{ (calculationResults.dscrRatio * 10).toFixed(2) }}x</span>
+                        <span class="gauge-value"
+                        :style="{ color: getWarning(calculationResults.warningLevel).color  }"
+                        >{{ (calculationResults.dscrRatio * 10).toFixed(2) }}x</span>
                     </div>
                 </div>
                 <p class="slider-hint">0 — 3x range</p>
@@ -118,12 +120,8 @@ function formatCash(val) {
     flex-direction: column;
     width: 100%;
     height: 100%;
-    background: #f2f2f2;
-    border-radius: 12px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
     box-sizing: border-box;
-    padding: 40px;
+    padding: 30px;
 }
 
 .input {
@@ -196,44 +194,9 @@ function formatCash(val) {
 .gauge-value {
     font-size: 1.4rem;
     font-weight: 700;
-    color: #4f46e5;
+    color: #000000;
 }
 
-/* Slider */
-.dscr-slider {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 6px;
-    border-radius: 999px;
-    background: linear-gradient(
-        to right,
-        #4f46e5 calc(var(--val, 0) * 100% / 3),
-        #e5e7eb calc(var(--val, 0) * 100% / 3)
-    );
-    outline: none;
-    cursor: not-allowed;
-    opacity: 0.85;
-}
-
-.dscr-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: #4f46e5;
-    border: 2px solid white;
-    box-shadow: 0 0 0 2px #4f46e5;
-    cursor: not-allowed;
-}
-
-.dscr-slider::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: #4f46e5;
-    border: 2px solid white;
-    cursor: not-allowed;
-}
 
 .slider-hint {
     font-size: 0.7rem;
