@@ -4,6 +4,7 @@ public class EarningOutputDto
 {
     public Dictionary<int, EA_Metrics> Earning_Output_Dictionary { get; set; } = new();
 
+
     public class EA_Metrics
     {
         public int Year { get; set; }
@@ -13,6 +14,7 @@ public class EarningOutputDto
         public decimal Margin { get; set; }
         public decimal RevenueGrowth { get; set; }
         public decimal EBITDA { get; set; }
+        public decimal Variance {get; set;}
 
         // Add Backs
         public decimal TotalAddBacks { get; set; }

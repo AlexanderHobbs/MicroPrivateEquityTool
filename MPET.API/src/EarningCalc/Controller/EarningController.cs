@@ -45,14 +45,17 @@ public class EarningController : ControllerBase
             return BadRequest(new { error = "X-Session-Id header is required." });
         }
 
-        var result = _service.Calculate(eaDto);
-
-        
-        _cache.Set($"{sessionId}:earning_result", result, new MemoryCacheEntryOptions
+        var options = new MemoryCacheEntryOptions
         {
             AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1),
             SlidingExpiration = TimeSpan.FromMinutes(30)
-        });      
+        };
+
+        _cache.Set($"{sessionId}:earning_input", eaDto, options);
+
+        var result = _service.Calculate(eaDto);
+
+        _cache.Set($"{sessionId}:earning_result", result, options);      
             
         return Ok(result);
     }

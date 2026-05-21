@@ -47,6 +47,14 @@ public class DSCRController : ControllerBase
             return BadRequest(new { error = "X-Session-Id header is required." });
         }
 
+         var options = new MemoryCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1),
+            SlidingExpiration = TimeSpan.FromMinutes(30)
+        };
+
+         _cache.Set($"{sessionId}:dscr_input", dscrData, options);
+
 
         if (!_cache.TryGetValue($"{sessionId}:debt_result", out DebtOutputDto? debtResult))
         {
@@ -59,11 +67,7 @@ public class DSCRController : ControllerBase
 
         var result = _service.Calculate(dscrData, debtResult);
 
-        _cache.Set($"{sessionId}:dscr_result", result, new MemoryCacheEntryOptions
-        {
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1),
-            SlidingExpiration = TimeSpan.FromMinutes(30)
-        });
+        _cache.Set($"{sessionId}:dscr_result", result, options);
 
         return Ok(result);
     }

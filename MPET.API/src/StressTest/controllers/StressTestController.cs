@@ -1,3 +1,4 @@
+using EarningCalculator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -31,6 +32,7 @@ public class StressTestController : ControllerBase
         // _cache.TryGetValue($"{sessionId}:earning_result", out EarningOutputDto earningResult);
         _cache.TryGetValue($"{sessionId}:debt_result", out DebtOutputDto? debtResult);
         _cache.TryGetValue($"{sessionId}:dscr_result", out DSCROutputDto dscrResult);
+        _cache.TryGetValue($"{sessionId}:earning_input", out EarningCalculatorDto eaDto);
 
         StressTestModel st = new(){
             NerveLevel = 5,
@@ -72,8 +74,8 @@ public class StressTestController : ControllerBase
             SlidingExpiration = TimeSpan.FromMinutes(30)
         };
 
-        _cache.Set($"{sessionId}:S-Test_result", result, options);
-        _cache.Set($"{sessionId}:S-Test_input", stModel, options);
+        _cache.Set($"{sessionId}:STest_result", result, options);
+        _cache.Set($"{sessionId}:STest_input", stModel, options);
 
         return Ok(result);
     } catch (System.Exception ex) {

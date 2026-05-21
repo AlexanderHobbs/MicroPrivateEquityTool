@@ -40,18 +40,28 @@ public class DebtController : ControllerBase
     public IActionResult Calculate([FromBody] DebtDataDto? debtData)
     {   
 
+        if (debtData == null)
+            return BadRequest(new { error = "Request body is required." });
+
+
         var sessionId = GetSessionId();
 
-        var result = _service.Calculate(debtData!);
+        if (string.IsNullOrEmpty(sessionId)){
+            return BadRequest(new { error = "X-Session-Id header is required." });
+        }
 
-        var options = new MemoryCacheEntryOptions
+         var options = new MemoryCacheEntryOptions
         {
             AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1),
             SlidingExpiration = TimeSpan.FromMinutes(30)
         };
 
-        _cache.Set($"{sessionId}:debt_result", result, options);
         _cache.Set($"{sessionId}:debt_input", debtData, options);
+
+
+        var result = _service.Calculate(debtData);
+
+        _cache.Set($"{sessionId}:debt_result", result, options);
 
         return Ok(result);
     }

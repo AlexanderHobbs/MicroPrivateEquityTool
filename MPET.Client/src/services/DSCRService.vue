@@ -3,6 +3,8 @@
 import {watch, ref, onActivated} from 'vue'
 import SingleInput from '@/components/basic/SingleInput.vue';
 import SingeOutput from '@/components/basic/SingeOutput.vue';
+import LoadingScreen from '@/components/basic/LoadingScreen.vue';
+import dscrIcon from "../assets/loading-icons/dscr.png"
 
 const props = defineProps({sessionId: String});
 
@@ -110,18 +112,8 @@ async function calculateDscr(){
         
     </div>
 
-    <div v-else class = "loading-container">
-        <transition name="fade-slide" mode="out-in">
-            <div>
-                <div class="loader">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-
-                <p class="loading-text">Loading DSCR Calculator...</p>
-            </div>
-        </transition>
+    <div v-else class="loading-container">
+      <LoadingScreen :iconSrc = "dscrIcon"/>
     </div>
 </template>
 
@@ -170,77 +162,14 @@ async function calculateDscr(){
 }
 
 
-
-
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-  transition: all 0.4s ease;
-}
-
-.fade-slide-enter-from,
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateY(10px);
-}
-
 .loading-container {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3rem;
-  gap: 1rem;
+  min-height: 100%;
+  width: 100%;
 }
 
-.loader {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.loader span {
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-  background: #6366f1;
-  animation: bounce 0.8s infinite ease-in-out;
-}
-
-.loader span:nth-child(2) {
-  animation-delay: 0.15s;
-}
-
-.loader span:nth-child(3) {
-  animation-delay: 0.3s;
-}
-
-.loading-text {
-  font-size: 0.95rem;
-  color: #94a3b8;
-  letter-spacing: 0.05em;
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes bounce {
-  0%, 80%, 100% {
-    transform: scale(0.7);
-    opacity: 0.5;
-  }
-
-  40% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 0.5;
-  }
-
-  50% {
-    opacity: 1;
-  }
-}
 
 </style>
 

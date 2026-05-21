@@ -5,6 +5,8 @@ import SingleInput from '@/components/basic/SingleInput.vue'
 import CurrencyOutput from '@/components/ea_comp/CurrencyOutput.vue'
 import EBITDAInput from '@/components/ea_comp/EBITDAInput.vue'
 import EBITDAOutput from '@/components/ea_comp/EBITDAOutput.vue'
+import LoadingScreen from '@/components/basic/LoadingScreen.vue'
+import earningIcon from '../assets/loading-icons/earning.png'
 
 const props = defineProps({
     initialData: Object,
@@ -24,6 +26,8 @@ watch(
         
     {immediate: true}
 )
+
+const success = ref(true)
 
 // ----------------------
 // State
@@ -209,7 +213,7 @@ function dataIsNotNull(obj) {
 </script>
 
 <template>
-    <div class = "parent-container">
+    <div class = "parent-container" v-if = "success">
         <div class = "input-container">
             <h2>Calculate True Earnings</h2>
             
@@ -342,6 +346,10 @@ function dataIsNotNull(obj) {
             </div>
         </div>
     </div>
+
+    <div v-else>
+    <LoadingScreen :iconSrc = "earningIcon"/>
+  </div>
 </template>
 
 

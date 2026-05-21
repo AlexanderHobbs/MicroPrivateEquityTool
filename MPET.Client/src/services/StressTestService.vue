@@ -1,4 +1,6 @@
 <script setup>
+import LoadingScreen from '@/components/basic/LoadingScreen.vue';
+import STIcon from '../assets/loading-icons/stress-test.png'
 import RangeInput from '@/components/basic/RangeInput.vue';
 import SingeOutput from '@/components/basic/SingeOutput.vue';
 import { watch, ref, onMounted } from 'vue';
@@ -12,6 +14,8 @@ watch(
   },
   { immediate: true }
 )
+
+const success = ref(true)
 
 const replicatedData = ref({
   nerveLevel: 0,
@@ -90,7 +94,7 @@ const navigateToDebtPage = () => {
 </script>
 
 <template>
-  <div class="parent-container">
+  <div class="parent-container" v-if = "success">
     <div class="input-container">
       <RangeInput label="Nerve Levels" type="none" v-model="replicatedData.nerveLevel" :max="10" :min="0" @input = "onInput()"/>
       <RangeInput label="Revenue" v-model="replicatedData.revenue" @input = "onInput()"/>
@@ -127,6 +131,9 @@ const navigateToDebtPage = () => {
         </button>
       </div>
     </div>
+  </div>
+  <div v-else>
+    <LoadingScreen :iconSrc = "STIcon"/>
   </div>
 </template>
 
@@ -244,4 +251,12 @@ button {
 .btn-primary:hover { background: #1e293b; }
 .btn-secondary:hover { background: #f8fafc; }
 .btn-cancel:hover { color: #64748b; text-decoration: underline; }
+
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  width: 100%;
+}
 </style>

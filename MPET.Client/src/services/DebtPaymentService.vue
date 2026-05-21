@@ -3,6 +3,9 @@
 import {ref, watch} from 'vue'
 import SingleInput from '@/components/basic/SingleInput.vue';
 import ToggleBtn from '@/components/basic/ToggleBtn.vue';
+import LoadingScreen from '@/components/basic/LoadingScreen.vue';
+import debtIcon from '../assets/loading-icons/debt.png'
+
 
 // ----------------------
 // State
@@ -19,7 +22,7 @@ watch(
 )
 
 const savedData = ref(null);
-
+const success = ref(true)
 
 const termOptions = ref([
     {text: "1 Year", value: 1},
@@ -232,7 +235,7 @@ function dataIsNotNull(obj) {
 </script>
 
 <template>
-    <div class = "parent-container">
+    <div class = "parent-container" v-if = "success">
         <div class="db-input-container">
             <h2>Calculate Debt Payment</h2>
 
@@ -304,6 +307,9 @@ function dataIsNotNull(obj) {
             <button class="save-btn" @click="calculateData">Calculate Debt Payment</button>
             <button class = "save-btn" @click = "autoFillMarketValues">Auto Fill</button>
         </div>
+    </div>
+    <div v-else class="loading-container">
+      <LoadingScreen :iconSrc = "debtIcon"/>
     </div>
 </template>
 
@@ -439,6 +445,14 @@ label {
 
 .save-btn:active {
     transform: translateY(0);
+}
+
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  width: 100%;
 }
 
 

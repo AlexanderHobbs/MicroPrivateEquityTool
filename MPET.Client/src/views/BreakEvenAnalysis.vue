@@ -1,14 +1,17 @@
 <script setup>
 import BreakEvenService from '@/services/BreakEvenService.vue';
 
+const prop = defineProps({
+    id: String 
+})
 
 </script>
 
 <template>
 <section class="parent">
-    <h2>Conduct a Break Even Analysis</h2>
-
-    <BreakEvenService />
+    <BreakEvenService 
+        :sessionId = prop.id
+    />
 </section>
 
 </template>
