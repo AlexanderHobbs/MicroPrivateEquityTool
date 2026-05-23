@@ -58,8 +58,9 @@ const emit = defineEmits(['update', 'navigateTo'])
 
 async function onInput(){
   try{
+
     const stData = { STModel: {...replicatedData.value} };
-    console.log(stData);
+
     const response = await fetch("/api/stresstest/calculate", {
       method: 'POST',
       headers: {
@@ -72,8 +73,10 @@ async function onInput(){
       showDebtPopup.value = true;
       return;
     }
+
     data.value = await response.json();
     emit('update', data)
+    
   }catch(err){
     console.error('Fetch failed:', err.name, err.message);
   }

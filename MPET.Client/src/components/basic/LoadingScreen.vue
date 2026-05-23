@@ -168,13 +168,13 @@ onUnmounted(() => cancelAnimationFrame(animId))
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  width: 198px;
-  height: 198px;
+  width: 125px;
   border-radius: 50%;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 90%;
 }
 
 .loader-img-wrap img {
