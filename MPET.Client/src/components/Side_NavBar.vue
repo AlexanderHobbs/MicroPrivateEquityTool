@@ -95,7 +95,7 @@ function changePage(pageName){
 button.active {
     border-left: 5px solid;
     border-image: linear-gradient(to bottom, #f5c518, #c9920a) 1;
-    background: linear-gradient(to right, rgb(245, 197, 24, 0.25), rgb(201, 146, 10, 0.8));
+    /* background: linear-gradient(to right, rgb(245, 197, 24, 0.25), rgb(201, 146, 10, 0.8)); */
 }
 
 .navbar-links button.active:hover {
