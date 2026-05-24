@@ -17,7 +17,7 @@ public class BreakEvenController : ControllerBase
         _cache = cache;
     }
 
-
+    [HttpPost("calculate")]
     public IActionResult calculate([FromBody] BreakEvenDto beDto)
     {
        if (beDto == null)

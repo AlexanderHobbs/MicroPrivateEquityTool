@@ -5,36 +5,69 @@ public class BreakEvenService
 {
     public BreakEvenOutputDto Calculate(BreakEvenDto eaDto)
     {
-        BreakEvenOutputDto output = new();
+        try {
+            BreakEvenOutputDto output = new();
 
-        decimal debtService = eaDto.BreakEvenModel.DebtService;
-        decimal currentRevenue = eaDto.BreakEvenModel.CurrentRevenue;
-        decimal fixedCost = eaDto.BreakEvenModel.FixedCost;
-        decimal variableCost = eaDto.BreakEvenModel.VariableCost;
+            decimal debtService = eaDto.BreakEvenModel.DebtService;
+            decimal currentRevenue = eaDto.BreakEvenModel.CurrentRevenue;
+            decimal fixedCost = eaDto.BreakEvenModel.FixedCost;
+            decimal variableCost = eaDto.BreakEvenModel.VariableCost;
 
-        decimal breakEvenRevenue = CalculateBER(debtService, fixedCost, variableCost);
-        decimal dropTolerance = CalculateDT(currentRevenue, breakEvenRevenue);
-        decimal cushion = CalculateCushion(currentRevenue, breakEvenRevenue);
+            decimal variableRatio = CalculateVariableRatio(variableCost, currentRevenue);
 
-        output.BreakEvenRevenue = breakEvenRevenue;
-        output.DropTolerance = dropTolerance;
-        output.Cushion = cushion;
+            decimal breakEvenRevenue = CalculateBER(debtService, fixedCost, variableRatio);
+            decimal cushion = CalculateCushion(currentRevenue, breakEvenRevenue);
+            decimal dropTolerance = CalculateDT(currentRevenue, cushion);
 
-        return output;
+
+            output.BreakEvenRevenue = breakEvenRevenue;
+            output.DropTolerance = dropTolerance;
+            output.Cushion = cushion;
+
+            return output;
+
+        }catch (Exception e)
+        {
+            Console.WriteLine($"Error in calculations: {e}");
+            throw;
+        }
     }
 
-    public decimal CalculateBER(decimal debtService, decimal FixedCost, decimal VariableCost)
+    public decimal CalculateVariableRatio(decimal cost, decimal revenue)
     {
-        return (FixedCost + debtService) / (1 - VariableCost);
+        if(revenue == 0)
+        {
+            throw new ArgumentException("Revenue cannot be zero");
+        }
+        
+        return cost / revenue;
     }
 
-    public decimal CalculateDT(decimal currentRev, decimal BER)
+    public decimal CalculateBER(decimal debtService, decimal fixedCost, decimal variableRatio)
     {
-        return ((currentRev - BER) / currentRev) * 100;
+        decimal contributionMargin = 1 - variableRatio;
+        Console.WriteLine(fixedCost + "-" + debtService +"-"+ contributionMargin);
+
+        return (fixedCost + debtService) / contributionMargin;
+    }
+
+    public decimal CalculateDT(decimal currentRev, decimal cushion)
+    {
+        if(currentRev == 0)
+        {
+            throw new ArgumentException("Revenue cannot be zero");
+        }
+
+        return cushion / currentRev * 100;
     }
 
     public decimal CalculateCushion(decimal currentRev, decimal BER)
     {
+        if(currentRev == 0)
+        {
+            throw new ArgumentException("Revenue cannot be zero");
+        }
+
         return currentRev - BER;
     }
 

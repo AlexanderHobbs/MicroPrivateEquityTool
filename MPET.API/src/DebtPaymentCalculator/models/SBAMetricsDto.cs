@@ -8,13 +8,4 @@ public class SBAMetricsDto
     public decimal InterestRate {get; set;}
     public int Term {get; set;}
 
-    public void display()
-    {
-        Console.WriteLine(
-            $"{LoanAmount}\n" + 
-            $"{DownPayment}\n" +
-            $"{InterestRate}\n" + 
-            $"{Term }"
-        );
-    }
 }

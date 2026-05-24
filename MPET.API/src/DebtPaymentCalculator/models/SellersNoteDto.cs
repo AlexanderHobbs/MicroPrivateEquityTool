@@ -6,11 +6,4 @@ public class SellersNoteDto
     public decimal InterestRate {get; set;}
     public int Term {get; set;}
 
-    public void display()
-    {
-        Console.WriteLine(
-            $"{LoanAmount} \n" +
-            $"{InterestRate} \n" +
-            $"{Term} \n");
-    }
 }

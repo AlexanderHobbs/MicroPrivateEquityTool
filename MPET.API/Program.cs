@@ -2,6 +2,7 @@
 using DebtPaymentCalculator;
 using DSCRCalculator;
 using StressTestCalculator;
+using BreakEvenCalculator;
 
 
 namespace AcquisitionInc;
@@ -32,6 +33,7 @@ public class FinancialSummary
     builder.Services.AddScoped<DebtService>();
     builder.Services.AddScoped<DSCRService>();
     builder.Services.AddScoped<StressTestService>();
+    builder.Services.AddScoped<BreakEvenService>();
     
     var app = builder.Build();
 

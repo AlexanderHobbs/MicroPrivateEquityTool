@@ -16,6 +16,25 @@ public class CentralController : ControllerBase
         _cache = cache;
     }
 
+    [HttpGet("earning")]
+    public IActionResult GetEarningResults()
+    {
+
+        var sessionId = GetSessionId();
+
+         if (string.IsNullOrEmpty(sessionId)){
+            return BadRequest(new { error = "X-Session-Id header is required." });
+        }
+
+
+        if(!_cache.TryGetValue($"{sessionId}:earning_result", out EarningOutputDto results))
+        {
+            return BadRequest(new {error = "No earning service history-Service Controller possibly not yet been envoked"});
+        }
+
+        return Ok(results);
+    }
+
     [HttpGet("debt")]
     public IActionResult GetDebtResults()
     {
@@ -35,24 +54,6 @@ public class CentralController : ControllerBase
         return Ok(results);
     }
 
-    [HttpGet("earning")]
-    public IActionResult GetEarningResults()
-    {
-
-        var sessionId = GetSessionId();
-
-         if (string.IsNullOrEmpty(sessionId)){
-            return BadRequest(new { error = "X-Session-Id header is required." });
-        }
-
-
-        if(!_cache.TryGetValue($"{sessionId}:earning_result", out EarningOutputDto results))
-        {
-            return BadRequest(new {error = "No earning service history-Service Controller possibly not yet been envoked"});
-        }
-
-        return Ok(results);
-    }
 
     [HttpGet("dscr")]
     public IActionResult GetDSCRResults()
@@ -85,6 +86,25 @@ public class CentralController : ControllerBase
 
 
         if(!_cache.TryGetValue($"{sessionId}:STest_result", out DSCROutputDto results))
+        {
+            return BadRequest(new {error = "No stress test service history-Service Controller possibly not yet been envoked"});
+        }
+
+        return Ok(results);
+    }
+
+    [HttpGet("breakeven")]
+    public IActionResult GetBreakEvenResults()
+    {
+
+        var sessionId = GetSessionId();
+
+         if (string.IsNullOrEmpty(sessionId)){
+            return BadRequest(new { error = "X-Session-Id header is required." });
+        }
+
+
+        if(!_cache.TryGetValue($"{sessionId}:breakeven_result", out BreakEvenOutputDto results))
         {
             return BadRequest(new {error = "No stress test service history-Service Controller possibly not yet been envoked"});
         }
