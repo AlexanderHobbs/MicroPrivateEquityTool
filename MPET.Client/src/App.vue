@@ -51,7 +51,7 @@ const currentPageComponent = computed(() => pages[currentPage.value]);
 
 <template>
 
-<div class = "parent-container">
+<div class = "parent-container" >
 
     <div class = "top-nav">
         <Top_NavBar class = "side-nav" @change-page = "changePage"/>
@@ -78,6 +78,7 @@ const currentPageComponent = computed(() => pages[currentPage.value]);
     <div class = "hero-section-ea" v-else>
         <Settings @close = "goBackPage"/>
     </div>
+    
 
 </div>
 
